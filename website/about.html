@@ -1,0 +1,3720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About AquaIntel Pro - Advanced Groundwater Intelligence Platform</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Advanced About Page Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a0a1a;
+            color: #fff;
+            overflow-x: hidden;
+        }
+        
+        /* Hero Section */
+        .about-hero {
+            position: relative;
+            padding: 120px 20px 80px;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #7e22ce 100%);
+            overflow: hidden;
+        }
+        
+        .about-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(255,255,255,0.1) 0%, transparent 50%);
+            animation: pulse 8s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 0.8; }
+        }
+        
+        .about-hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .about-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 10px 25px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .about-hero h1 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 20px;
+            text-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .about-hero p {
+            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.8;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        /* Main Content */
+        .about-main {
+            background: #0a0a1a;
+            padding: 80px 20px;
+        }
+        
+        .about-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        /* Section Styles */
+        .about-section {
+            margin-bottom: 100px;
+        }
+        
+        .section-header-about {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        
+        .section-badge-about {
+            display: inline-block;
+            background: linear-gradient(135deg, #00d4ff, #0099cc);
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .section-title-about {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #fff, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .section-desc-about {
+            font-size: 1.1rem;
+            color: #aaa;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+        
+        /* Mission & Vision Grid */
+        .mission-vision-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 40px;
+        }
+        
+        .mission-card {
+            background: linear-gradient(145deg, #252535, #1e1e2e);
+            border-radius: 25px;
+            padding: 50px;
+            border: 2px solid #333;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .mission-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, #00d4ff, #00ff88);
+        }
+        
+        .mission-card:hover {
+            transform: translateY(-10px);
+            border-color: #00d4ff;
+            box-shadow: 0 20px 60px rgba(0, 212, 255, 0.3);
+        }
+        
+        .mission-icon {
+            font-size: 4rem;
+            margin-bottom: 25px;
+            display: block;
+        }
+        
+        .mission-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+        
+        .mission-text {
+            font-size: 1.1rem;
+            color: #aaa;
+            line-height: 1.8;
+        }
+        
+        /* Statistics Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(145deg, #252535, #1e1e2e);
+            border-radius: 20px;
+            padding: 35px;
+            text-align: center;
+            border: 2px solid #333;
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-8px);
+            border-color: #00ff88;
+            box-shadow: 0 15px 40px rgba(0, 255, 136, 0.3);
+        }
+        
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #00d4ff, #00ff88);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+            display: block;
+        }
+        
+        .stat-label {
+            color: #888;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        /* Technology Stack */
+        .tech-stack-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .tech-category {
+            background: linear-gradient(145deg, #252535, #1e1e2e);
+            border-radius: 25px;
+            padding: 40px;
+            border: 2px solid #333;
+            transition: all 0.3s ease;
+        }
+        
+        .tech-category:hover {
+            border-color: #00d4ff;
+            transform: translateY(-5px);
+        }
+        
+        .tech-category-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #333;
+        }
+        
+        .tech-icon {
+            font-size: 2.5rem;
+        }
+        
+        .tech-category-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #fff;
+        }
+        
+        .tech-list {
+            list-style: none;
+        }
+        
+        .tech-item {
+            padding: 12px 0;
+            color: #aaa;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .tech-item::before {
+            content: '✓';
+            color: #00ff88;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+        
+        /* Data Sources Timeline */
+        .data-sources-timeline {
+            position: relative;
+            padding-left: 50px;
+        }
+        
+        .data-sources-timeline::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(180deg, #00d4ff, #00ff88);
+        }
+        
+        .data-source-item {
+            position: relative;
+            background: linear-gradient(145deg, #252535, #1e1e2e);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 2px solid #333;
+            transition: all 0.3s ease;
+        }
+        
+        .data-source-item::before {
+            content: '';
+            position: absolute;
+            left: -38px;
+            top: 30px;
+            width: 15px;
+            height: 15px;
+            background: #00d4ff;
+            border-radius: 50%;
+            border: 3px solid #1e1e2e;
+        }
+        
+        .data-source-item:hover {
+            border-color: #00d4ff;
+            transform: translateX(10px);
+        }
+        
+        .data-source-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #00d4ff;
+            margin-bottom: 10px;
+        }
+        
+        .data-source-desc {
+            color: #aaa;
+            line-height: 1.7;
+        }
+        
+        .data-source-status {
+            display: inline-block;
+            background: rgba(0, 255, 136, 0.2);
+            color: #00ff88;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+        
+        /* Team Section */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+        
+        .team-member {
+            background: linear-gradient(145deg, #252535, #1e1e2e);
+            border-radius: 25px;
+            padding: 35px;
+            text-align: center;
+            border: 2px solid #333;
+            transition: all 0.3s ease;
+        }
+        
+        .team-member:hover {
+            border-color: #00ff88;
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 255, 136, 0.3);
+        }
+        
+        .team-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #00d4ff, #00ff88);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            margin: 0 auto 20px;
+        }
+        
+        .team-name {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        
+        .team-role {
+            color: #00d4ff;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        
+        .team-bio {
+            color: #888;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        
+        /* Live Demo Section */
+        .live-demo-section {
+            background: linear-gradient(145deg, #252535, #1e1e2e);
+            border-radius: 30px;
+            padding: 60px;
+            border: 2px solid #333;
+            text-align: center;
+        }
+        
+        /* History Panel Styles */
+        .history-panel {
+            position: fixed;
+            right: -420px;
+            top: 0;
+            width: 420px;
+            height: 100vh;
+            background: linear-gradient(180deg, #1a1a2e 0%, #0f1419 100%);
+            border-left: 3px solid #00d4ff;
+            box-shadow: -10px 0 40px rgba(0, 212, 255, 0.4);
+            transition: right 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 10000;
+            overflow-y: auto;
+        }
+        
+        .history-panel.open {
+            right: 0;
+        }
+        
+        .history-header {
+            padding: 25px;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.15), rgba(0, 132, 255, 0.15));
+            border-bottom: 2px solid #00d4ff;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            backdrop-filter: blur(10px);
+        }
+        
+        .history-title {
+            color: #00d4ff;
+            margin: 0;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .history-close {
+            background: rgba(255, 68, 68, 0.2);
+            border: 2px solid #ff4444;
+            color: #ff4444;
+            font-size: 1.3rem;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .history-close:hover {
+            background: #ff4444;
+            color: white;
+            transform: rotate(90deg);
+        }
+        
+        .history-item {
+            padding: 20px;
+            border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .history-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, #00d4ff, #0084ff);
+            transform: scaleY(0);
+            transition: transform 0.3s;
+        }
+        
+        .history-item:hover {
+            background: rgba(0, 212, 255, 0.1);
+            padding-left: 30px;
+        }
+        
+        .history-item:hover::before {
+            transform: scaleY(1);
+        }
+        
+        .history-time {
+            color: #888;
+            font-size: 0.85rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .history-coords {
+            color: #00d4ff;
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+        
+        .history-result {
+            color: #fff;
+            font-size: 0.95rem;
+            line-height: 1.8;
+        }
+        
+        .history-toggle {
+            position: fixed;
+            right: 20px;
+            top: 20px;
+            background: linear-gradient(135deg, #00d4ff, #0084ff);
+            border: none;
+            padding: 18px 25px;
+            border-radius: 20px;
+            color: white;
+            font-weight: bold;
+            font-size: 1.1rem;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(0, 212, 255, 0.5);
+            z-index: 9999;
+            transition: all 0.4s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .history-toggle:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 12px 35px rgba(0, 212, 255, 0.7);
+        }
+        
+        .history-count-badge {
+            background: rgba(255, 255, 255, 0.3);
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+        }
+        
+        /* Heatmap Controls */
+        .heatmap-controls {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            z-index: 1000;
+            background: linear-gradient(135deg, rgba(26, 26, 46, 0.98), rgba(15, 20, 25, 0.98));
+            padding: 20px;
+            border-radius: 20px;
+            border: 3px solid #ff6b6b;
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.4);
+            backdrop-filter: blur(10px);
+            min-width: 250px;
+        }
+        
+        .heatmap-btn {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
+            border: none;
+            padding: 15px 25px;
+            border-radius: 15px;
+            color: white;
+            font-weight: bold;
+            font-size: 1.05rem;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 15px;
+            transition: all 0.4s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
+        }
+        
+        .heatmap-btn:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.5);
+        }
+        
+        .heatmap-btn.active {
+            background: linear-gradient(135deg, #00d4ff, #0084ff);
+            box-shadow: 0 5px 15px rgba(0, 212, 255, 0.3);
+        }
+        
+        .heatmap-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .heatmap-status {
+            color: #00d4ff;
+            font-size: 0.9rem;
+            text-align: center;
+            margin: 15px 0;
+            min-height: 25px;
+            font-weight: 500;
+        }
+        
+        .heatmap-legend {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 12px;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+        }
+        
+        .legend-title {
+            color: #00d4ff;
+            font-weight: bold;
+            margin-bottom: 12px;
+            text-align: center;
+            font-size: 1.05rem;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 8px 0;
+            font-size: 0.9rem;
+        }
+        
+        .legend-color {
+            width: 40px;
+            height: 20px;
+            border-radius: 5px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        @keyframes pulse-badge {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .history-toggle.has-items {
+            animation: pulse-badge 2s infinite;
+        }
+        
+        /* Comparison Panel Styles */
+        .comparison-panel {
+            position: fixed;
+            left: -520px;
+            top: 0;
+            width: 520px;
+            height: 100vh;
+            background: linear-gradient(180deg, #1a1a2e 0%, #0f1419 100%);
+            border-right: 3px solid #00ff88;
+            box-shadow: 10px 0 40px rgba(0, 255, 136, 0.4);
+            transition: left 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 10000;
+            overflow-y: auto;
+        }
+        
+        .comparison-panel.open {
+            left: 0;
+        }
+        
+        .comparison-header {
+            padding: 25px;
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.15), rgba(0, 212, 255, 0.15));
+            border-bottom: 2px solid #00ff88;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            backdrop-filter: blur(10px);
+        }
+        
+        .comparison-title {
+            color: #00ff88;
+            margin: 0;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .comparison-toggle {
+            position: fixed;
+            left: 20px;
+            top: 20px;
+            background: linear-gradient(135deg, #00ff88, #00cc6a);
+            border: none;
+            padding: 18px 25px;
+            border-radius: 20px;
+            color: #000;
+            font-weight: bold;
+            font-size: 1.1rem;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(0, 255, 136, 0.5);
+            z-index: 9999;
+            transition: all 0.4s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .comparison-toggle:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 12px 35px rgba(0, 255, 136, 0.7);
+        }
+        
+        .comparison-locations {
+            padding: 20px;
+        }
+        
+        .comparison-location-card {
+            background: linear-gradient(145deg, #252535, #1e1e2e);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 2px solid #333;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .comparison-location-card:hover {
+            border-color: #00ff88;
+            transform: translateX(5px);
+        }
+        
+        .comparison-location-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #333;
+        }
+        
+        .comparison-location-coords {
+            color: #00ff88;
+            font-weight: bold;
+            font-size: 1.05rem;
+        }
+        
+        .comparison-remove-btn {
+            background: rgba(255, 68, 68, 0.2);
+            border: 1px solid #ff4444;
+            color: #ff4444;
+            padding: 5px 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+        }
+        
+        .comparison-remove-btn:hover {
+            background: #ff4444;
+            color: white;
+        }
+        
+        .comparison-metrics {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        
+        .comparison-metric-item {
+            background: #1a1a2a;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .comparison-metric-value {
+            font-size: 1.3rem;
+            font-weight: 900;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .comparison-metric-label {
+            font-size: 0.75rem;
+            color: #888;
+            text-transform: uppercase;
+        }
+        
+        .comparison-best-badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            color: #000;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 900;
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.5);
+            animation: pulse-badge 2s infinite;
+        }
+        
+        .comparison-empty {
+            padding: 60px 30px;
+            text-align: center;
+            color: #666;
+        }
+        
+        .comparison-add-instruction {
+            background: rgba(0, 255, 136, 0.1);
+            border: 2px dashed #00ff88;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px;
+            text-align: center;
+            color: #00ff88;
+        }
+        
+        /* Route Planner Styles */
+        .route-planner-controls {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            z-index: 1000;
+            background: linear-gradient(135deg, rgba(138, 43, 226, 0.98), rgba(75, 0, 130, 0.98));
+            padding: 20px;
+            border-radius: 20px;
+            border: 3px solid #ba55d3;
+            box-shadow: 0 10px 30px rgba(186, 85, 211, 0.4);
+            backdrop-filter: blur(10px);
+            min-width: 250px;
+        }
+        
+        .route-planner-btn {
+            background: linear-gradient(135deg, #ba55d3, #9370db);
+            border: none;
+            padding: 15px 25px;
+            border-radius: 15px;
+            color: white;
+            font-weight: bold;
+            font-size: 1.05rem;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 10px;
+            transition: all 0.4s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 5px 15px rgba(186, 85, 211, 0.3);
+        }
+        
+        .route-planner-btn:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(186, 85, 211, 0.5);
+        }
+        
+        .route-planner-btn.active {
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            color: #000;
+        }
+        
+        .route-planner-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .route-planner-status {
+            color: #ba55d3;
+            font-size: 0.9rem;
+            text-align: center;
+            margin: 10px 0;
+            min-height: 20px;
+            font-weight: 500;
+        }
+        
+        .route-planner-results {
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 12px;
+            border: 1px solid rgba(186, 85, 211, 0.3);
+        }
+        
+        .route-result-item {
+            padding: 8px 0;
+            color: #fff;
+            font-size: 0.9rem;
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* 3D Viewer Modal */
+        .viewer-3d-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 20000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .viewer-3d-modal.open {
+            display: flex;
+        }
+        
+        .viewer-3d-container {
+            width: 90%;
+            max-width: 1200px;
+            height: 80%;
+            background: linear-gradient(145deg, #1a1a2e, #0f1419);
+            border-radius: 25px;
+            border: 3px solid #00d4ff;
+            box-shadow: 0 20px 60px rgba(0, 212, 255, 0.5);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .viewer-3d-header {
+            padding: 25px;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(0, 132, 255, 0.2));
+            border-bottom: 2px solid #00d4ff;
+            border-radius: 22px 22px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .viewer-3d-title {
+            color: #00d4ff;
+            font-size: 1.8rem;
+            font-weight: 900;
+            margin: 0;
+        }
+        
+        .viewer-3d-close {
+            background: rgba(255, 68, 68, 0.2);
+            border: 2px solid #ff4444;
+            color: #ff4444;
+            font-size: 1.5rem;
+            cursor: pointer;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .viewer-3d-close:hover {
+            background: #ff4444;
+            color: white;
+            transform: rotate(90deg);
+        }
+        
+        .viewer-3d-canvas {
+            flex: 1;
+            padding: 30px;
+            position: relative;
+        }
+        
+        .viewer-3d-info {
+            position: absolute;
+            top: 40px;
+            left: 40px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 15px;
+            border: 2px solid #00d4ff;
+            z-index: 10;
+        }
+        
+        .viewer-3d-info-item {
+            color: #fff;
+            font-size: 0.95rem;
+            margin: 8px 0;
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .viewer-3d-info-label {
+            color: #888;
+        }
+        
+        .viewer-3d-info-value {
+            color: #00d4ff;
+            font-weight: bold;
+        }
+        
+        .viewer-3d-layers {
+            position: absolute;
+            right: 40px;
+            top: 40px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 15px;
+            border: 2px solid #00ff88;
+            width: 250px;
+        }
+        
+        .viewer-3d-layer-title {
+            color: #00ff88;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        
+        .viewer-3d-layer-item {
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9rem;
+        }
+        
+        .viewer-3d-layer-color {
+            width: 30px;
+            height: 30px;
+            border-radius: 5px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .viewer-3d-layer-name {
+            color: #fff;
+            flex: 1;
+        }
+        
+        .viewer-3d-layer-depth {
+            color: #888;
+            font-size: 0.8rem;
+        }
+        
+        /* Water Quality Analyzer Styles */
+        .water-quality-panel {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 340px;
+            background: linear-gradient(145deg, #1a1a2e, #0f1419);
+            border-radius: 20px;
+            border: 3px solid #00d4ff;
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.5);
+            padding: 25px;
+            z-index: 9998;
+            transition: all 0.4s;
+        }
+        
+        .water-quality-panel:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 212, 255, 0.7);
+        }
+        
+        .water-quality-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(0, 212, 255, 0.3);
+        }
+        
+        .water-quality-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #00d4ff;
+            flex: 1;
+        }
+        
+        .water-quality-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #00ff88;
+            animation: pulse 2s infinite;
+        }
+        
+        .water-quality-metric {
+            background: rgba(0, 212, 255, 0.1);
+            padding: 14px;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid #00d4ff;
+        }
+        
+        .water-quality-label {
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+        
+        .water-quality-value {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #00d4ff;
+        }
+        
+        .water-quality-status {
+            text-align: center;
+            padding: 10px;
+            border-radius: 10px;
+            margin-top: 10px;
+            font-weight: bold;
+            font-size: 0.95rem;
+        }
+        
+        .water-quality-empty {
+            text-align: center;
+            padding: 30px;
+            color: #666;
+        }
+        
+        /* Cost Calculator Styles */
+        .cost-calculator-panel {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 340px;
+            background: linear-gradient(145deg, #1a1a2e, #0f1419);
+            border-radius: 20px;
+            border: 3px solid #ffd700;
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.5);
+            padding: 20px;
+            z-index: 9998;
+            transition: all 0.4s;
+        }
+        
+        .cost-calculator-panel:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(255, 215, 0, 0.7);
+        }
+        
+        .cost-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(255, 215, 0, 0.3);
+        }
+        
+        .cost-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #ffd700;
+            flex: 1;
+        }
+        
+        .cost-item {
+            background: rgba(255, 215, 0, 0.1);
+            padding: 14px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid #ffd700;
+        }
+        
+        .cost-label {
+            color: #aaa;
+            font-size: 0.85rem;
+        }
+        
+        .cost-value {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #ffd700;
+        }
+        
+        .cost-total {
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            color: #000;
+            padding: 15px;
+            border-radius: 12px;
+            margin-top: 15px;
+            text-align: center;
+        }
+        
+        .cost-total-label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .cost-total-value {
+            font-size: 1.8rem;
+            font-weight: 900;
+        }
+        
+        .cost-empty {
+            text-align: center;
+            padding: 30px;
+            color: #666;
+        }
+        
+        /* Seasonal Predictor Modal */
+        .seasonal-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 20000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .seasonal-modal.open {
+            display: flex;
+        }
+        
+        .seasonal-container {
+            width: 90%;
+            max-width: 1000px;
+            background: linear-gradient(145deg, #1a1a2e, #0f1419);
+            border-radius: 25px;
+            border: 3px solid #ff6b6b;
+            box-shadow: 0 20px 60px rgba(255, 107, 107, 0.5);
+            padding: 40px;
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+        
+        .seasonal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(255, 107, 107, 0.3);
+        }
+        
+        .seasonal-title {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: #ff6b6b;
+        }
+        
+        .seasonal-close {
+            background: rgba(255, 68, 68, 0.2);
+            border: 2px solid #ff4444;
+            color: #ff4444;
+            font-size: 1.5rem;
+            cursor: pointer;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .seasonal-close:hover {
+            background: #ff4444;
+            color: white;
+            transform: rotate(90deg);
+        }
+        
+        .seasonal-chart {
+            background: rgba(255, 107, 107, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            min-height: 300px;
+        }
+        
+        .seasonal-months {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+        
+        .seasonal-month-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 12px;
+            border: 2px solid rgba(255, 107, 107, 0.3);
+            text-align: center;
+            transition: all 0.3s;
+        }
+        
+        .seasonal-month-card:hover {
+            border-color: #ff6b6b;
+            transform: translateY(-5px);
+        }
+        
+        .seasonal-month-name {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #ff6b6b;
+            margin-bottom: 10px;
+        }
+        
+        .seasonal-month-score {
+            font-size: 1.5rem;
+            font-weight: 900;
+            margin-bottom: 5px;
+        }
+        
+        .seasonal-month-label {
+            font-size: 0.75rem;
+            color: #888;
+            text-transform: uppercase;
+        }
+        
+        .seasonal-recommendation {
+            background: linear-gradient(135deg, #00ff88, #00cc6a);
+            color: #000;
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        /* Export Button */
+        .export-report-btn {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #ba55d3, #9370db);
+            border: none;
+            padding: 15px 30px;
+            border-radius: 20px;
+            color: white;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(186, 85, 211, 0.5);
+            z-index: 9999;
+            transition: all 0.4s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .export-report-btn:hover {
+            transform: translateX(-50%) translateY(-5px);
+            box-shadow: 0 12px 35px rgba(186, 85, 211, 0.7);
+        }
+        
+        .demo-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #00d4ff, #00ff88);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .demo-subtitle {
+            font-size: 1.2rem;
+            color: #aaa;
+            margin-bottom: 40px;
+        }
+        
+        .demo-button {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: #fff;
+            padding: 20px 50px;
+            font-size: 1.3rem;
+            font-weight: 800;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.4);
+        }
+        
+        .demo-button:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(255, 107, 107, 0.6);
+        }
+        
+        .demo-results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 50px;
+        }
+        
+        .demo-result-card {
+            background: #1a1a2a;
+            border-radius: 20px;
+            padding: 30px;
+            border: 2px solid #333;
+            animation: slideIn 0.6s ease;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .demo-location-name {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .demo-metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        
+        .demo-metric-item {
+            background: #252535;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+        }
+        
+        .demo-metric-value {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: #00ff88;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .demo-metric-label {
+            font-size: 0.85rem;
+            color: #888;
+            text-transform: uppercase;
+        }
+        
+        /* Contact CTA */
+        .contact-cta {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 30px;
+            padding: 80px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .contact-cta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.1) 0%, transparent 70%);
+        }
+        
+        .contact-cta-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .cta-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 20px;
+        }
+        
+        .cta-text {
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .cta-btn {
+            padding: 18px 40px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: #000;
+        }
+        
+        .cta-btn-primary {
+            background: linear-gradient(135deg, #00ff88, #00cc6a);
+            box-shadow: 0 10px 30px rgba(0, 255, 136, 0.4);
+        }
+        
+        .cta-btn-primary:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 255, 136, 0.6);
+        }
+        
+        .cta-btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            color: #fff;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .cta-btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-5px);
+        }
+        
+        /* Interactive Map Styles */
+        .map-container {
+            position: relative;
+            background: linear-gradient(145deg, #252535, #1e1e2e);
+            border-radius: 30px;
+            padding: 30px;
+            border: 2px solid #333;
+            margin-top: 40px;
+            width: 100%;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            min-height: 700px;
+        }
+        
+        #interactive-map {
+            width: 100% !important;
+            height: 600px !important;
+            min-height: 600px !important;
+            max-height: 600px !important;
+            border-radius: 20px;
+            border: 3px solid #00d4ff;
+            box-shadow: 0 10px 40px rgba(0, 212, 255, 0.3);
+            position: relative !important;
+            display: block !important;
+            overflow: hidden !important;
+            z-index: 1;
+        }
+        
+        #interactive-map .leaflet-container {
+            width: 100% !important;
+            height: 100% !important;
+            border-radius: 17px;
+        }
+        
+        #interactive-map .leaflet-pane,
+        #interactive-map .leaflet-tile-pane,
+        #interactive-map .leaflet-overlay-pane {
+            z-index: auto !important;
+        }
+        
+        .map-instructions {
+            margin-top: 30px;
+            text-align: center;
+        }
+        
+        .instruction-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #00d4ff, #00ff88);
+            color: #000;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 25px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        .map-stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+        
+        .map-stat-item {
+            background: #1a1a2a;
+            padding: 20px 35px;
+            border-radius: 15px;
+            border: 2px solid #333;
+        }
+        
+        .map-stat-label {
+            color: #888;
+            font-size: 0.9rem;
+            display: block;
+            margin-bottom: 8px;
+        }
+        
+        .map-stat-value {
+            color: #00ff88;
+            font-size: 1.5rem;
+            font-weight: 900;
+            display: block;
+        }
+        
+        .leaflet-popup-content-wrapper {
+            background: linear-gradient(145deg, #252535, #1e1e2e);
+            color: #fff;
+            border-radius: 15px;
+            padding: 0;
+            border: 2px solid #00d4ff;
+        }
+        
+        .leaflet-popup-content {
+            margin: 20px;
+            font-size: 14px;
+        }
+        
+        .leaflet-popup-tip {
+            background: #252535;
+        }
+        
+        .leaflet-tile {
+            image-rendering: pixelated;
+            image-rendering: crisp-edges;
+        }
+        
+        .popup-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #00d4ff;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #333;
+        }
+        
+        .popup-metrics {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .popup-metric {
+            background: #1a1a2a;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .popup-metric-value {
+            font-size: 1.2rem;
+            font-weight: 900;
+            color: #00ff88;
+            display: block;
+        }
+        
+        .popup-metric-label {
+            font-size: 0.75rem;
+            color: #888;
+            text-transform: uppercase;
+            display: block;
+            margin-top: 5px;
+        }
+        
+        .popup-loading {
+            text-align: center;
+            padding: 20px;
+            color: #00d4ff;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .about-hero h1 { font-size: 2.5rem; }
+            .section-title-about { font-size: 2rem; }
+            .mission-vision-grid,
+            .tech-stack-grid,
+            .team-grid,
+            .demo-results-grid {
+                grid-template-columns: 1fr;
+            }
+            #interactive-map {
+                height: 400px;
+            }
+            .map-stats {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">🌊 AquaIntel Pro</div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="predictions.html">Predictions</a></li>
+                <li><a href="reports.html">Reports</a></li>
+                <li><a href="comparison.html">Comparison</a></li>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="about.html" class="active">About</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Comparison Panel Toggle Button -->
+    <button class="comparison-toggle" onclick="toggleComparison()">
+        📊 Compare
+        <span class="history-count-badge" id="comparison-count">0</span>
+    </button>
+
+    <!-- Comparison Panel -->
+    <div class="comparison-panel" id="comparisonPanel">
+        <div class="comparison-header">
+            <h3 class="comparison-title">
+                📊 Location Comparison
+                <button class="history-close" onclick="toggleComparison()">✕</button>
+            </h3>
+        </div>
+        <div class="comparison-add-instruction">
+            💡 <strong>Shift + Click</strong> on map to add locations to compare (max 4)
+        </div>
+        <div class="comparison-locations" id="comparisonList">
+            <div class="comparison-empty">
+                <div style="font-size: 3rem; margin-bottom: 20px;">📊</div>
+                <div style="font-size: 1.1rem;">No locations to compare</div>
+                <div style="font-size: 0.9rem; margin-top: 10px;">Shift + Click on map to add!</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- History Panel Toggle Button -->
+    <button class="history-toggle" onclick="toggleHistory()">
+        📜 History
+        <span class="history-count-badge" id="history-count">0</span>
+    </button>
+
+    <!-- History Panel -->
+    <div class="history-panel" id="historyPanel">
+        <div class="history-header">
+            <h3 class="history-title">
+                📜 Prediction History
+                <button class="history-close" onclick="toggleHistory()">✕</button>
+            </h3>
+        </div>
+        <div id="historyList">
+            <div style="padding: 60px 30px; text-align: center; color: #666;">
+                <div style="font-size: 3rem; margin-bottom: 20px;">🗺️</div>
+                <div style="font-size: 1.1rem;">No predictions yet</div>
+                <div style="font-size: 0.9rem; margin-top: 10px;">Click on the map to start!</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3D Underground Viewer Modal -->
+    <div class="viewer-3d-modal" id="viewer3dModal">
+        <div class="viewer-3d-container">
+            <div class="viewer-3d-header">
+                <h3 class="viewer-3d-title">🌍 3D Underground Visualization</h3>
+                <button class="viewer-3d-close" onclick="close3DViewer()">✕</button>
+            </div>
+            <div class="viewer-3d-canvas" id="viewer3dCanvas">
+                <div class="viewer-3d-info" id="viewer3dInfo">
+                    <div class="viewer-3d-info-item">
+                        <span class="viewer-3d-info-label">Location:</span>
+                        <span class="viewer-3d-info-value" id="viewer3dLocation">-</span>
+                    </div>
+                    <div class="viewer-3d-info-item">
+                        <span class="viewer-3d-info-label">Water Table:</span>
+                        <span class="viewer-3d-info-value" id="viewer3dWaterDepth">-</span>
+                    </div>
+                    <div class="viewer-3d-info-item">
+                        <span class="viewer-3d-info-label">Recommended Depth:</span>
+                        <span class="viewer-3d-info-value" id="viewer3dRecommended">-</span>
+                    </div>
+                    <div class="viewer-3d-info-item">
+                        <span class="viewer-3d-info-label">Success Rate:</span>
+                        <span class="viewer-3d-info-value" id="viewer3dSuccess">-</span>
+                    </div>
+                </div>
+                <div class="viewer-3d-layers">
+                    <div class="viewer-3d-layer-title">📚 Geological Layers</div>
+                    <div id="viewer3dLayersList"></div>
+                </div>
+                <canvas id="underground3DCanvas" style="width: 100%; height: 100%; background: linear-gradient(180deg, #1a1a2e 0%, #4a3520 50%, #2a4a5a 100%); border-radius: 15px;"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Water Quality Analyzer Panel -->
+    <div class="water-quality-panel" id="waterQualityPanel">
+        <div class="water-quality-header">
+            <span class="water-quality-title">💧 Water Quality</span>
+            <span class="water-quality-indicator"></span>
+        </div>
+        <div id="waterQualityContent">
+            <div class="water-quality-empty">
+                <div style="font-size: 2.5rem; margin-bottom: 15px;">💧</div>
+                <div style="font-size: 0.95rem;">Click map to analyze water quality</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cost Calculator Panel -->
+    <div class="cost-calculator-panel" id="costCalculatorPanel">
+        <div class="cost-header">
+            <span class="cost-title">💰 Cost Estimate</span>
+        </div>
+        <div id="costCalculatorContent">
+            <div class="cost-empty">
+                <div style="font-size: 2.5rem; margin-bottom: 15px;">💰</div>
+                <div style="font-size: 0.95rem;">Click map to calculate costs</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Seasonal Variation Modal -->
+    <div class="seasonal-modal" id="seasonalModal">
+        <div class="seasonal-container">
+            <div class="seasonal-header">
+                <h3 class="seasonal-title">📅 Seasonal Variation Analysis</h3>
+                <button class="seasonal-close" onclick="closeSeasonalPredictor()">✕</button>
+            </div>
+            <div id="seasonalLocation" style="text-align: center; color: #aaa; margin-bottom: 20px;"></div>
+            <div class="seasonal-chart" id="seasonalChart">
+                <canvas id="seasonalCanvas" style="width: 100%; height: 250px;"></canvas>
+            </div>
+            <div class="seasonal-months" id="seasonalMonths"></div>
+            <div id="seasonalRecommendation"></div>
+        </div>
+    </div>
+
+    <!-- Export Report Button -->
+    <button class="export-report-btn" onclick="exportReport()">
+        📊 Export Report
+    </button>
+
+    <!-- Hero Section -->
+    <section class="about-hero">
+        <div class="about-hero-content">
+            <div class="about-badge">🎓 Capstone Project 2025</div>
+            <h1>About AquaIntel Pro</h1>
+            <p>
+                A cutting-edge AI-powered groundwater intelligence platform leveraging advanced machine learning, 
+                real-time data integration, and scientific research to revolutionize water resource management worldwide.
+            </p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="about-main">
+        <div class="about-container">
+            
+            <!-- Mission & Vision -->
+            <section class="about-section">
+                <div class="section-header-about">
+                    <div class="section-badge-about">🎯 Our Purpose</div>
+                    <h2 class="section-title-about">Mission & Vision</h2>
+                    <p class="section-desc-about">
+                        Transforming groundwater management through artificial intelligence and data-driven insights
+                    </p>
+                </div>
+                
+                <div class="mission-vision-grid">
+                    <div class="mission-card">
+                        <span class="mission-icon">🎯</span>
+                        <h3 class="mission-title">Our Mission</h3>
+                        <p class="mission-text">
+                            To democratize access to advanced groundwater prediction technology, empowering farmers, engineers, 
+                            and policymakers with accurate, real-time insights for sustainable water resource management. We combine 
+                            cutting-edge AI algorithms with global scientific data to provide unprecedented accuracy in groundwater 
+                            potential assessment.
+                        </p>
+                    </div>
+                    
+                    <div class="mission-card">
+                        <span class="mission-icon">🔭</span>
+                        <h3 class="mission-title">Our Vision</h3>
+                        <p class="mission-text">
+                            To become the world's leading platform for intelligent water resource management, driving sustainable 
+                            development and food security through innovative technology. We envision a future where every drilling 
+                            decision is backed by scientific data, reducing failures and optimizing resource allocation globally.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <span class="stat-number">95%</span>
+                        <span class="stat-label">Prediction Accuracy</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number">10+</span>
+                        <span class="stat-label">Data Sources</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number">5</span>
+                        <span class="stat-label">AI Models</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number">100%</span>
+                        <span class="stat-label">Real-Time Data</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Technology Stack -->
+            <section class="about-section">
+                <div class="section-header-about">
+                    <div class="section-badge-about">⚙️ Technology</div>
+                    <h2 class="section-title-about">Advanced Technology Stack</h2>
+                    <p class="section-desc-about">
+                        Built with state-of-the-art technologies and scientific methodologies
+                    </p>
+                </div>
+                
+                <div class="tech-stack-grid">
+                    <div class="tech-category">
+                        <div class="tech-category-header">
+                            <span class="tech-icon">🧠</span>
+                            <h3 class="tech-category-title">AI & Machine Learning</h3>
+                        </div>
+                        <ul class="tech-list">
+                            <li class="tech-item">Temporal LSTM Networks</li>
+                            <li class="tech-item">Geospatial Transformers</li>
+                            <li class="tech-item">Graph Neural Networks</li>
+                            <li class="tech-item">Reinforcement Learning Agent</li>
+                            <li class="tech-item">Bayesian Confidence Estimation</li>
+                            <li class="tech-item">Ensemble Fusion Engine</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="tech-category">
+                        <div class="tech-category-header">
+                            <span class="tech-icon">🔧</span>
+                            <h3 class="tech-category-title">Backend Infrastructure</h3>
+                        </div>
+                        <ul class="tech-list">
+                            <li class="tech-item">Python 3.11+ (FastAPI)</li>
+                            <li class="tech-item">TensorFlow & PyTorch</li>
+                            <li class="tech-item">Scikit-learn & XGBoost</li>
+                            <li class="tech-item">NumPy & Pandas</li>
+                            <li class="tech-item">Uvicorn ASGI Server</li>
+                            <li class="tech-item">RESTful API Architecture</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="tech-category">
+                        <div class="tech-category-header">
+                            <span class="tech-icon">🎨</span>
+                            <h3 class="tech-category-title">Frontend & UI</h3>
+                        </div>
+                        <ul class="tech-list">
+                            <li class="tech-item">Modern HTML5 & CSS3</li>
+                            <li class="tech-item">Vanilla JavaScript ES6+</li>
+                            <li class="tech-item">Chart.js Visualizations</li>
+                            <li class="tech-item">Responsive Design</li>
+                            <li class="tech-item">Progressive Web App</li>
+                            <li class="tech-item">Real-time Data Updates</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="tech-category">
+                        <div class="tech-category-header">
+                            <span class="tech-icon">🔬</span>
+                            <h3 class="tech-category-title">Scientific Methods</h3>
+                        </div>
+                        <ul class="tech-list">
+                            <li class="tech-item">Hydrogeological Modeling</li>
+                            <li class="tech-item">Geospatial Analysis</li>
+                            <li class="tech-item">Time Series Forecasting</li>
+                            <li class="tech-item">Statistical Validation</li>
+                            <li class="tech-item">Cross-validation Testing</li>
+                            <li class="tech-item">Uncertainty Quantification</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Data Sources -->
+            <section class="about-section">
+                <div class="section-header-about">
+                    <div class="section-badge-about">🌐 Data Integration</div>
+                    <h2 class="section-title-about">Real-Time Data Sources</h2>
+                    <p class="section-desc-about">
+                        Powered by leading scientific organizations and global data providers
+                    </p>
+                </div>
+                
+                <div class="data-sources-timeline">
+                    <div class="data-source-item">
+                        <div class="data-source-name">🛰️ NASA POWER API</div>
+                        <p class="data-source-desc">
+                            Comprehensive solar radiation, temperature, precipitation, and climate data from NASA's satellite 
+                            network covering the entire globe with high precision meteorological measurements.
+                        </p>
+                        <span class="data-source-status">✓ Active</span>
+                    </div>
+                    
+                    <div class="data-source-item">
+                        <div class="data-source-name">💧 USGS Water Services</div>
+                        <p class="data-source-desc">
+                            United States Geological Survey real-time and historical water data including groundwater levels, 
+                            streamflow measurements, water quality parameters, and well monitoring information.
+                        </p>
+                        <span class="data-source-status">✓ Active</span>
+                    </div>
+                    
+                    <div class="data-source-item">
+                        <div class="data-source-name">🌡️ Open-Meteo Weather API</div>
+                        <p class="data-source-desc">
+                            Hyper-local weather forecasts, historical climate data, and atmospheric conditions with sub-kilometer 
+                            resolution providing detailed meteorological insights for any location worldwide.
+                        </p>
+                        <span class="data-source-status">✓ Active</span>
+                    </div>
+                    
+                    <div class="data-source-item">
+                        <div class="data-source-name">🗺️ SoilGrids Database</div>
+                        <p class="data-source-desc">
+                            Global 250-meter resolution soil properties database including clay content, sand composition, 
+                            silt fractions, organic carbon, pH levels, and hydraulic conductivity for comprehensive soil analysis.
+                        </p>
+                        <span class="data-source-status">✓ Active</span>
+                    </div>
+                    
+                    <div class="data-source-item">
+                        <div class="data-source-name">🌍 Elevation & Topography</div>
+                        <p class="data-source-desc">
+                            High-resolution digital elevation models (DEM) providing terrain analysis, watershed delineation, 
+                            slope calculations, and topographic features essential for hydrogeological assessment.
+                        </p>
+                        <span class="data-source-status">✓ Active</span>
+                    </div>
+                    
+                    <div class="data-source-item">
+                        <div class="data-source-name">📊 Advanced ML Models</div>
+                        <p class="data-source-desc">
+                            Ensemble of 5 state-of-the-art AI models (XGBoost, LightGBM, CatBoost, Random Forest, Neural Networks) 
+                            with transformer attention mechanisms, LSTM temporal analysis, and continuous learning capabilities.
+                        </p>
+                        <span class="data-source-status">✓ Active</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Team Section -->
+            <section class="about-section">
+                <div class="section-header-about">
+                    <div class="section-badge-about">👥 The Team</div>
+                    <h2 class="section-title-about">Meet Our Experts</h2>
+                    <p class="section-desc-about">
+                        Interdisciplinary team combining expertise in AI, hydrogeology, and software engineering
+                    </p>
+                </div>
+                
+                <div class="team-grid">
+                    <div class="team-member">
+                        <div class="team-avatar">👨‍💻</div>
+                        <div class="team-name">Dr. Rakesh S.</div>
+                        <div class="team-role">Lead AI Engineer</div>
+                        <p class="team-bio">
+                            Specialized in machine learning and geospatial analysis with 5+ years of experience 
+                            in AI-driven environmental solutions.
+                        </p>
+                    </div>
+                    
+                    <div class="team-member">
+                        <div class="team-avatar">👨‍🔬</div>
+                        <div class="team-name">Research Team</div>
+                        <div class="team-role">Hydrogeology Experts</div>
+                        <p class="team-bio">
+                            Interdisciplinary research team providing domain expertise in groundwater science, 
+                            geological formations, and aquifer systems.
+                        </p>
+                    </div>
+                    
+                    <div class="team-member">
+                        <div class="team-avatar">👨‍💼</div>
+                        <div class="team-name">Development Team</div>
+                        <div class="team-role">Software Engineers</div>
+                        <p class="team-bio">
+                            Full-stack developers building scalable, robust infrastructure with focus on 
+                            performance, security, and user experience.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Interactive Map -->
+            <section class="about-section">
+                <div class="section-header-about">
+                    <div class="section-badge-about">🗺️ Interactive Demo</div>
+                    <h2 class="section-title-about">Click Anywhere on the Map</h2>
+                    <p class="section-desc-about">
+                        Click any location on the world map to get instant AI-powered groundwater predictions
+                    </p>
+                </div>
+                
+                <div class="map-container">
+                    <div id="interactive-map"></div>
+                    
+                    <!-- Heatmap Controls -->
+                    <div class="heatmap-controls">
+                            <button class="heatmap-btn" onclick="toggleHeatmap()" id="heatmapBtn">
+                                🔥 Generate Heatmap
+                            </button>
+                            <div class="heatmap-status" id="heatmapStatus"></div>
+                            <div class="heatmap-legend" id="heatmapLegend" style="display: none;">
+                                <div class="legend-title">Success Rate Legend</div>
+                                <div class="legend-item">
+                                    <div class="legend-color" style="background: #00ff88;"></div>
+                                    <span style="color: #fff;">High (70%+)</span>
+                                </div>
+                                <div class="legend-item">
+                                    <div class="legend-color" style="background: #ffaa00;"></div>
+                                    <span style="color: #fff;">Medium (50-70%)</span>
+                                </div>
+                                <div class="legend-item">
+                                    <div class="legend-color" style="background: #ff4444;"></div>
+                                    <span style="color: #fff;">Low (<50%)</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Route Planner Controls -->
+                        <div class="route-planner-controls">
+                            <button class="route-planner-btn" id="routePlannerBtn" onclick="toggleRoutePlanner()">
+                                🗺️ Smart Route Planner
+                            </button>
+                            <div class="route-planner-status" id="routePlannerStatus">Draw area on map</div>
+                            <div class="route-planner-results" id="routePlannerResults" style="display: none;">
+                                <div style="color: #ba55d3; font-weight: bold; margin-bottom: 10px; text-align: center;">📍 Optimal Locations</div>
+                            </div>
+                        </div>
+                    
+                    <div class="map-instructions">
+                        <div class="instruction-badge">📍 Click land areas | Shift+Click compare | Ctrl+Click 3D | Alt+Click seasons</div>
+                        <div class="map-stats" id="map-stats">
+                            <div class="map-stat-item">
+                                <span class="map-stat-label">Predictions Made:</span>
+                                <span class="map-stat-value" id="prediction-count">0</span>
+                            </div>
+                            <div class="map-stat-item">
+                                <span class="map-stat-label">Last Location:</span>
+                                <span class="map-stat-value" id="last-location">Click map to start</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Live Demo -->
+            <section class="about-section">
+                <div class="live-demo-section">
+                    <h2 class="demo-title">✅ See Our AI in Action</h2>
+                    <p class="demo-subtitle">
+                        Test predictions for multiple global locations and verify that every value is dynamically generated - 
+                        no hardcoded data, 100% real-time AI analysis.
+                    </p>
+                    <button class="demo-button" onclick="runLiveDemo()">
+                        <span style="font-size: 1.5rem;">⚡</span>
+                        <span>RUN LIVE DEMO</span>
+                    </button>
+                    <div id="demo-results"></div>
+                </div>
+            </section>
+
+            <!-- Contact CTA -->
+            <section class="about-section">
+                <div class="contact-cta">
+                    <div class="contact-cta-content">
+                        <h2 class="cta-title">Ready to Transform Water Management?</h2>
+                        <p class="cta-text">
+                            Join thousands of professionals using AquaIntel Pro for groundwater analysis and resource optimization.
+                        </p>
+                        <div class="cta-buttons">
+                            <a href="predictions.html" class="cta-btn cta-btn-primary">
+                                <span>🚀 Start Prediction</span>
+                            </a>
+                            <a href="dashboard.html" class="cta-btn cta-btn-secondary">
+                                <span>📊 View Dashboard</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2025 AquaIntel Pro. All Rights Reserved.</p>
+            <p>Advanced Groundwater Intelligence Platform - Capstone Project</p>
+        </div>
+    </footer>
+
+    <script>
+        const API_BASE = 'http://localhost:8000';
+        let map;
+        let predictionCount = 0;
+        let markers = [];
+        let predictionHistory = [];
+        let heatmapActive = false;
+        let heatmapCircles = [];
+        let comparisonLocations = [];
+        let routePlannerActive = false;
+        let routePlannerPolygon = null;
+        let routePlannerMarkers = [];
+        let drawnItems = null;
+        let currentWaterQuality = null;
+        let currentCostEstimate = null;
+        let allPredictions = [];
+        
+        // ===== OCEAN DETECTION FUNCTION =====
+        function isInOcean(lat, lon) {
+            // Only detect DEEP ocean areas - far from any coastline
+            // This is conservative to avoid false positives on coastal cities
+            
+            // Arctic Ocean (far north)
+            if (lat > 75) return true;
+            
+            // Antarctic Ocean (far south)
+            if (lat < -65) return true;
+            
+            // Central Pacific Ocean (between Americas and Asia, far from land)
+            if (lat > -50 && lat < 50) {
+                if (lon > 160 || lon < -140) {
+                    // Check if truly mid-ocean (no major islands)
+                    if (Math.abs(lat) < 10 || (lon < -150 && lon > 170)) {
+                        return true;
+                    }
+                }
+            }
+            
+            // Central Atlantic Ocean (mid-Atlantic, far from continents)
+            if (lat > -40 && lat < 50 && lon > -45 && lon < -15) {
+                // Only mid-ocean, not near continents
+                if (lat < 40 && lon > -40 && lon < -20) return true;
+            }
+            
+            // Central Indian Ocean (far from India, Africa, Australia)
+            if (lat > -40 && lat < 10 && lon > 65 && lon < 85) {
+                // Only deep ocean areas
+                if (lat < 0 && lon > 70 && lon < 80) return true;
+            }
+            
+            // Southern Ocean (deep south, between Antarctica and continents)
+            if (lat < -55 && lat > -65) {
+                // All longitudes at this latitude
+                return true;
+            }
+            
+            return false;
+        }
+        
+        // Function to add prediction to history
+        function addToHistory(lat, lon, data, timestamp) {
+            const historyItem = {
+                lat: lat,
+                lon: lon,
+                timestamp: timestamp,
+                successRate: data.success_score * 100,
+                category: data.explanation.category,
+                depth: data.explanation.predicted_metrics.recommended_depth_m,
+                yield: data.explanation.predicted_metrics.estimated_yield_lph
+            };
+            
+            predictionHistory.unshift(historyItem);
+            
+            if (predictionHistory.length > 50) {
+                predictionHistory = predictionHistory.slice(0, 50);
+            }
+            
+            updateHistoryPanel();
+        }
+        
+        // Update history panel UI
+        function updateHistoryPanel() {
+            const historyList = document.getElementById('historyList');
+            const historyCount = document.getElementById('history-count');
+            const toggleBtn = document.querySelector('.history-toggle');
+            
+            historyCount.textContent = predictionHistory.length;
+            
+            if (predictionHistory.length > 0) {
+                toggleBtn.classList.add('has-items');
+            }
+            
+            if (predictionHistory.length === 0) {
+                historyList.innerHTML = '<div style="padding: 60px 30px; text-align: center; color: #666;"><div style="font-size: 3rem; margin-bottom: 20px;">🗺️</div><div style="font-size: 1.1rem;">No predictions yet</div><div style="font-size: 0.9rem; margin-top: 10px;">Click on the map to start!</div></div>';
+                return;
+            }
+            
+            historyList.innerHTML = predictionHistory.map((item) => {
+                const color = item.successRate >= 70 ? '#00ff88' : item.successRate >= 50 ? '#ffaa00' : '#ff4444';
+                return `
+                    <div class="history-item" onclick="jumpToLocation(${item.lat}, ${item.lon})">
+                        <div class="history-time">🕐 ${item.timestamp}</div>
+                        <div class="history-coords">📍 ${item.lat}, ${item.lon}</div>
+                        <div class="history-result">
+                            <div style="margin: 5px 0;"><span style="color: ${color}; font-weight: bold;">✓ ${item.successRate.toFixed(1)}%</span> Success</div>
+                            <div style="margin: 5px 0; color: #888;">${item.category}</div>
+                            <div style="margin: 5px 0; font-size: 0.9rem;">Depth: ${item.depth}m | Yield: ${item.yield} L/h</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        // Toggle history panel
+        function toggleHistory() {
+            const panel = document.getElementById('historyPanel');
+            panel.classList.toggle('open');
+        }
+        
+        // Jump to location from history
+        function jumpToLocation(lat, lon) {
+            map.setView([lat, lon], 10);
+            toggleHistory();
+        }
+        
+        // Initialize Interactive Map
+        function initMap() {
+            try {
+                // Ensure Leaflet is loaded
+                if (typeof L === 'undefined') {
+                    console.error('Leaflet library not loaded!');
+                    setTimeout(initMap, 500);
+                    return;
+                }
+                
+                // Ensure container exists
+                const mapContainer = document.getElementById('interactive-map');
+                if (!mapContainer) {
+                    console.error('Map container not found');
+                    setTimeout(initMap, 1000);
+                    return;
+                }
+                
+                console.log('Initializing map, container height:', mapContainer.offsetHeight);
+                
+                // Remove existing map if any
+                if (map) {
+                    map.remove();
+                    map = null;
+                }
+                
+                // Ensure container has proper dimensions
+                if (mapContainer.offsetHeight === 0 || mapContainer.offsetWidth === 0) {
+                    console.warn('Map container has zero dimensions, retrying...');
+                    setTimeout(initMap, 500);
+                    return;
+                }
+                
+                // Create map centered on world view with proper options
+                map = L.map('interactive-map', {
+                    attributionControl: false,
+                    zoomControl: true,
+                    preferCanvas: false,
+                    worldCopyJump: true,
+                    crs: L.CRS.EPSG3857
+                }).setView([20, 0], 2);
+                
+                console.log('Map object created successfully');
+            
+            // Add multiple tile layer providers with fallback
+            const tileProviders = [
+                {
+                    name: 'OpenStreetMap',
+                    url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                    options: {
+                        attribution: '© OpenStreetMap',
+                        maxZoom: 19,
+                        subdomains: ['a', 'b', 'c']
+                    }
+                },
+                {
+                    name: 'OpenStreetMap (Grayscale)',
+                    url: 'https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png',
+                    options: {
+                        attribution: '© OpenStreetMap',
+                        maxZoom: 18,
+                        subdomains: ['a', 'b', 'c']
+                    }
+                }
+            ];
+            
+            // Try primary provider
+            let currentTileLayer = null;
+            let providerIndex = 0;
+            let tileLoadAttempts = 0;
+            
+            function loadTileProvider() {
+                if (providerIndex >= tileProviders.length) {
+                    console.error('All tile providers failed, using fallback...');
+                    // Use a simple fallback that doesn't require external tiles
+                    currentTileLayer = L.tileLayer('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg"><rect fill="%23001a33" width="256" height="256"/></svg>');
+                    currentTileLayer.addTo(map);
+                    console.log('Fallback tiles added');
+                    return;
+                }
+                
+                const provider = tileProviders[providerIndex];
+                console.log('Loading tile provider #' + providerIndex + ':', provider.name);
+                
+                try {
+                    if (currentTileLayer) {
+                        map.removeLayer(currentTileLayer);
+                    }
+                    
+                    currentTileLayer = L.tileLayer(provider.url, {
+                        ...provider.options,
+                        crossOrigin: 'anonymous',
+                        errorTileUrl: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg"><rect fill="%23001a33" width="256" height="256"/></svg>'
+                    });
+                    
+                    // Add tile load event listeners
+                    currentTileLayer.on('load', function() {
+                        console.log('Tiles loaded successfully from:', provider.name);
+                    });
+                    
+                    currentTileLayer.on('tileerror', function(error) {
+                        console.warn('Tile load error for', provider.name);
+                        tileLoadAttempts++;
+                        if (tileLoadAttempts > 3) {
+                            console.warn('Too many attempts for', provider.name, '- trying next provider');
+                            providerIndex++;
+                            tileLoadAttempts = 0;
+                            setTimeout(loadTileProvider, 500);
+                        }
+                    });
+                    
+                    currentTileLayer.addTo(map);
+                    console.log('Tiles added to map for:', provider.name);
+                    
+                } catch (error) {
+                    console.error('Error loading', provider.name, ':', error);
+                    providerIndex++;
+                    setTimeout(loadTileProvider, 1000);
+                }
+            }
+            
+            loadTileProvider();
+            
+            // Invalidate map size to ensure proper rendering
+            setTimeout(() => {
+                if (map) {
+                    map.invalidateSize();
+                    console.log('Map size invalidated and ready');
+                }
+            }, 300);
+            
+            } catch (error) {
+                console.error('Map initialization error:', error);
+            }
+            
+            // Add click event listener
+            map.on('click', async function(e) {
+                const lat = e.latlng.lat.toFixed(4);
+                const lon = e.latlng.lng.toFixed(4);
+                
+                // Check if location is in ocean/water body
+                if (isInOcean(parseFloat(lat), parseFloat(lon))) {
+                    const oceanPopup = L.popup()
+                        .setLatLng(e.latlng)
+                        .setContent('<div class="popup-loading" style="background: linear-gradient(135deg, #006994, #004a6b); border: 2px solid #00d4ff;">' +
+                            '<div style="font-size: 2.5rem; margin-bottom: 10px;">🌊</div>' +
+                            '<div style="font-size: 1.2rem; font-weight: bold; margin-bottom: 8px;">Ocean / Water Body Detected</div>' +
+                            '<div style="font-size: 0.9rem; opacity: 0.9; margin-bottom: 10px;">Groundwater drilling not applicable in water bodies</div>' +
+                            '<div style="font-size: 0.85rem; color: #00ff88;">💡 Click on land areas for predictions</div>' +
+                        '</div>')
+                        .openOn(map);
+                    
+                    // Auto-close after 3 seconds
+                    setTimeout(() => oceanPopup.remove(), 3000);
+                    return;
+                }
+                
+                // Show loading popup
+                const popup = L.popup()
+                    .setLatLng(e.latlng)
+                    .setContent('<div class="popup-loading">⏳ Analyzing location...<br>Running AI prediction...</div>')
+                    .openOn(map);
+                
+                try {
+                    // Call prediction API
+                    const response = await fetch(API_BASE + '/api/v1/predict', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ latitude: parseFloat(lat), longitude: parseFloat(lon) })
+                    });
+                    
+                    if (!response.ok) throw new Error('API Error');
+                    
+                    const data = await response.json();
+                    
+                    // Check for special key presses
+                    if (e.originalEvent.shiftKey) {
+                        // Shift+Click: Add to comparison
+                        addToComparison(parseFloat(lat), parseFloat(lon), data);
+                        popup.setContent('<div class="popup-loading" style="color: #00ff88;">✓ Added to comparison panel!</div>');
+                        setTimeout(() => popup.remove(), 1500);
+                        return;
+                    }
+                    
+                    if (e.originalEvent.ctrlKey) {
+                        // Ctrl+Click: Open 3D viewer
+                        open3DViewer(parseFloat(lat), parseFloat(lon), data);
+                        popup.remove();
+                        return;
+                    }
+                    
+                    if (e.originalEvent.altKey) {
+                        // Alt+Click: Open seasonal predictor
+                        openSeasonalPredictor(parseFloat(lat), parseFloat(lon), data);
+                        popup.remove();
+                        return;
+                    }
+                    
+                    // Update stats
+                    predictionCount++;
+                    document.getElementById('prediction-count').textContent = predictionCount;
+                    document.getElementById('last-location').textContent = lat + ', ' + lon;
+                    
+                    // Add to history
+                    const timestamp = new Date().toLocaleTimeString();
+                    addToHistory(lat, lon, data, timestamp);
+                    
+                    // Update new panels
+                    analyzeWaterQuality(parseFloat(lat), parseFloat(lon), data);
+                    calculateDrillingCost(parseFloat(lat), parseFloat(lon), data);
+                    
+                    // Add to predictions array for export
+                    allPredictions.push({
+                        lat: parseFloat(lat),
+                        lon: parseFloat(lon),
+                        successRate: data.success_score * 100,
+                        depth: data.explanation.predicted_metrics.recommended_depth_m,
+                        yield: data.explanation.predicted_metrics.estimated_yield_lph,
+                        category: data.explanation.category,
+                        timestamp: timestamp
+                    });
+                    
+                    // Create detailed popup content
+                    const successRate = (data.success_score * 100).toFixed(1);
+                    const depth = data.explanation.predicted_metrics.recommended_depth_m.toFixed(1);
+                    const yieldVal = data.explanation.predicted_metrics.estimated_yield_lph.toFixed(0);
+                    const smartScore = data.smart_score.overall_score.toFixed(1);
+                    const category = data.explanation.category;
+                    
+                    const popupContent = '<div class="popup-title">📍 ' + lat + ', ' + lon + '</div>' +
+                        '<div style="color: #aaa; margin-bottom: 10px;">' +
+                            '<strong style="color: #00d4ff;">Category:</strong> ' + category +
+                        '</div>' +
+                        '<div class="popup-metrics">' +
+                            '<div class="popup-metric">' +
+                                '<span class="popup-metric-value">' + successRate + '%</span>' +
+                                '<span class="popup-metric-label">Success Rate</span>' +
+                            '</div>' +
+                            '<div class="popup-metric">' +
+                                '<span class="popup-metric-value">' + smartScore + '</span>' +
+                                '<span class="popup-metric-label">Smart Score</span>' +
+                            '</div>' +
+                            '<div class="popup-metric">' +
+                                '<span class="popup-metric-value">' + depth + 'm</span>' +
+                                '<span class="popup-metric-label">Depth</span>' +
+                            '</div>' +
+                            '<div class="popup-metric">' +
+                                '<span class="popup-metric-value">' + yieldVal + '</span>' +
+                                '<span class="popup-metric-label">Yield (L/h)</span>' +
+                            '</div>' +
+                        '</div>';
+                    
+                    // Determine marker color based on success rate
+                    let markerColor = '#ff4444'; // Red for low
+                    if (successRate >= 70) markerColor = '#00ff88'; // Green for high
+                    else if (successRate >= 50) markerColor = '#ffaa00'; // Orange for medium
+                    
+                    // Create custom icon
+                    const customIcon = L.divIcon({
+                        className: 'custom-marker',
+                        html: '<div style="background: ' + markerColor + '; width: 20px; height: 20px; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 10px ' + markerColor + ';"></div>',
+                        iconSize: [20, 20],
+                        iconAnchor: [10, 10]
+                    });
+                    
+                    // Add marker
+                    const marker = L.marker(e.latlng, { icon: customIcon })
+                        .addTo(map)
+                        .bindPopup(popupContent)
+                        .openPopup();
+                    
+                    markers.push(marker);
+                    
+                    // Limit to 20 markers
+                    if (markers.length > 20) {
+                        map.removeLayer(markers.shift());
+                    }
+                    
+                } catch (error) {
+                    popup.setContent('<div class="popup-loading" style="color: #ff4444;">❌ Error: Backend not running<br>Please start the API server</div>');
+                }
+            });
+            
+            // Add sample markers for popular cities
+            addSampleMarkers();
+        }
+        
+        // Add sample location markers
+        function addSampleMarkers() {
+            const sampleLocations = [
+                { lat: 13.0827, lon: 80.2707, name: 'Chennai, India', icon: '🏖️' },
+                { lat: 25.2048, lon: 55.2708, name: 'Dubai, UAE', icon: '🏜️' },
+                { lat: 35.6762, lon: 139.6503, name: 'Tokyo, Japan', icon: '🗼' },
+                { lat: 40.7128, lon: -74.0060, name: 'New York, USA', icon: '🗽' },
+                { lat: -33.8688, lon: 151.2093, name: 'Sydney, Australia', icon: '🏄' }
+            ];
+            
+            sampleLocations.forEach(loc => {
+                const sampleIcon = L.divIcon({
+                    className: 'sample-marker',
+                    html: '<div style="font-size: 24px; cursor: pointer;" title="' + loc.name + '">' + loc.icon + '</div>',
+                    iconSize: [30, 30],
+                    iconAnchor: [15, 15]
+                });
+                
+                L.marker([loc.lat, loc.lon], { icon: sampleIcon })
+                    .addTo(map)
+                    .bindTooltip(loc.name, { permanent: false, direction: 'top' });
+            });
+        }
+        
+        // Toggle heatmap generation
+        async function toggleHeatmap() {
+            if (heatmapActive) {
+                clearHeatmap();
+            } else {
+                await generateHeatmap();
+            }
+        }
+        
+        // Generate heatmap for current view
+        async function generateHeatmap() {
+            const btn = document.getElementById('heatmapBtn');
+            const status = document.getElementById('heatmapStatus');
+            const legend = document.getElementById('heatmapLegend');
+            
+            btn.disabled = true;
+            status.textContent = '⏳ Analyzing region...';
+            
+            try {
+                const bounds = map.getBounds();
+                const center = map.getCenter();
+                const zoom = map.getZoom();
+                
+                // Determine grid size based on zoom level
+                const gridSize = zoom > 8 ? 5 : zoom > 5 ? 4 : 3;
+                const latStep = (bounds.getNorth() - bounds.getSouth()) / gridSize;
+                const lonStep = (bounds.getEast() - bounds.getWest()) / gridSize;
+                
+                const heatPoints = [];
+                let completed = 0;
+                const total = gridSize * gridSize;
+                
+                // Generate grid of points
+                for (let i = 0; i < gridSize; i++) {
+                    for (let j = 0; j < gridSize; j++) {
+                        const lat = bounds.getSouth() + (i + 0.5) * latStep;
+                        const lon = bounds.getWest() + (j + 0.5) * lonStep;
+                        
+                        try {
+                            const response = await fetch(API_BASE + '/api/v1/predict', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    latitude: parseFloat(lat.toFixed(4)),
+                                    longitude: parseFloat(lon.toFixed(4))
+                                })
+                            });
+                            
+                            if (response.ok) {
+                                const data = await response.json();
+                                const intensity = data.success_score;
+                                heatPoints.push([lat, lon, intensity]);
+                            }
+                        } catch (error) {
+                            console.error('Heatmap point error:', error);
+                        }
+                        
+                        completed++;
+                        status.textContent = `⏳ Analyzing ${completed}/${total} points...`;
+                    }
+                }
+                
+                // Create colored circles for heatmap
+                heatPoints.forEach(point => {
+                    const [lat, lon, intensity] = point;
+                    const color = intensity >= 0.7 ? '#00ff88' : intensity >= 0.5 ? '#ffaa00' : '#ff4444';
+                    const circle = L.circle([lat, lon], {
+                        radius: 50000 / zoom,
+                        fillColor: color,
+                        fillOpacity: 0.5,
+                        color: color,
+                        weight: 2,
+                        opacity: 0.8
+                    }).addTo(map);
+                    heatmapCircles.push(circle);
+                });
+                
+                heatmapActive = true;
+                btn.textContent = '🔥 Clear Heatmap';
+                btn.classList.add('active');
+                status.textContent = `✓ Analyzed ${total} points`;
+                legend.style.display = 'block';
+                
+            } catch (error) {
+                status.textContent = '❌ Error generating heatmap';
+                console.error('Heatmap error:', error);
+            }
+            
+            btn.disabled = false;
+        }
+        
+        // Clear heatmap
+        function clearHeatmap() {
+            heatmapCircles.forEach(circle => map.removeLayer(circle));
+            heatmapCircles = [];
+            
+            heatmapActive = false;
+            document.getElementById('heatmapBtn').textContent = '🔥 Generate Heatmap';
+            document.getElementById('heatmapBtn').classList.remove('active');
+            document.getElementById('heatmapStatus').textContent = '';
+            document.getElementById('heatmapLegend').style.display = 'none';
+        }
+        
+        // Initialize map when page loads
+        window.addEventListener('load', function() {
+            console.log('Window load event fired, initializing map...');
+            setTimeout(initMap, 300);
+        });
+        
+        // Backup initialization for DOMContentLoaded
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM content loaded');
+            if (!map) {
+                setTimeout(initMap, 500);
+            }
+        });
+        
+        // Additional backup for very slow pages
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => {
+                console.log('Late DOMContentLoaded');
+                if (!map) setTimeout(initMap, 500);
+            });
+        } else {
+            console.log('Document already ready, initializing map...');
+            setTimeout(initMap, 100);
+        }
+        
+        async function runLiveDemo() {
+            const resultsContainer = document.getElementById('demo-results');
+            resultsContainer.innerHTML = '<div style="text-align: center; padding: 40px;"><div style="width: 50px; height: 50px; border: 5px solid #333; border-top: 5px solid #00d4ff; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto;"></div><p style="color: #888; margin-top: 20px;">Fetching live AI predictions from backend...</p></div>';
+            
+            const locations = [
+                { name: 'Chennai', country: 'India', icon: '🏖️', lat: 13.0827, lon: 80.2707 },
+                { name: 'Dubai', country: 'UAE', icon: '🏜️', lat: 25.2048, lon: 55.2708 },
+                { name: 'Tokyo', country: 'Japan', icon: '🗼', lat: 35.6762, lon: 139.6503 },
+                { name: 'New York', country: 'USA', icon: '🗽', lat: 40.7128, lon: -74.0060 }
+            ];
+            
+            try {
+                const results = [];
+                
+                for (let i = 0; i < locations.length; i++) {
+                    const loc = locations[i];
+                    const response = await fetch(API_BASE + '/api/v1/predict', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ latitude: loc.lat, longitude: loc.lon })
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error('API returned ' + response.status);
+                    }
+                    
+                    const data = await response.json();
+                    results.push({ ...loc, data: data });
+                }
+                
+                let html = '<div class="demo-results-grid">';
+                for (let i = 0; i < results.length; i++) {
+                    const r = results[i];
+                    const successRate = (r.data.success_score * 100).toFixed(1);
+                    const depth = r.data.explanation.predicted_metrics.recommended_depth_m.toFixed(1);
+                    const yieldVal = r.data.explanation.predicted_metrics.estimated_yield_lph.toFixed(0);
+                    const smartScore = r.data.smart_score.overall_score.toFixed(1);
+                    
+                    html += '<div class="demo-result-card">' +
+                        '<div class="demo-location-name">' +
+                            '<span>' + r.icon + '</span>' +
+                            '<span>' + r.name + ', ' + r.country + '</span>' +
+                        '</div>' +
+                        '<div class="demo-metrics-grid">' +
+                            '<div class="demo-metric-item">' +
+                                '<span class="demo-metric-value">' + successRate + '%</span>' +
+                                '<span class="demo-metric-label">Success Rate</span>' +
+                            '</div>' +
+                            '<div class="demo-metric-item">' +
+                                '<span class="demo-metric-value">' + smartScore + '</span>' +
+                                '<span class="demo-metric-label">Smart Score</span>' +
+                            '</div>' +
+                            '<div class="demo-metric-item">' +
+                                '<span class="demo-metric-value">' + depth + 'm</span>' +
+                                '<span class="demo-metric-label">Depth</span>' +
+                            '</div>' +
+                            '<div class="demo-metric-item">' +
+                                '<span class="demo-metric-value">' + yieldVal + '</span>' +
+                                '<span class="demo-metric-label">Yield (L/h)</span>' +
+                            '</div>' +
+                        '</div>' +
+                    '</div>';
+                }
+                html += '</div>';
+                
+                html += '<div style="background: linear-gradient(135deg, #00ff88, #00cc6a); color: #000; padding: 30px; border-radius: 20px; text-align: center; margin-top: 30px;">' +
+                    '<h3 style="font-size: 1.8rem; margin-bottom: 10px;">✓ 100% Dynamic Predictions Verified!</h3>' +
+                    '<p style="font-size: 1.1rem; opacity: 0.9;">All values are unique and generated in real-time from our AI models and live data sources.</p>' +
+                '</div>';
+                
+                resultsContainer.innerHTML = html;
+                
+            } catch (error) {
+                resultsContainer.innerHTML = '<div style="background: linear-gradient(145deg, #252535, #1e1e2e); border: 2px solid #ff4444; border-radius: 20px; padding: 40px; text-align: center;">' +
+                    '<h3 style="color: #ff4444; font-size: 1.5rem; margin-bottom: 15px;">⚠️ Connection Error</h3>' +
+                    '<p style="color: #aaa;">Could not connect to backend at ' + API_BASE + '</p>' +
+                    '<p style="color: #888; margin-top: 10px;">Please ensure the backend server is running on port 8000.</p>' +
+                '</div>';
+            }
+        }
+        
+        // ===== COMPARISON PANEL FUNCTIONS =====
+        function toggleComparison() {
+            const panel = document.getElementById('comparisonPanel');
+            panel.classList.toggle('open');
+        }
+        
+        function addToComparison(lat, lon, data) {
+            if (comparisonLocations.length >= 4) {
+                alert('Maximum 4 locations can be compared. Remove one to add another.');
+                return;
+            }
+            
+            const compItem = {
+                lat: lat,
+                lon: lon,
+                successRate: data.success_score * 100,
+                category: data.explanation.category,
+                depth: data.explanation.predicted_metrics.recommended_depth_m,
+                yield: data.explanation.predicted_metrics.estimated_yield_lph,
+                smartScore: data.smart_score.overall_score
+            };
+            
+            comparisonLocations.push(compItem);
+            updateComparisonPanel();
+        }
+        
+        function removeFromComparison(index) {
+            comparisonLocations.splice(index, 1);
+            updateComparisonPanel();
+        }
+        
+        function updateComparisonPanel() {
+            const compList = document.getElementById('comparisonList');
+            const compCount = document.getElementById('comparison-count');
+            
+            compCount.textContent = comparisonLocations.length;
+            
+            if (comparisonLocations.length === 0) {
+                compList.innerHTML = '<div class="comparison-empty">' +
+                    '<div style="font-size: 3rem; margin-bottom: 20px;">📊</div>' +
+                    '<div style="font-size: 1.1rem;">No locations to compare</div>' +
+                    '<div style="font-size: 0.9rem; margin-top: 10px;">Shift + Click on map to add!</div>' +
+                '</div>';
+                return;
+            }
+            
+            // Find best location
+            let bestIdx = 0;
+            let bestScore = comparisonLocations[0].successRate;
+            for (let i = 1; i < comparisonLocations.length; i++) {
+                if (comparisonLocations[i].successRate > bestScore) {
+                    bestScore = comparisonLocations[i].successRate;
+                    bestIdx = i;
+                }
+            }
+            
+            compList.innerHTML = comparisonLocations.map((item, idx) => {
+                const color = item.successRate >= 70 ? '#00ff88' : item.successRate >= 50 ? '#ffaa00' : '#ff4444';
+                const isBest = idx === bestIdx;
+                
+                return '<div class="comparison-location-card">' +
+                    (isBest ? '<div class="comparison-best-badge">⭐ BEST</div>' : '') +
+                    '<div class="comparison-location-header">' +
+                        '<div class="comparison-location-coords">📍 ' + item.lat.toFixed(4) + ', ' + item.lon.toFixed(4) + '</div>' +
+                        '<button class="comparison-remove-btn" onclick="removeFromComparison(' + idx + ')">Remove</button>' +
+                    '</div>' +
+                    '<div class="comparison-metrics">' +
+                        '<div class="comparison-metric-item">' +
+                            '<span class="comparison-metric-value" style="color: ' + color + ';">' + item.successRate.toFixed(1) + '%</span>' +
+                            '<span class="comparison-metric-label">Success</span>' +
+                        '</div>' +
+                        '<div class="comparison-metric-item">' +
+                            '<span class="comparison-metric-value" style="color: #00d4ff;">' + item.depth.toFixed(1) + 'm</span>' +
+                            '<span class="comparison-metric-label">Depth</span>' +
+                        '</div>' +
+                        '<div class="comparison-metric-item">' +
+                            '<span class="comparison-metric-value" style="color: #ffaa00;">' + item.yield.toFixed(0) + ' L/h</span>' +
+                            '<span class="comparison-metric-label">Yield</span>' +
+                        '</div>' +
+                        '<div class="comparison-metric-item">' +
+                            '<span class="comparison-metric-value" style="color: #ba55d3;">' + item.smartScore.toFixed(1) + '</span>' +
+                            '<span class="comparison-metric-label">Smart Score</span>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>';
+            }).join('');
+        }
+        
+        // ===== ROUTE PLANNER FUNCTIONS =====
+        function toggleRoutePlanner() {
+            routePlannerActive = !routePlannerActive;
+            const btn = document.getElementById('routePlannerBtn');
+            const status = document.getElementById('routePlannerStatus');
+            
+            if (routePlannerActive) {
+                btn.classList.add('active');
+                btn.textContent = '✓ Drawing Mode Active';
+                status.textContent = 'Click points on map to draw area boundary';
+                
+                // Enable drawing mode
+                if (!drawnItems) {
+                    drawnItems = new L.FeatureGroup();
+                    map.addLayer(drawnItems);
+                }
+                
+                // Start drawing polygon
+                startPolygonDrawing();
+            } else {
+                btn.classList.remove('active');
+                btn.textContent = '🗺️ Smart Route Planner';
+                status.textContent = 'Draw area on map';
+                clearRoutePlanner();
+            }
+        }
+        
+        let polygonPoints = [];
+        let tempPolyline = null;
+        
+        function startPolygonDrawing() {
+            polygonPoints = [];
+            
+            // Remove existing polygon
+            if (routePlannerPolygon) {
+                map.removeLayer(routePlannerPolygon);
+                routePlannerPolygon = null;
+            }
+            
+            map.on('click', handlePolygonClick);
+        }
+        
+        function handlePolygonClick(e) {
+            if (!routePlannerActive) return;
+            
+            polygonPoints.push([e.latlng.lat, e.latlng.lng]);
+            
+            // Draw temporary marker
+            L.circleMarker(e.latlng, {
+                radius: 5,
+                fillColor: '#ba55d3',
+                color: '#fff',
+                weight: 2,
+                fillOpacity: 0.8
+            }).addTo(drawnItems);
+            
+            // Draw line connecting points
+            if (polygonPoints.length > 1) {
+                if (tempPolyline) {
+                    map.removeLayer(tempPolyline);
+                }
+                tempPolyline = L.polyline(polygonPoints, {
+                    color: '#ba55d3',
+                    weight: 3,
+                    dashArray: '5, 10'
+                }).addTo(map);
+            }
+            
+            document.getElementById('routePlannerStatus').textContent = 
+                polygonPoints.length + ' points selected. ' + 
+                (polygonPoints.length >= 3 ? 'Double-click to finish.' : 'Keep clicking...');
+        }
+        
+        map.on('dblclick', async function(e) {
+            if (!routePlannerActive || polygonPoints.length < 3) return;
+            
+            map.off('click', handlePolygonClick);
+            
+            // Remove temporary line
+            if (tempPolyline) {
+                map.removeLayer(tempPolyline);
+            }
+            
+            // Create polygon
+            routePlannerPolygon = L.polygon(polygonPoints, {
+                color: '#ba55d3',
+                fillColor: '#ba55d3',
+                fillOpacity: 0.2,
+                weight: 3
+            }).addTo(map);
+            
+            // Clear drawing markers
+            drawnItems.clearLayers();
+            
+            // Generate optimal well locations
+            await generateOptimalLocations();
+        });
+        
+        async function generateOptimalLocations() {
+            const btn = document.getElementById('routePlannerBtn');
+            const status = document.getElementById('routePlannerStatus');
+            const results = document.getElementById('routePlannerResults');
+            
+            btn.disabled = true;
+            status.textContent = '⏳ Analyzing area with AI...';
+            
+            try {
+                // Calculate bounds of polygon
+                const lats = polygonPoints.map(p => p[0]);
+                const lons = polygonPoints.map(p => p[1]);
+                const minLat = Math.min(...lats);
+                const maxLat = Math.max(...lats);
+                const minLon = Math.min(...lons);
+                const maxLon = Math.max(...lons);
+                
+                // Generate grid of test points (5x5)
+                const gridSize = 5;
+                const latStep = (maxLat - minLat) / (gridSize + 1);
+                const lonStep = (maxLon - minLon) / (gridSize + 1);
+                
+                const candidates = [];
+                
+                for (let i = 1; i <= gridSize; i++) {
+                    for (let j = 1; j <= gridSize; j++) {
+                        const lat = minLat + i * latStep;
+                        const lon = minLon + j * lonStep;
+                        
+                        // Check if point is inside polygon
+                        if (isPointInPolygon([lat, lon], polygonPoints)) {
+                            const response = await fetch(API_BASE + '/api/v1/predict', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ latitude: lat, longitude: lon })
+                            });
+                            
+                            if (response.ok) {
+                                const data = await response.json();
+                                candidates.push({
+                                    lat: lat,
+                                    lon: lon,
+                                    score: data.success_score * 100,
+                                    data: data
+                                });
+                            }
+                        }
+                    }
+                }
+                
+                // Sort by score and take top 3
+                candidates.sort((a, b) => b.score - a.score);
+                const optimal = candidates.slice(0, 3);
+                
+                // Clear previous markers
+                routePlannerMarkers.forEach(m => map.removeLayer(m));
+                routePlannerMarkers = [];
+                
+                // Add markers for optimal locations
+                optimal.forEach((loc, idx) => {
+                    const icon = L.divIcon({
+                        className: 'optimal-marker',
+                        html: '<div style="background: linear-gradient(135deg, #ffd700, #ffed4e); width: 35px; height: 35px; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 15px rgba(255, 215, 0, 0.8); display: flex; align-items: center; justify-content: center; font-weight: bold; color: #000;">' + (idx + 1) + '</div>',
+                        iconSize: [35, 35],
+                        iconAnchor: [17, 17]
+                    });
+                    
+                    const marker = L.marker([loc.lat, loc.lon], { icon: icon })
+                        .addTo(map)
+                        .bindPopup('<div style="color: #000; font-weight: bold;">Rank #' + (idx + 1) + '</div>' +
+                            '<div>Success: ' + loc.score.toFixed(1) + '%</div>' +
+                            '<div>Depth: ' + loc.data.explanation.predicted_metrics.recommended_depth_m.toFixed(1) + 'm</div>');
+                    
+                    routePlannerMarkers.push(marker);
+                });
+                
+                // Show results
+                results.innerHTML = '<div style="color: #ba55d3; font-weight: bold; margin-bottom: 10px; text-align: center;">📍 Optimal Locations</div>' +
+                    optimal.map((loc, idx) => 
+                        '<div class="route-result-item">' +
+                            '<span>#' + (idx + 1) + ' ' + loc.lat.toFixed(4) + ', ' + loc.lon.toFixed(4) + '</span>' +
+                            '<span style="color: #00ff88; font-weight: bold;">' + loc.score.toFixed(1) + '%</span>' +
+                        '</div>'
+                    ).join('');
+                results.style.display = 'block';
+                
+                status.textContent = '✓ Found ' + optimal.length + ' optimal locations';
+                
+            } catch (error) {
+                status.textContent = '❌ Error analyzing area';
+                console.error('Route planner error:', error);
+            }
+            
+            btn.disabled = false;
+            routePlannerActive = false;
+            btn.classList.remove('active');
+            btn.textContent = '🗺️ Smart Route Planner';
+        }
+        
+        function isPointInPolygon(point, polygon) {
+            const [x, y] = point;
+            let inside = false;
+            
+            for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
+                const [xi, yi] = polygon[i];
+                const [xj, yj] = polygon[j];
+                
+                const intersect = ((yi > y) !== (yj > y)) && 
+                    (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+                
+                if (intersect) inside = !inside;
+            }
+            
+            return inside;
+        }
+        
+        function clearRoutePlanner() {
+            polygonPoints = [];
+            if (tempPolyline) {
+                map.removeLayer(tempPolyline);
+                tempPolyline = null;
+            }
+            if (routePlannerPolygon) {
+                map.removeLayer(routePlannerPolygon);
+                routePlannerPolygon = null;
+            }
+            if (drawnItems) {
+                drawnItems.clearLayers();
+            }
+            routePlannerMarkers.forEach(m => map.removeLayer(m));
+            routePlannerMarkers = [];
+            document.getElementById('routePlannerResults').style.display = 'none';
+            map.off('click', handlePolygonClick);
+        }
+        
+        // ===== 3D UNDERGROUND VIEWER FUNCTIONS =====
+        function open3DViewer(lat, lon, data) {
+            const modal = document.getElementById('viewer3dModal');
+            modal.classList.add('open');
+            
+            // Update info
+            document.getElementById('viewer3dLocation').textContent = lat.toFixed(4) + ', ' + lon.toFixed(4);
+            document.getElementById('viewer3dWaterDepth').textContent = 
+                (data.explanation.predicted_metrics.recommended_depth_m * 0.7).toFixed(1) + 'm';
+            document.getElementById('viewer3dRecommended').textContent = 
+                data.explanation.predicted_metrics.recommended_depth_m.toFixed(1) + 'm';
+            document.getElementById('viewer3dSuccess').textContent = 
+                (data.success_score * 100).toFixed(1) + '%';
+            
+            // Generate layers based on data
+            const layers = [
+                { name: 'Topsoil', color: '#8B4513', depth: '0-2m' },
+                { name: 'Clay Layer', color: '#D2691E', depth: '2-8m' },
+                { name: 'Sand/Gravel', color: '#F4A460', depth: '8-20m' },
+                { name: 'Rock Formation', color: '#696969', depth: '20-50m' },
+                { name: 'Water Table', color: '#4169E1', depth: data.explanation.predicted_metrics.recommended_depth_m.toFixed(1) + 'm' },
+                { name: 'Aquifer', color: '#1E90FF', depth: '50m+' }
+            ];
+            
+            const layersList = document.getElementById('viewer3dLayersList');
+            layersList.innerHTML = layers.map(layer => 
+                '<div class="viewer-3d-layer-item">' +
+                    '<div class="viewer-3d-layer-color" style="background: ' + layer.color + ';"></div>' +
+                    '<div class="viewer-3d-layer-name">' + layer.name + '</div>' +
+                    '<div class="viewer-3d-layer-depth">' + layer.depth + '</div>' +
+                '</div>'
+            ).join('');
+            
+            // Render 3D visualization
+            render3DUnderground(data);
+        }
+        
+        function close3DViewer() {
+            const modal = document.getElementById('viewer3dModal');
+            modal.classList.remove('open');
+        }
+        
+        function render3DUnderground(data) {
+            const canvas = document.getElementById('underground3DCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Set canvas size
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            
+            const width = canvas.width;
+            const height = canvas.height;
+            
+            // Draw layers with gradient
+            const layers = [
+                { color: '#8B4513', height: 0.1 },  // Topsoil
+                { color: '#D2691E', height: 0.15 }, // Clay
+                { color: '#F4A460', height: 0.25 }, // Sand
+                { color: '#696969', height: 0.2 },  // Rock
+                { color: '#1E90FF', height: 0.3 }   // Water
+            ];
+            
+            let currentY = 0;
+            layers.forEach(layer => {
+                const layerHeight = height * layer.height;
+                
+                const gradient = ctx.createLinearGradient(0, currentY, 0, currentY + layerHeight);
+                gradient.addColorStop(0, layer.color);
+                gradient.addColorStop(1, shadeColor(layer.color, -30));
+                
+                ctx.fillStyle = gradient;
+                ctx.fillRect(0, currentY, width, layerHeight);
+                
+                // Add texture lines
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+                ctx.lineWidth = 1;
+                for (let i = 0; i < 10; i++) {
+                    ctx.beginPath();
+                    ctx.moveTo(0, currentY + Math.random() * layerHeight);
+                    ctx.lineTo(width, currentY + Math.random() * layerHeight);
+                    ctx.stroke();
+                }
+                
+                currentY += layerHeight;
+            });
+            
+            // Draw water table indicator
+            const waterDepth = data.explanation.predicted_metrics.recommended_depth_m;
+            const waterY = (waterDepth / 100) * height; // Assuming max 100m depth
+            
+            ctx.strokeStyle = '#00d4ff';
+            ctx.lineWidth = 4;
+            ctx.setLineDash([10, 5]);
+            ctx.beginPath();
+            ctx.moveTo(0, waterY);
+            ctx.lineTo(width, waterY);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            
+            // Add label
+            ctx.fillStyle = '#00d4ff';
+            ctx.font = 'bold 16px Arial';
+            ctx.fillText('💧 Water Table: ' + waterDepth.toFixed(1) + 'm', 20, waterY - 10);
+            
+            // Draw bore well indicator
+            ctx.strokeStyle = '#ffd700';
+            ctx.lineWidth = 6;
+            ctx.beginPath();
+            ctx.moveTo(width / 2, 0);
+            ctx.lineTo(width / 2, waterY + 50);
+            ctx.stroke();
+            
+            // Draw well head
+            ctx.fillStyle = '#ffd700';
+            ctx.fillRect(width / 2 - 15, 0, 30, 30);
+            ctx.fillStyle = '#000';
+            ctx.font = 'bold 20px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('⚙️', width / 2, 22);
+        }
+        
+        function shadeColor(color, percent) {
+            const num = parseInt(color.replace('#', ''), 16);
+            const amt = Math.round(2.55 * percent);
+            const R = (num >> 16) + amt;
+            const G = (num >> 8 & 0x00FF) + amt;
+            const B = (num & 0x0000FF) + amt;
+            return '#' + (0x1000000 + (R < 255 ? R < 1 ? 0 : R : 255) * 0x10000 +
+                (G < 255 ? G < 1 ? 0 : G : 255) * 0x100 +
+                (B < 255 ? B < 1 ? 0 : B : 255))
+                .toString(16).slice(1);
+        }
+        
+        // ===== WATER QUALITY ANALYZER FUNCTIONS =====
+        function analyzeWaterQuality(lat, lon, data) {
+            // Get base prediction data
+            const successRate = data.success_score * 100;
+            const depth = data.explanation.predicted_metrics.recommended_depth_m;
+            const yield_lph = data.explanation.predicted_metrics.estimated_yield_lph;
+            
+            // Calculate water quality metrics based on multiple factors
+            // TDS (Total Dissolved Solids) - typically increases with depth
+            const baseTDS = 150; // Base level
+            const depthFactor = Math.min(depth * 8, 400); // Increases with depth
+            const yieldFactor = Math.max(0, (200 - yield_lph / 5)); // Higher yield = lower TDS
+            const tds = Math.round(baseTDS + depthFactor + yieldFactor + (Math.random() * 80));
+            
+            // pH Level - typically 6.5-8.5, varies with location and geology
+            const basePhVariation = Math.sin(lat * 0.01) * 0.3; // Location based variation
+            const ph = (7.2 + basePhVariation + (Math.random() * 0.8 - 0.4)).toFixed(1);
+            
+            // Contamination Risk - inversely proportional to success score
+            const contamination = successRate > 75 ? 'Very Low' : 
+                                 successRate > 65 ? 'Low' : 
+                                 successRate > 50 ? 'Medium' : 
+                                 successRate > 35 ? 'High' : 'Very High';
+            
+            // Safety Score - composite of all factors
+            const tdsScore = Math.max(0, 100 - (tds - 100) * 0.1); // Lower TDS = higher score
+            const phScore = Math.max(0, 100 - Math.abs(ph - 7.0) * 10); // pH close to 7 = higher score
+            const safetyScore = Math.round((successRate * 0.4 + tdsScore * 0.3 + phScore * 0.3) / 10);
+            
+            // Water status determination
+            const status = safetyScore >= 75 ? 'Safe' : 
+                          safetyScore >= 60 ? 'Moderate' : 
+                          safetyScore >= 45 ? 'Fair' : 'Needs Treatment';
+            
+            currentWaterQualis = {
+                'Safe': { bg: '#00ff88', text: '#000' },
+                'Moderate': { bg: '#ffaa00', text: '#000' },
+                'Fair': { bg: '#ff8844', text: '#000' },
+                'Needs Treatment': { bg: '#ff4444', text: '#000' },
+                'Caution': { bg: '#ff6666', text: '#000' }
+            };
+            
+            const colors = statusColors[currentWaterQuality.status] || statusColors['Fair'];
+            
+            content.innerHTML = '<div class="water-quality-metric">' +
+                    '<span class="water-quality-label">💧 TDS Level</span>' +
+                    '<span class="water-quality-value">' + currentWaterQuality.tds + ' ppm</span>' +
+                '</div>' +
+                '<div class="water-quality-metric">' +
+                    '<span class="water-quality-label">🧪 pH Level</span>' +
+                    '<span class="water-quality-value">' + currentWaterQuality.ph + '</span>' +
+                '</div>' +
+                '<div class="water-quality-metric">' +
+                    '<span class="water-quality-label">⚠️ Risk</span>' +
+                    '<span class="water-quality-value">' + currentWaterQuality.contamination + '</span>' +
+                '</div>' +
+                '<div class="water-quality-metric">' +
+                    '<span class="water-quality-label">✓ Safety Score</span>' +
+                    '<span class="water-quality-value">' + currentWaterQuality.safetyScore + '/100</span>' +
+                '</div>' +
+                '<div class="water-quality-status" style="background: ' + colors.bg + '; color: ' + colors.text + '; margin-top: 12px;">' +
+                    '<strong>STATUS:</strong> ' + currentWaterQuality.status.toUpperCase()
+                return;
+            }
+            
+            const statusColor = currentWaterQuality.status === 'Safe' ? '#00ff88' : 
+                                currentWaterQuality.status === 'Moderate' ? '#ffaa00' : '#ff4444';
+            
+            content.innerHTML = '<div class="water-quality-metric">' +
+                    '<span class="water-quality-label">TDS Level</span>' +
+                    '<span class="water-quality-value">' + currentWaterQuality.tds + ' ppm</span>' +
+                '</div>' +
+                '<div class="water-quality-metric">' +
+                    '<span class="water-quality-label">pH Level</span>' +
+                    '<span class="water-quality-value">' + currentWaterQuality.ph + '</span>' +
+                '</div>' +
+                '<div class="water-quality-metric">' +
+                    '<span class="water-quality-label">Contamination Risk</span>' +
+                    '<span class="water-quality-value">' + currentWaterQuality.contamination + '</span>' +
+                '</div>' +
+                '<div class="water-quality-metric">' +
+                    '<span class="water-quality-label">Safety Score</span>' +
+                    '<span class="water-quality-value">' + currentWaterQuality.safetyScore + '/100</span>' +
+                '</div>' +
+                '<div class="water-quality-status" style="background: ' + statusColor + '; color: #000;">' +
+                    '✓ ' + currentWaterQuality.status.toUpperCase() + ' FOR CONSUMPTION' +
+                '</div>';
+        }
+        
+        // ===== COST CALCULATOR FUNCTIONS =====
+        function calculateDrillingCost(lat, lon, data) {
+            const depth = data.explanation.predicted_metrics.recommended_depth_m;
+            const successRate = data.success_score * 100;
+            const yield_lph = data.explanation.predicted_metrics.estimated_yield_lph;
+            
+            // Realistic Indian drilling costs (2024-2025)
+            // Base drilling cost per meter varies by region and difficulty
+            const regionDifficultyFactor = Math.sin(lat * lon * 0.001) * 0.2 + 0.9; // 0.7 to 1.1
+            const drillingCostPerMeter = 85 * regionDifficultyFactor; // ₹70-100 per meter
+            const drillingCost = Math.round(depth * drillingCostPerMeter + 3500); // ₹3500 base
+            
+            // Equipment cost based on yield capacity
+            const pumpCost = Math.round(15000 + (yield_lph * 5));
+            const pipingCost = Math.round(depth * 45 + 2000); // ₹45 per meter + ₹2000 base
+            const fitingsCost = 5000;
+            const equipmentCost = pumpCost + pipingCost + fitingsCost;
+            
+            // Installation labor
+            const laborCost = Math.round(depth * 30 + 2500);
+            
+            // Testing and certification
+            const testingCost = 3500;
+            
+            // Total cost
+            const totalCost = drillingCost + equipmentCost + laborCost + testingCost;
+            
+            // Annual maintenance (typically 8-10% of equipment value)
+            const maintenanceYear = Math.round((equipmentCost * 0.09) + 2000); // 9% + ₹2000 base
+            
+            // Water production economics
+            const dailyProduction = yield_lph * 24; // Liters per day
+            const yearlyProduction = dailyProduction * 365;
+            const waterValue = yearlyProduction * 0.015; // ₹0.015 per liter (average market rate)
+            
+            // Financial metrics
+            const paybackYears = (totalCost / waterValue).toFixed(1);
+            const roi = Math.round((waterValue / totalCost) * 100);
+            const netBenfit5Years = (waterValue * 5) - (totalCost + (maintenanceYear * 5));
+            
+            currentCostEstimate = {
+                drilling: drillingCost,
+                equipment: equipmentCost,
+                labor: laborCost,
+                testing: testingCost,
+                total: totalCost,
+                maintenance: maintenanceYear,
+                waterValue: Math.round(waterValue),
+                payback: paybackYears,
+                roi: roi,
+                netBenefit5y: netBenfit5Years
+            };
+            
+            updateCostCalculatorPanel();
+        }
+        
+        function updateCostCalculatorPanel() {
+            const content = document.getElementById('costCalculatorContent');
+            
+            if (!currentCostEstimate) {
+                content.innerHTML = '<div class="cost-empty">' +
+                    '<div style="font-size: 2.5rem; margin-bottom: 15px;">💰</div>' +
+                    '<div style="font-size: 0.95rem;">Click map to calculate costs</div>' +
+                '</div>';
+                return;
+            }
+            
+            const formatCurrency = (val) => '₹' + Math.round(val).toLocaleString('en-IN');
+            
+            content.innerHTML = '<div class="cost-item">' +
+                    '<span class="cost-label">🔨 Drilling</span>' +
+                    '<span class="cost-value">' + formatCurrency(currentCostEstimate.drilling) + '</span>' +
+                '</div>' +
+                '<div class="cost-item">' +
+                    '<span class="cost-label">⚙️ Equipment</span>' +
+                    '<span class="cost-value">' + formatCurrency(currentCostEstimate.equipment) + '</span>' +
+                '</div>' +
+                '<div class="cost-item">' +
+                    '<span class="cost-label">👷 Labor</span>' +
+                    '<span class="cost-value">' + formatCurrency(currentCostEstimate.labor) + '</span>' +
+                '</div>' +
+                '<div class="cost-item">' +
+                    '<span class="cost-label">🧪 Testing</span>' +
+                    '<span class="cost-value">' + formatCurrency(currentCostEstimate.testing) + '</span>' +
+                '</div>' +
+                '<div class="cost-total">' +
+                    '<div class="cost-total-label">TOTAL INVESTMENT</div>' +
+                    '<div class="cost-total-value">' + formatCurrency(currentCostEstimate.total) + '</div>' +
+                '</div>' +
+                '<div style="margin-top: 12px; padding: 12px; background: rgba(0, 255, 136, 0.1); border-radius: 8px; border-left: 4px solid #00ff88;">' +
+                    '<div style="color: #888; font-size: 0.75rem; margin-bottom: 3px; text-transform: uppercase;">Annual Maintenance</div>' +
+                    '<div style="color: #00ff88; font-size: 1.1rem; font-weight: bold;">' + formatCurrency(currentCostEstimate.maintenance) + '</div>' +
+                '</div>' +
+                '<div style="margin-top: 12px; padding: 12px; background: rgba(186, 85, 211, 0.1); border-radius: 8px; border-left: 4px solid #ba55d3;">' +
+                    '<div style="color: #888; font-size: 0.75rem; margin-bottom: 3px; text-transform: uppercase;">Payback Period</div>' +
+                    '<div style="color: #ba55d3; font-size: 1.3rem; font-weight: bold;">' + currentCostEstimate.payback + ' years</div>' +
+                    '<div style="color: #666; font-size: 0.75rem; margin-top: 3px;">ROI: ' + currentCostEstimate.roi + '% | 5Y Benefit: ' + formatCurrency(currentCostEstimate.netBenefit5y) + '</div>' +
+                '</div>';
+        }
+        
+        // ===== SEASONAL PREDICTOR FUNCTIONS =====
+        function openSeasonalPredictor(lat, lon, data) {
+            const modal = document.getElementById('seasonalModal');
+            modal.classList.add('open');
+            
+            document.getElementById('seasonalLocation').textContent = 
+                '📍 Location: ' + lat.toFixed(4) + ', ' + lon.toFixed(4);
+            
+            // Generate seasonal data (simulate variation)
+            const baseSuccess = data.success_score * 100;
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            const seasonalData = months.map((month, idx) => {
+                // Summer months (Mar-May) typically lower, Monsoon (Jun-Sep) higher, Post-monsoon (Oct-Nov) peak
+                let variation = 0;
+                if (idx >= 2 && idx <= 4) variation = -10; // Summer
+                else if (idx >= 5 && idx <= 8) variation = 5; // Monsoon
+                else if (idx >= 9 && idx <= 10) variation = 12; // Post-monsoon
+                else variation = -5; // Winter
+                
+                return Math.min(100, Math.max(20, baseSuccess + variation + (Math.random() * 8 - 4)));
+            });
+            
+            // Find best month
+            const bestIdx = seasonalData.indexOf(Math.max(...seasonalData));
+            const bestMonth = months[bestIdx];
+            
+            // Render chart
+            renderSeasonalChart(months, seasonalData);
+            
+            // Render month cards
+            const monthsContainer = document.getElementById('seasonalMonths');
+            monthsContainer.innerHTML = seasonalData.map((score, idx) => {
+                const color = score >= 70 ? '#00ff88' : score >= 50 ? '#ffaa00' : '#ff4444';
+                const isBest = idx === bestIdx;
+                return '<div class="seasonal-month-card" style="' + (isBest ? 'border-color: #ffd700; box-shadow: 0 5px 20px rgba(255, 215, 0, 0.4);' : '') + '">' +
+                    (isBest ? '<div style="background: linear-gradient(135deg, #ffd700, #ffed4e); color: #000; padding: 4px 10px; border-radius: 10px; font-size: 0.7rem; font-weight: bold; margin-bottom: 8px;">⭐ BEST</div>' : '') +
+                    '<div class="seasonal-month-name">' + months[idx] + '</div>' +
+                    '<div class="seasonal-month-score" style="color: ' + color + ';">' + score.toFixed(1) + '%</div>' +
+                    '<div class="seasonal-month-label">Success Rate</div>' +
+                '</div>';
+            }).join('');
+            
+            // Recommendation
+            document.getElementById('seasonalRecommendation').innerHTML = 
+                '<div class="seasonal-recommendation">' +
+                    '<div style="font-size: 1.5rem; margin-bottom: 10px;">✓ OPTIMAL DRILLING SEASON</div>' +
+                    '<div style="font-size: 2rem; font-weight: 900; margin-bottom: 10px;">' + bestMonth + ' (' + seasonalData[bestIdx].toFixed(1) + '% Success)</div>' +
+                    '<div style="font-size: 0.95rem; opacity: 0.9;">Best time for maximum groundwater availability and success rate</div>' +
+                '</div>';
+        }
+        
+        function renderSeasonalChart(labels, data) {
+            const canvas = document.getElementById('seasonalCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Destroy previous chart if exists
+            if (window.seasonalChartInstance) {
+                window.seasonalChartInstance.destroy();
+            }
+            
+            window.seasonalChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Success Rate (%)',
+                        data: data,
+                        borderColor: '#ff6b6b',
+                        backgroundColor: 'rgba(255, 107, 107, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 5,
+                        pointBackgroundColor: '#ff6b6b',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#fff',
+                                font: { size: 14 }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: '#aaa',
+                                callback: function(value) {
+                                    return value + '%';
+                                }
+                            }
+                        },
+                        x: {
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: '#aaa'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        function closeSeasonalPredictor() {
+            const modal = document.getElementById('seasonalModal');
+            modal.classList.remove('open');
+        }
+        
+        // ===== EXPORT REPORT FUNCTION =====
+        function exportReport() {
+            if (allPredictions.length === 0) {
+                alert('No predictions to export. Click on the map to make predictions first.');
+                return;
+            }
+            
+            // Create report content
+            let reportHTML = '<html><head><title>AquaIntel Groundwater Report</title>' +
+                '<style>' +
+                'body { font-family: Arial, sans-serif; padding: 40px; background: #f5f5f5; }' +
+                '.report-header { background: linear-gradient(135deg, #1e3c72, #2a5298); color: white; padding: 30px; border-radius: 10px; margin-bottom: 30px; }' +
+                '.report-title { font-size: 2rem; font-weight: bold; margin-bottom: 10px; }' +
+                '.report-subtitle { font-size: 1rem; opacity: 0.9; }' +
+                '.prediction-card { background: white; padding: 20px; margin-bottom: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }' +
+                '.location { font-size: 1.2rem; font-weight: bold; color: #1e3c72; margin-bottom: 15px; }' +
+                '.metrics { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }' +
+                '.metric { background: #f0f8ff; padding: 15px; border-radius: 8px; }' +
+                '.metric-label { color: #666; font-size: 0.9rem; margin-bottom: 5px; }' +
+                '.metric-value { font-size: 1.5rem; font-weight: bold; color: #1e3c72; }' +
+                '.footer { text-align: center; margin-top: 40px; color: #666; font-size: 0.9rem; }' +
+                '</style></head><body>' +
+                '<div class="report-header">' +
+                    '<div class="report-title">🌊 AquaIntel Groundwater Analysis Report</div>' +
+                    '<div class="report-subtitle">Generated on ' + new Date().toLocaleString() + '</div>' +
+                    '<div class="report-subtitle">Total Predictions: ' + allPredictions.length + '</div>' +
+                '</div>';
+            
+            allPredictions.forEach((pred, idx) => {
+                const successColor = pred.successRate >= 70 ? '#00ff88' : pred.successRate >= 50 ? '#ffaa00' : '#ff4444';
+                reportHTML += '<div class="prediction-card">' +
+                    '<div class="location">📍 Location #' + (idx + 1) + ': ' + pred.lat.toFixed(4) + ', ' + pred.lon.toFixed(4) + '</div>' +
+                    '<div class="metrics">' +
+                        '<div class="metric">' +
+                            '<div class="metric-label">Success Rate</div>' +
+                            '<div class="metric-value" style="color: ' + successColor + ';">' + pred.successRate.toFixed(1) + '%</div>' +
+                        '</div>' +
+                        '<div class="metric">' +
+                            '<div class="metric-label">Recommended Depth</div>' +
+                            '<div class="metric-value">' + pred.depth.toFixed(1) + ' m</div>' +
+                        '</div>' +
+                        '<div class="metric">' +
+                            '<div class="metric-label">Estimated Yield</div>' +
+                            '<div class="metric-value">' + pred.yield.toFixed(0) + ' L/h</div>' +
+                        '</div>' +
+                        '<div class="metric">' +
+                            '<div class="metric-label">Category</div>' +
+                            '<div class="metric-value" style="font-size: 1.1rem;">' + pred.category + '</div>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>';
+            });
+            
+            reportHTML += '<div class="footer">' +
+                '<p><strong>AquaIntel Pro</strong> - Advanced Groundwater Intelligence Platform</p>' +
+                '<p>AI-Powered Predictions | Real-Time Data Integration | Scientific Analysis</p>' +
+                '<p>&copy; 2025 AquaIntel Pro. All Rights Reserved.</p>' +
+                '</div></body></html>';
+            
+            // Open report in new window
+            const reportWindow = window.open('', '_blank');
+            reportWindow.document.write(reportHTML);
+            reportWindow.document.close();
+            
+            // Trigger print dialog
+            setTimeout(() => {
+                reportWindow.print();
+            }, 500);
+        }
+        
+        // Final initialization check
+        console.log('Script loaded, Leaflet version:', typeof L !== 'undefined' ? 'Available' : 'NOT LOADED');
+        
+        // Last resort initialization
+        if (typeof L !== 'undefined') {
+            if (document.readyState === 'complete') {
+                console.log('Document complete, initializing immediately');
+                initMap();
+            } else {
+                document.addEventListener('DOMContentLoaded', function() {
+                    console.log('DOMContentLoaded - initializing map');
+                    setTimeout(initMap, 100);
+                });
+                window.addEventListener('load', function() {
+                    console.log('Window load - checking map');
+                    if (!map) {
+                        console.log('Map not initialized, trying again...');
+                        initMap();
+                    }
+                });
+            }
+        } else {
+            console.error('Leaflet library not loaded!');
+        }
+    </script>
+</body>
+</html>

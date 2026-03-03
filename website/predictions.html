@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Groundwater Predictions - AquaIntel Pro</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Advanced Predictions Styles */
+        .predictions-hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 80px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .predictions-hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: grid-move 20s linear infinite;
+        }
+        
+        @keyframes grid-move {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+        
+        .hero-title-predictions {
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(90deg, #ffffff, #a8d8ff, #ffffff);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 3s linear infinite;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero-subtitle-predictions {
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 1.3rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Main Container */
+        .predictions-main {
+            background: #1a1a2a;
+            padding: 60px 20px;
+            min-height: 800px;
+        }
+        
+        .predictions-container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        
+        /* Tabs Navigation */
+        .prediction-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 40px;
+            border-bottom: 2px solid #333;
+            padding-bottom: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .tab-btn {
+            background: #2a2a3a;
+            border: 2px solid #444;
+            color: #aaa;
+            padding: 15px 30px;
+            border-radius: 15px 15px 0 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .tab-btn:hover, .tab-btn.active {
+            background: linear-gradient(135deg, #00d4ff, #0099cc);
+            color: #000;
+            border-color: #00d4ff;
+            transform: translateY(-3px);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Input Section */
+        .input-section {
+            background: linear-gradient(145deg, #252535, #1e1e2e);
+            border-radius: 25px;
+            padding: 40px;
+            border: 2px solid #333;
+            margin-bottom: 40px;
+        }
+        
+        .input-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .input-group-advanced {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .input-label-advanced {
+            color: #00d4ff;
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .input-field-advanced {
+            background: #1a1a2a;
+            border: 2px solid #444;
+            color: #fff;
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .input-field-advanced:focus {
+            outline: none;
+            border-color: #00d4ff;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+        }
+        
+        /* Quick Locations Grid */
+        .quick-locations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .location-card {
+            background: linear-gradient(145deg, #2a2a3a, #252535);
+            border: 2px solid #444;
+            border-radius: 15px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .location-card:hover {
+            border-color: #00d4ff;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
+        }
+        
+        .location-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .location-name {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 5px;
+        }
+        
+        .location-coords {
+            font-size: 0.75rem;
+            color: #888;
+        }
+        
+        /* Prediction Button */
+        .predict-btn-advanced {
+            width: 100%;
+            background: linear-gradient(135deg, #00ff88, #00cc6a);
+            border: none;
+            color: #000;
+            padding: 20px 40px;
+            border-radius: 15px;
+            font-size: 1.3rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .predict-btn-advanced:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 255, 136, 0.5);
+        }
+        
+        .predict-btn-advanced:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        /* Results Section */
+        .results-section {
+            display: none;
+            animation: fadeIn 0.6s ease;
+        }
+        
+        .results-section.visible {
+            display: block;
+        }
+        
+        .results-header {
+            background: linear-gradient(145deg, #252535, #1e1e2e);
+            border-radius: 25px;
+            padding: 30px;
+            border: 2px solid #333;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .results-location {
+            font-size: 2rem;
+            color: #00d4ff;
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+        
+        .results-timestamp {
+            color: #888;
+            font-size: 0.9rem;
+        }
+        
+        /* Metrics Cards */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .metric-card-advanced {
+            background: linear-gradient(145deg, #252535, #1e1e2e);
+            border-radius: 20px;
+            padding: 30px;
+            border: 2px solid #333;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .metric-card-advanced::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #00d4ff, #00ff88);
+        }
+        
+        .metric-card-advanced:hover {
+            transform: translateY(-8px);
+            border-color: #00d4ff;
+            box-shadow: 0 15px 40px rgba(0, 212, 255, 0.3);
+        }
+        
+        .metric-icon-large {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 0 10px rgba(0, 212, 255, 0.6));
+        }
+        
+        .metric-value-large {
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #00d4ff, #00ff88);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        
+        .metric-label-large {
+            color: #888;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+        
+        .metric-status {
+            margin-top: 12px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+        
+        .status-excellent { background: rgba(0, 255, 136, 0.2); color: #00ff88; }
+        .status-good { background: rgba(0, 212, 255, 0.2); color: #00d4ff; }
+        .status-moderate { background: rgba(255, 193, 7, 0.2); color: #ffc107; }
+        .status-poor { background: rgba(255, 68, 68, 0.2); color: #ff4444; }
+        
+        /* Charts Section */
+        .charts-section-predictions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .chart-card-predictions {
+            background: linear-gradient(145deg, #252535, #1e1e2e);
+            border-radius: 20px;
+            padding: 30px;
+            border: 2px solid #333;
+        }
+        
+        .chart-title-predictions {
+            font-size: 1.4rem;
+            color: #fff;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .chart-wrapper-predictions {
+            position: relative;
+            height: 300px;
+        }
+        
+        /* Details Grid */
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .details-card {
+            background: linear-gradient(145deg, #252535, #1e1e2e);
+            border-radius: 20px;
+            padding: 30px;
+            border: 2px solid #333;
+        }
+        
+        .details-title {
+            font-size: 1.4rem;
+            color: #00d4ff;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .factor-item-advanced {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #333;
+        }
+        
+        .factor-item-advanced:last-child {
+            border-bottom: none;
+        }
+        
+        .factor-name-advanced {
+            color: #aaa;
+            font-size: 1rem;
+        }
+        
+        .factor-value-advanced {
+            font-size: 1.2rem;
+            font-weight: 700;
+            padding: 5px 15px;
+            border-radius: 10px;
+        }
+        
+        .factor-high { background: rgba(0, 255, 136, 0.2); color: #00ff88; }
+        .factor-medium { background: rgba(0, 212, 255, 0.2); color: #00d4ff; }
+        .factor-low { background: rgba(255, 193, 7, 0.2); color: #ffc107; }
+        
+        .recommendations-list-advanced {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .recommendations-list-advanced li {
+            padding: 15px;
+            background: #1a1a2a;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            color: #ddd;
+            line-height: 1.6;
+            border-left: 4px solid #00d4ff;
+        }
+        
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 40px;
+        }
+        
+        .action-btn {
+            background: linear-gradient(135deg, #00d4ff, #0099cc);
+            border: none;
+            color: #000;
+            padding: 15px 30px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 212, 255, 0.4);
+        }
+        
+        .action-btn.secondary {
+            background: linear-gradient(145deg, #2a2a3a, #252535);
+            color: #fff;
+            border: 2px solid #444;
+        }
+        
+        .action-btn.secondary:hover {
+            border-color: #00d4ff;
+            box-shadow: 0 10px 25px rgba(0, 212, 255, 0.2);
+        }
+        
+        /* Loading Overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        }
+        
+        .loading-overlay.active {
+            display: flex;
+        }
+        
+        .loading-content {
+            text-align: center;
+        }
+        
+        .loading-spinner {
+            width: 80px;
+            height: 80px;
+            border: 8px solid #333;
+            border-top: 8px solid #00d4ff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 30px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .loading-text {
+            color: #00d4ff;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        
+        .loading-subtext {
+            color: #888;
+            font-size: 1rem;
+        }
+        
+        /* History Panel */
+        .history-panel {
+            background: linear-gradient(145deg, #252535, #1e1e2e);
+            border-radius: 20px;
+            padding: 30px;
+            border: 2px solid #333;
+        }
+        
+        .history-item {
+            background: #1a1a2a;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid #00d4ff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .history-item:hover {
+            transform: translateX(10px);
+            border-color: #00ff88;
+            box-shadow: 0 5px 20px rgba(0, 212, 255, 0.2);
+        }
+        
+        .history-name {
+            font-size: 1.2rem;
+            color: #fff;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        
+        .history-meta {
+            color: #888;
+            font-size: 0.85rem;
+        }
+        
+        .history-score {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #00ff88;
+            float: right;
+        }
+        
+        /* Empty State */
+        .empty-state-predictions {
+            text-align: center;
+            padding: 100px 20px;
+            color: #888;
+        }
+        
+        .empty-icon-predictions {
+            font-size: 6rem;
+            margin-bottom: 25px;
+            opacity: 0.3;
+        }
+        
+        .empty-title-predictions {
+            font-size: 2rem;
+            color: #fff;
+            margin-bottom: 15px;
+        }
+        
+        .empty-text-predictions {
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title-predictions { font-size: 2rem; }
+            .input-grid { grid-template-columns: 1fr; }
+            .quick-locations-grid { grid-template-columns: 1fr; }
+            .metrics-grid { grid-template-columns: 1fr; }
+            .charts-section-predictions { grid-template-columns: 1fr; }
+            .details-grid { grid-template-columns: 1fr; }
+            .prediction-tabs { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">🌊 AquaIntel</div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="predictions.html" class="active">Predictions</a></li>
+                <li><a href="reports.html">Reports</a></li>
+                <li><a href="comparison.html">Comparison</a></li>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="about.html">About</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="predictions-hero">
+        <h1 class="hero-title-predictions">🎯 AI Groundwater Predictions</h1>
+        <p class="hero-subtitle-predictions">Advanced Machine Learning Analysis with Real-Time Data Integration</p>
+    </section>
+
+    <!-- Main Content -->
+    <section class="predictions-main">
+        <div class="predictions-container">
+            <!-- Tabs -->
+            <div class="prediction-tabs">
+                <button class="tab-btn active" onclick="switchTab('single')">
+                    <span>📍</span> Single Prediction
+                </button>
+                <button class="tab-btn" onclick="switchTab('batch')">
+                    <span>📊</span> Batch Analysis
+                </button>
+                <button class="tab-btn" onclick="switchTab('history')">
+                    <span>⏱️</span> Prediction History
+                </button>
+            </div>
+
+            <!-- Single Prediction Tab -->
+            <div id="tab-single" class="tab-content active">
+                <div class="input-section">
+                    <div class="input-grid">
+                        <div class="input-group-advanced">
+                            <label class="input-label-advanced">📍 Latitude</label>
+                            <input type="number" id="latitude" class="input-field-advanced" value="13.0827" step="0.0001" placeholder="e.g., 13.0827">
+                        </div>
+                        
+                        <div class="input-group-advanced">
+                            <label class="input-label-advanced">📍 Longitude</label>
+                            <input type="number" id="longitude" class="input-field-advanced" value="80.2707" step="0.0001" placeholder="e.g., 80.2707">
+                        </div>
+                        
+                        <div class="input-group-advanced">
+                            <label class="input-label-advanced">📌 Location Name</label>
+                            <input type="text" id="location-name" class="input-field-advanced" placeholder="e.g., Chennai">
+                        </div>
+                    </div>
+
+                    <h3 style="color: #00d4ff; margin-bottom: 20px;">🌍 Quick Locations</h3>
+                    <div class="quick-locations-grid">
+                        <div class="location-card" onclick="setLocation(13.0827, 80.2707, 'Chennai')">
+                            <div class="location-icon">🏖️</div>
+                            <div class="location-name">Chennai</div>
+                            <div class="location-coords">13.08°, 80.27°</div>
+                        </div>
+                        <div class="location-card" onclick="setLocation(12.9716, 77.5946, 'Bangalore')">
+                            <div class="location-icon">🏙️</div>
+                            <div class="location-name">Bangalore</div>
+                            <div class="location-coords">12.97°, 77.59°</div>
+                        </div>
+                        <div class="location-card" onclick="setLocation(19.0760, 72.8777, 'Mumbai')">
+                            <div class="location-icon">🌆</div>
+                            <div class="location-name">Mumbai</div>
+                            <div class="location-coords">19.08°, 72.88°</div>
+                        </div>
+                        <div class="location-card" onclick="setLocation(28.6139, 77.2090, 'Delhi')">
+                            <div class="location-icon">🏛️</div>
+                            <div class="location-name">Delhi</div>
+                            <div class="location-coords">28.61°, 77.21°</div>
+                        </div>
+                        <div class="location-card" onclick="setLocation(25.2048, 55.2708, 'Dubai')">
+                            <div class="location-icon">🏜️</div>
+                            <div class="location-name">Dubai</div>
+                            <div class="location-coords">25.20°, 55.27°</div>
+                        </div>
+                        <div class="location-card" onclick="setLocation(40.7128, -74.0060, 'New York')">
+                            <div class="location-icon">🗽</div>
+                            <div class="location-name">New York</div>
+                            <div class="location-coords">40.71°, -74.01°</div>
+                        </div>
+                    </div>
+
+                    <button class="predict-btn-advanced" id="predict-btn" onclick="runPrediction()">
+                        <span style="font-size: 1.5rem;">🚀</span>
+                        <span>RUN AI PREDICTION</span>
+                    </button>
+                </div>
+
+                <!-- Results Section -->
+                <div class="results-section" id="results-section">
+                    <!-- Results will be injected here -->
+                </div>
+            </div>
+
+            <!-- Batch Analysis Tab -->
+            <div id="tab-batch" class="tab-content">
+                <div class="empty-state-predictions">
+                    <div class="empty-icon-predictions">📊</div>
+                    <h3 class="empty-title-predictions">Batch Analysis Coming Soon</h3>
+                    <p class="empty-text-predictions">Analyze multiple locations simultaneously with our advanced batch processing feature.</p>
+                </div>
+            </div>
+
+            <!-- History Tab -->
+            <div id="tab-history" class="tab-content">
+                <div class="history-panel" id="history-panel">
+                    <!-- History will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loading-overlay">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">Analyzing Groundwater...</div>
+            <div class="loading-subtext">Fetching real-time data from NASA, USGS & Open-Meteo APIs</div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2025 AquaIntel Pro. Advanced Groundwater Intelligence Platform.</p>
+        </div>
+    </footer>
+
+    <script>
+        const API_URL = 'http://localhost:8000/api/v1/predict';
+        let currentPrediction = null;
+        let radarChart = null;
+        let barChart = null;
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadHistory();
+        });
+        
+        // Tab Switching
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(function(tab) {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-btn').forEach(function(btn) {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById('tab-' + tabName).classList.add('active');
+            event.target.closest('.tab-btn').classList.add('active');
+            
+            // Load history if history tab
+            if (tabName === 'history') {
+                loadHistory();
+            }
+        }
+        
+        // Set Location
+        function setLocation(lat, lon, name) {
+            document.getElementById('latitude').value = lat;
+            document.getElementById('longitude').value = lon;
+            document.getElementById('location-name').value = name;
+        }
+        
+        // Run Prediction
+        async function runPrediction() {
+            var lat = parseFloat(document.getElementById('latitude').value);
+            var lon = parseFloat(document.getElementById('longitude').value);
+            var name = document.getElementById('location-name').value || 'Location ' + lat.toFixed(4) + ', ' + lon.toFixed(4);
+            
+            var btn = document.getElementById('predict-btn');
+            var overlay = document.getElementById('loading-overlay');
+            
+            btn.disabled = true;
+            btn.innerHTML = '<span style="font-size: 1.5rem;">⏳</span><span>ANALYZING...</span>';
+            overlay.classList.add('active');
+            
+            try {
+                var response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        latitude: lat,
+                        longitude: lon
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error('HTTP ' + response.status + ': ' + response.statusText);
+                }
+                
+                var data = await response.json();
+                currentPrediction = data;
+                
+                // Save to localStorage
+                var predictions = JSON.parse(localStorage.getItem('aquaintel_predictions') || '[]');
+                predictions.unshift({
+                    success_score: data.success_score,
+                    explanation: data.explanation,
+                    smart_score: data.smart_score,
+                    risk_level: data.risk_level,
+                    latitude: lat,
+                    longitude: lon,
+                    timestamp: new Date().toISOString(),
+                    name: name,
+                    category: data.explanation ? data.explanation.category : 'Good',
+                    depth: data.explanation && data.explanation.predicted_metrics ? data.explanation.predicted_metrics.recommended_depth_m : 30,
+                    yield_lph: data.explanation && data.explanation.predicted_metrics ? data.explanation.predicted_metrics.estimated_yield_lph : 500,
+                    confidence: data.confidence || 75
+                });
+                
+                // Keep only last 50 predictions
+                if (predictions.length > 50) {
+                    predictions = predictions.slice(0, 50);
+                }
+                
+                localStorage.setItem('aquaintel_predictions', JSON.stringify(predictions));
+                
+                // Display results
+                displayResults(data, name, lat, lon);
+                
+            } catch (error) {
+                console.error('Prediction error:', error);
+                var resultsSection = document.getElementById('results-section');
+                resultsSection.classList.add('visible');
+                resultsSection.innerHTML = 
+                    '<div class="results-header" style="border-color: #ff4444;">' +
+                        '<div class="results-location" style="color: #ff4444;">⚠️ Connection Error</div>' +
+                        '<p style="color: #fff;">Could not connect to backend at ' + API_URL + '</p>' +
+                        '<p style="color: #888;">Make sure the backend server is running on port 8000.</p>' +
+                    '</div>';
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<span style="font-size: 1.5rem;">🚀</span><span>RUN AI PREDICTION</span>';
+                overlay.classList.remove('active');
+            }
+        }
+        
+        // Display Results
+        function displayResults(data, name, lat, lon) {
+            var resultsSection = document.getElementById('results-section');
+            
+            // Extract data
+            var successRate = (data.success_score * 100).toFixed(1);
+            var depth = data.explanation && data.explanation.predicted_metrics ? data.explanation.predicted_metrics.recommended_depth_m.toFixed(1) : '30.0';
+            var yieldVal = data.explanation && data.explanation.predicted_metrics ? data.explanation.predicted_metrics.estimated_yield_lph.toFixed(0) : '500';
+            var category = data.explanation ? data.explanation.category : 'Good';
+            var smartScore = data.smart_score ? data.smart_score.overall_score.toFixed(1) : successRate;
+            var riskLevel = data.risk_level || 'Medium';
+            var confidence = data.confidence || 75;
+            
+            // Determine status
+            var successStatus = successRate >= 85 ? 'Excellent' : (successRate >= 70 ? 'Very Good' : (successRate >= 55 ? 'Good' : (successRate >= 40 ? 'Moderate' : 'Poor')));
+            var statusClass = successRate >= 85 ? 'status-excellent' : (successRate >= 70 ? 'status-good' : (successRate >= 55 ? 'status-moderate' : 'status-poor'));
+            
+            // Build results HTML
+            var html = '';
+            
+            // Header
+            html += '<div class="results-header">';
+            html += '<div class="results-location">📍 ' + name + '</div>';
+            html += '<div class="results-timestamp">Generated: ' + new Date().toLocaleString() + ' | Coordinates: ' + lat.toFixed(4) + '°, ' + lon.toFixed(4) + '°</div>';
+            html += '</div>';
+            
+            // Metrics Cards
+            html += '<div class="metrics-grid">';
+            
+            html += '<div class="metric-card-advanced">';
+            html += '<div class="metric-icon-large">🎯</div>';
+            html += '<div class="metric-value-large">' + successRate + '%</div>';
+            html += '<div class="metric-label-large">Success Rate</div>';
+            html += '<div class="metric-status ' + statusClass + '">' + successStatus + '</div>';
+            html += '</div>';
+            
+            html += '<div class="metric-card-advanced">';
+            html += '<div class="metric-icon-large">⭐</div>';
+            html += '<div class="metric-value-large">' + smartScore + '</div>';
+            html += '<div class="metric-label-large">Smart Score</div>';
+            var grade = smartScore >= 80 ? 'A' : (smartScore >= 60 ? 'B' : (smartScore >= 40 ? 'C' : 'D'));
+            html += '<div class="metric-status status-good">Grade: ' + grade + '</div>';
+            html += '</div>';
+            
+            html += '<div class="metric-card-advanced">';
+            html += '<div class="metric-icon-large">📏</div>';
+            html += '<div class="metric-value-large">' + depth + 'm</div>';
+            html += '<div class="metric-label-large">Recommended Depth</div>';
+            html += '<div class="metric-status status-good">' + (depth < 30 ? 'Shallow' : (depth < 60 ? 'Medium' : 'Deep')) + '</div>';
+            html += '</div>';
+            
+            html += '<div class="metric-card-advanced">';
+            html += '<div class="metric-icon-large">💧</div>';
+            html += '<div class="metric-value-large">' + yieldVal + '</div>';
+            html += '<div class="metric-label-large">Yield (L/h)</div>';
+            html += '<div class="metric-status status-good">' + (yieldVal >= 2000 ? 'High' : (yieldVal >= 1000 ? 'Medium' : 'Low')) + '</div>';
+            html += '</div>';
+            
+            html += '<div class="metric-card-advanced">';
+            html += '<div class="metric-icon-large">⚠️</div>';
+            html += '<div class="metric-value-large">' + riskLevel + '</div>';
+            html += '<div class="metric-label-large">Risk Level</div>';
+            var riskClass = riskLevel === 'Low' ? 'status-excellent' : (riskLevel === 'High' ? 'status-poor' : 'status-moderate');
+            html += '<div class="metric-status ' + riskClass + '">' + (riskLevel === 'Low' ? '✓ Safe' : (riskLevel === 'High' ? '⚠ Caution' : '~ Monitor')) + '</div>';
+            html += '</div>';
+            
+            html += '<div class="metric-card-advanced">';
+            html += '<div class="metric-icon-large">🎲</div>';
+            html += '<div class="metric-value-large">' + confidence + '%</div>';
+            html += '<div class="metric-label-large">AI Confidence</div>';
+            html += '<div class="metric-status status-good">' + (confidence >= 80 ? 'High' : (confidence >= 60 ? 'Medium' : 'Low')) + '</div>';
+            html += '</div>';
+            
+            html += '</div>';
+            
+            // Charts
+            html += '<div class="charts-section-predictions">';
+            
+            html += '<div class="chart-card-predictions">';
+            html += '<h3 class="chart-title-predictions"><span>📊</span> Performance Radar</h3>';
+            html += '<div class="chart-wrapper-predictions"><canvas id="radarChart"></canvas></div>';
+            html += '</div>';
+            
+            html += '<div class="chart-card-predictions">';
+            html += '<h3 class="chart-title-predictions"><span>📈</span> Contributing Factors</h3>';
+            html += '<div class="chart-wrapper-predictions"><canvas id="barChart"></canvas></div>';
+            html += '</div>';
+            
+            html += '</div>';
+            
+            // Details Grid
+            html += '<div class="details-grid">';
+            
+            // Contributing Factors
+            html += '<div class="details-card">';
+            html += '<h3 class="details-title"><span>📊</span> Contributing Factors</h3>';
+            
+            var factors = data.explanation && data.explanation.contributing_factors ? data.explanation.contributing_factors : {};
+            if (Object.keys(factors).length > 0) {
+                for (var key in factors) {
+                    var value = factors[key];
+                    var percent = (value * 100).toFixed(1);
+                    var factorClass = value >= 0.7 ? 'factor-high' : (value >= 0.4 ? 'factor-medium' : 'factor-low');
+                    var displayName = key.replace(/_/g, ' ').replace(/\b\w/g, function(c) { return c.toUpperCase(); });
+                    
+                    html += '<div class="factor-item-advanced">';
+                    html += '<span class="factor-name-advanced">' + displayName + '</span>';
+                    html += '<span class="factor-value-advanced ' + factorClass + '">' + percent + '%</span>';
+                    html += '</div>';
+                }
+            } else {
+                html += '<p style="color: #888;">No factor data available</p>';
+            }
+            
+            html += '</div>';
+            
+            // Recommendations
+            html += '<div class="details-card">';
+            html += '<h3 class="details-title"><span>💡</span> Recommendations</h3>';
+            
+            var recommendations = data.explanation && data.explanation.recommendations ? data.explanation.recommendations : [];
+            if (recommendations.length > 0) {
+                html += '<ul class="recommendations-list-advanced">';
+                for (var i = 0; i < recommendations.length; i++) {
+                    var rec = recommendations[i];
+                    var text = typeof rec === 'string' ? rec : (rec.description || rec.title || JSON.stringify(rec));
+                    html += '<li>' + text + '</li>';
+                }
+                html += '</ul>';
+            } else {
+                html += '<ul class="recommendations-list-advanced">';
+                html += '<li>Site assessment recommended before drilling</li>';
+                html += '<li>Consider seasonal variations in groundwater levels</li>';
+                html += '<li>Consult with local hydrogeology experts</li>';
+                html += '</ul>';
+            }
+            
+            html += '</div>';
+            
+            html += '</div>';
+            
+            // Action Buttons
+            html += '<div class="action-buttons">';
+            html += '<button class="action-btn" onclick="exportPrediction()"><span>📥</span> Export Results</button>';
+            html += '<button class="action-btn" onclick="window.location.href=\'reports.html\'"><span>📊</span> View Reports</button>';
+            html += '<button class="action-btn" onclick="window.location.href=\'comparison.html\'"><span>⚖️</span> Compare Locations</button>';
+            html += '<button class="action-btn secondary" onclick="runPrediction()"><span>🔄</span> Run Another</button>';
+            html += '</div>';
+            
+            resultsSection.innerHTML = html;
+            resultsSection.classList.add('visible');
+            
+            // Render charts after DOM update
+            setTimeout(function() {
+                renderCharts(data);
+            }, 100);
+        }
+        
+        // Render Charts
+        function renderCharts(data) {
+            // Destroy existing charts
+            if (radarChart) radarChart.destroy();
+            if (barChart) barChart.destroy();
+            
+            var factors = data.explanation && data.explanation.contributing_factors ? data.explanation.contributing_factors : {};
+            
+            // Radar Chart - Performance Metrics
+            var radarCtx = document.getElementById('radarChart');
+            if (radarCtx) {
+                var successScore = (data.success_score * 100).toFixed(1);
+                var smartScore = data.smart_score ? data.smart_score.overall_score.toFixed(1) : successScore;
+                var confidence = data.confidence || 75;
+                var depth = data.explanation && data.explanation.predicted_metrics ? data.explanation.predicted_metrics.recommended_depth_m : 30;
+                var depthScore = 100 - (depth / 2);
+                var yieldVal = data.explanation && data.explanation.predicted_metrics ? data.explanation.predicted_metrics.estimated_yield_lph : 500;
+                var yieldScore = Math.min((yieldVal / 50), 100);
+                
+                radarChart = new Chart(radarCtx.getContext('2d'), {
+                    type: 'radar',
+                    data: {
+                        labels: ['Success Rate', 'Smart Score', 'Confidence', 'Depth Score', 'Yield Score'],
+                        datasets: [{
+                            label: 'Performance Metrics',
+                            data: [successScore, smartScore, confidence, depthScore, yieldScore],
+                            backgroundColor: 'rgba(0, 212, 255, 0.2)',
+                            borderColor: '#00d4ff',
+                            borderWidth: 3,
+                            pointBackgroundColor: '#00d4ff',
+                            pointBorderColor: '#fff',
+                            pointRadius: 5
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false }
+                        },
+                        scales: {
+                            r: {
+                                angleLines: { color: '#333' },
+                                grid: { color: '#333' },
+                                pointLabels: { color: '#888', font: { size: 12 } },
+                                ticks: { display: false },
+                                suggestedMin: 0,
+                                suggestedMax: 100
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // Bar Chart - Contributing Factors
+            var barCtx = document.getElementById('barChart');
+            if (barCtx && Object.keys(factors).length > 0) {
+                var labels = [];
+                var values = [];
+                var colors = [];
+                
+                for (var key in factors) {
+                    var displayName = key.replace(/_/g, ' ').replace(/\b\w/g, function(c) { return c.toUpperCase(); });
+                    labels.push(displayName);
+                    values.push((factors[key] * 100).toFixed(1));
+                    var value = factors[key];
+                    colors.push(value >= 0.7 ? '#00ff88' : (value >= 0.4 ? '#00d4ff' : '#ffc107'));
+                }
+                
+                barChart = new Chart(barCtx.getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Factor Contribution (%)',
+                            data: values,
+                            backgroundColor: colors,
+                            borderRadius: 8
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 100,
+                                grid: { color: '#333' },
+                                ticks: { color: '#888' }
+                            },
+                            x: {
+                                grid: { display: false },
+                                ticks: { color: '#888', font: { size: 10 } }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+        
+        // Export Prediction
+        function exportPrediction() {
+            if (!currentPrediction) return;
+            
+            var blob = new Blob([JSON.stringify(currentPrediction, null, 2)], { type: 'application/json' });
+            var url = URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.href = url;
+            a.download = 'prediction_' + Date.now() + '.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+        
+        // Load History
+        function loadHistory() {
+            var historyPanel = document.getElementById('history-panel');
+            var predictions = JSON.parse(localStorage.getItem('aquaintel_predictions') || '[]');
+            
+            if (predictions.length === 0) {
+                historyPanel.innerHTML = 
+                    '<div class="empty-state-predictions">' +
+                        '<div class="empty-icon-predictions">⏱️</div>' +
+                        '<h3 class="empty-title-predictions">No Prediction History</h3>' +
+                        '<p class="empty-text-predictions">Your prediction history will appear here after you run your first analysis.</p>' +
+                    '</div>';
+                return;
+            }
+            
+            var html = '<h3 style="color: #00d4ff; margin-bottom: 25px; font-size: 1.5rem;">📜 Prediction History (' + predictions.length + ' total)</h3>';
+            
+            for (var i = 0; i < predictions.length; i++) {
+                var pred = predictions[i];
+                var timeAgo = getTimeAgo(pred.timestamp);
+                var successRate = ((pred.success_score || 0) * 100).toFixed(1);
+                
+                html += '<div class="history-item" onclick="loadPredictionFromHistory(' + i + ')">';
+                html += '<span class="history-score">' + successRate + '%</span>';
+                html += '<div class="history-name">' + (pred.name || 'Location ' + i) + '</div>';
+                html += '<div class="history-meta">' + pred.latitude.toFixed(4) + '°, ' + pred.longitude.toFixed(4) + '° | ' + timeAgo + '</div>';
+                html += '</div>';
+            }
+            
+            historyPanel.innerHTML = html;
+        }
+        
+        // Load Prediction from History
+        function loadPredictionFromHistory(index) {
+            var predictions = JSON.parse(localStorage.getItem('aquaintel_predictions') || '[]');
+            if (predictions[index]) {
+                var pred = predictions[index];
+                document.getElementById('latitude').value = pred.latitude;
+                document.getElementById('longitude').value = pred.longitude;
+                document.getElementById('location-name').value = pred.name || '';
+                
+                // Switch to single prediction tab
+                switchTab('single');
+                
+                // Scroll to top
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+        
+        // Get Time Ago
+        function getTimeAgo(timestamp) {
+            var now = new Date();
+            var past = new Date(timestamp);
+            var diffMs = now - past;
+            var diffMins = Math.floor(diffMs / 60000);
+            var diffHours = Math.floor(diffMs / 3600000);
+            var diffDays = Math.floor(diffMs / 86400000);
+            
+            if (diffMins < 1) return 'Just now';
+            if (diffMins < 60) return diffMins + ' minute' + (diffMins > 1 ? 's' : '') + ' ago';
+            if (diffHours < 24) return diffHours + ' hour' + (diffHours > 1 ? 's' : '') + ' ago';
+            return diffDays + ' day' + (diffDays > 1 ? 's' : '') + ' ago';
+        }
+    </script>
+</body>
+</html>

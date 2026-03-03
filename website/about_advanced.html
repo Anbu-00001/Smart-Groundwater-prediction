@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - AquaIntel Pro | Advanced Groundwater Intelligence</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #0a0a0a 100%);
+            color: #fff;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* History Panel Styles */
+        .history-panel {
+            position: fixed;
+            right: -420px;
+            top: 0;
+            width: 420px;
+            height: 100vh;
+            background: linear-gradient(180deg, #1a1a2e 0%, #0f1419 100%);
+            border-left: 3px solid #00d4ff;
+            box-shadow: -10px 0 40px rgba(0, 212, 255, 0.4);
+            transition: right 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 10000;
+            overflow-y: auto;
+        }
+
+        .history-panel.open {
+            right: 0;
+        }
+
+        .history-header {
+            padding: 25px;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.15), rgba(0, 132, 255, 0.15));
+            border-bottom: 2px solid #00d4ff;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            backdrop-filter: blur(10px);
+        }
+
+        .history-title {
+            color: #00d4ff;
+            margin: 0;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .history-close {
+            background: rgba(255, 68, 68, 0.2);
+            border: 2px solid #ff4444;
+            color: #ff4444;
+            font-size: 1.3rem;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .history-close:hover {
+            background: #ff4444;
+            color: white;
+            transform: rotate(90deg);
+        }
+
+        .history-item {
+            padding: 20px;
+            border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .history-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, #00d4ff, #0084ff);
+            transform: scaleY(0);
+            transition: transform 0.3s;
+        }
+
+        .history-item:hover {
+            background: rgba(0, 212, 255, 0.1);
+            padding-left: 30px;
+        }
+
+        .history-item:hover::before {
+            transform: scaleY(1);
+        }
+
+        .history-time {
+            color: #888;
+            font-size: 0.85rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .history-coords {
+            color: #00d4ff;
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+
+        .history-result {
+            color: #fff;
+            font-size: 0.95rem;
+            line-height: 1.8;
+        }
+
+        .history-toggle {
+            position: fixed;
+            right: 20px;
+            top: 120px;
+            background: linear-gradient(135deg, #00d4ff, #0084ff);
+            border: none;
+            padding: 18px 25px;
+            border-radius: 20px;
+            color: white;
+            font-weight: bold;
+            font-size: 1.1rem;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(0, 212, 255, 0.5);
+            z-index: 9999;
+            transition: all 0.4s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .history-toggle:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 12px 35px rgba(0, 212, 255, 0.7);
+        }
+
+        .history-count-badge {
+            background: rgba(255, 255, 255, 0.3);
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+        }
+
+        /* Heatmap Controls */
+        .heatmap-controls {
+            position: absolute;
+            top: 100px;
+            left: 15px;
+            z-index: 1000;
+            background: linear-gradient(135deg, rgba(26, 26, 46, 0.98), rgba(15, 20, 25, 0.98));
+            padding: 20px;
+            border-radius: 20px;
+            border: 3px solid #ff6b6b;
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.4);
+            backdrop-filter: blur(10px);
+            min-width: 250px;
+        }
+
+        .heatmap-btn {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
+            border: none;
+            padding: 15px 25px;
+            border-radius: 15px;
+            color: white;
+            font-weight: bold;
+            font-size: 1.05rem;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 15px;
+            transition: all 0.4s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
+        }
+
+        .heatmap-btn:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.5);
+        }
+
+        .heatmap-btn.active {
+            background: linear-gradient(135deg, #00d4ff, #0084ff);
+            box-shadow: 0 5px 15px rgba(0, 212, 255, 0.3);
+        }
+
+        .heatmap-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .heatmap-status {
+            color: #00d4ff;
+            font-size: 0.9rem;
+            text-align: center;
+            margin: 15px 0;
+            min-height: 25px;
+            font-weight: 500;
+        }
+
+        .heatmap-legend {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 12px;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+        }
+
+        .legend-title {
+            color: #00d4ff;
+            font-weight: bold;
+            margin-bottom: 12px;
+            text-align: center;
+            font-size: 1.05rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 8px 0;
+            font-size: 0.9rem;
+        }
+
+        .legend-color {
+            width: 40px;
+            height: 20px;
+            border-radius: 5px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .map-container {
+            height: 650px;
+            border-radius: 25px;
+            border: 4px solid #00d4ff;
+            box-shadow: 0 0 40px rgba(0, 212, 255, 0.5);
+            position: relative;
+            overflow: hidden;
+            margin: 40px 0;
+        }
+
+        #interactive-map {
+            height: 100%;
+            width: 100%;
+        }
+
+        .map-info-panel {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            z-index: 1000;
+            background: linear-gradient(135deg, rgba(26, 26, 46, 0.98), rgba(15, 20, 25, 0.98));
+            padding: 20px;
+            border-radius: 20px;
+            border: 3px solid #00d4ff;
+            min-width: 250px;
+            backdrop-filter: blur(10px);
+        }
+
+        .info-title {
+            color: #00d4ff;
+            font-weight: bold;
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-row {
+            color: #888;
+            font-size: 0.95rem;
+            margin: 8px 0;
+        }
+
+        .info-value {
+            color: #00ff88;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .page-title {
+            text-align: center;
+            font-size: 3.5rem;
+            background: linear-gradient(135deg, #00d4ff, #0084ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+        }
+
+        .page-subtitle {
+            text-align: center;
+            color: #888;
+            font-size: 1.3rem;
+            margin-bottom: 60px;
+        }
+
+        .feature-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .history-toggle.has-items {
+            animation: pulse 2s infinite;
+        }
+    </style>
+</head>
+<body>
+    <!-- History Panel Toggle Button -->
+    <button class="history-toggle" onclick="toggleHistory()">
+        📜 History
+        <span class="history-count-badge" id="history-count">0</span>
+    </button>
+
+    <!-- History Panel -->
+    <div class="history-panel" id="historyPanel">
+        <div class="history-header">
+            <h3 class="history-title">
+                📜 Prediction History
+                <button class="history-close" onclick="toggleHistory()">✕</button>
+            </h3>
+        </div>
+        <div id="historyList">
+            <div style="padding: 60px 30px; text-align: center; color: #666;">
+                <div style="font-size: 3rem; margin-bottom: 20px;">🗺️</div>
+                <div style="font-size: 1.1rem;">No predictions yet</div>
+                <div style="font-size: 0.9rem; margin-top: 10px;">Click on the map to start!</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1 class="page-title">🚀 Advanced Features Demo</h1>
+        <p class="page-subtitle">Prediction History & Regional Heatmap Analysis</p>
+
+        <div style="text-align: center; margin-bottom: 40px;">
+            <span class="feature-badge">🆕 NEW FEATURES ADDED</span>
+        </div>
+
+        <div class="map-container">
+            <div id="interactive-map"></div>
+
+            <!-- Map Info Panel -->
+            <div class="map-info-panel">
+                <div class="info-title">📍 Click Map to Predict</div>
+                <div class="info-row">
+                    Predictions: <span class="info-value" id="pred-count">0</span>
+                </div>
+                <div class="info-row" style="font-size: 0.85rem; color: #666;">
+                    Last: <span id="last-loc" style="color: #00d4ff;">-</span>
+                </div>
+            </div>
+
+            <!-- Heatmap Controls -->
+            <div class="heatmap-controls">
+                <button class="heatmap-btn" onclick="toggleHeatmap()" id="heatmapBtn">
+                    🔥 Generate Heatmap
+                </button>
+                <div class="heatmap-status" id="heatmapStatus"></div>
+                <div class="heatmap-legend" id="heatmapLegend" style="display: none;">
+                    <div class="legend-title">Success Rate Legend</div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #00ff88;"></div>
+                        <span style="color: #fff;">High (70%+)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #ffaa00;"></div>
+                        <span style="color: #fff;">Medium (50-70%)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #ff4444;"></div>
+                        <span style="color: #fff;">Low (<50%)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top: 60px; text-align: center; color: #888;">
+            <h3 style="color: #00d4ff; margin-bottom: 20px;">✨ Feature Highlights</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 30px;">
+                <div style="background: rgba(0, 212, 255, 0.1); padding: 30px; border-radius: 20px; border: 2px solid rgba(0, 212, 255, 0.3);">
+                    <div style="font-size: 2.5rem; margin-bottom: 15px;">📜</div>
+                    <h4 style="color: #00d4ff; margin-bottom: 10px;">Prediction History</h4>
+                    <p style="font-size: 0.95rem;">Track all your predictions with timestamps. Click any history item to jump back to that location instantly.</p>
+                </div>
+                <div style="background: rgba(255, 107, 107, 0.1); padding: 30px; border-radius: 20px; border: 2px solid rgba(255, 107, 107, 0.3);">
+                    <div style="font-size: 2.5rem; margin-bottom: 15px;">🔥</div>
+                    <h4 style="color: #ff6b6b; margin-bottom: 10px;">Regional Heatmap</h4>
+                    <p style="font-size: 0.95rem;">Analyze entire regions with AI. Generate color-coded heatmaps showing groundwater potential across your view.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8000';
+        let map;
+        let predictionCount = 0;
+        let markers = [];
+        let predictionHistory = [];
+        let heatmapLayer = null;
+        let heatmapActive = false;
+        let heatmapCircles = [];
+
+        // Initialize Map
+        function initMap() {
+            map = L.map('interactive-map').setView([20, 0], 2);
+
+            // Add reliable tile provider with fallback
+            const tileProviders = [
+                {
+                    url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                    options: {
+                        attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                        maxZoom: 19,
+                        subdomains: ['a', 'b', 'c']
+                    }
+                },
+                {
+                    url: 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
+                    options: {
+                        attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors © <a href="https://carto.com/attributions">CARTO</a>',
+                        maxZoom: 19,
+                        subdomains: 'abcd'
+                    }
+                }
+            ];
+            
+            let currentTileLayer = null;
+            let providerIndex = 0;
+            
+            function loadTileProvider() {
+                if (providerIndex >= tileProviders.length) return;
+                
+                const provider = tileProviders[providerIndex];
+                if (currentTileLayer) map.removeLayer(currentTileLayer);
+                
+                currentTileLayer = L.tileLayer(provider.url, provider.options);
+                currentTileLayer.on('tileerror', function() {
+                    providerIndex++;
+                    setTimeout(loadTileProvider, 1000);
+                });
+                currentTileLayer.addTo(map);
+            }
+            
+            loadTileProvider();
+
+            // Map click handler
+            map.on('click', async function(e) {
+                const lat = e.latlng.lat.toFixed(4);
+                const lon = e.latlng.lng.toFixed(4);
+
+                const popup = L.popup()
+                    .setLatLng(e.latlng)
+                    .setContent('<div style="text-align: center; padding: 10px;">⏳ Analyzing location...<br>Running AI prediction...</div>')
+                    .openOn(map);
+
+                try {
+                    const response = await fetch(API_BASE + '/api/v1/predict', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            latitude: parseFloat(lat),
+                            longitude: parseFloat(lon)
+                        })
+                    });
+
+                    const data = await response.json();
+                    const successRate = data.success_score * 100;
+
+                    // Update stats
+                    predictionCount++;
+                    document.getElementById('pred-count').textContent = predictionCount;
+                    document.getElementById('last-loc').textContent = lat + ', ' + lon;
+
+                    // Add to history
+                    const timestamp = new Date().toLocaleTimeString();
+                    addToHistory(lat, lon, data, timestamp);
+
+                    // Create popup content
+                    const popupContent = 
+                        '<div style="min-width: 200px; padding: 10px;">' +
+                            '<div style="font-weight: bold; color: #00d4ff; margin-bottom: 10px;">📍 ' + lat + ', ' + lon + '</div>' +
+                            '<div style="margin: 5px 0;">Success: <strong style="color: #00ff88;">' + successRate.toFixed(1) + '%</strong></div>' +
+                            '<div style="margin: 5px 0;">Category: ' + data.explanation.category + '</div>' +
+                            '<div style="margin: 5px 0;">Depth: ' + data.explanation.predicted_metrics.recommended_depth_m + 'm</div>' +
+                            '<div style="margin: 5px 0;">Yield: ' + data.explanation.predicted_metrics.estimated_yield_lph + ' L/h</div>' +
+                        '</div>';
+
+                    // Determine marker color
+                    let markerColor = successRate >= 70 ? '#00ff88' : successRate >= 50 ? '#ffaa00' : '#ff4444';
+
+                    const customIcon = L.divIcon({
+                        className: 'custom-marker',
+                        html: '<div style="background: ' + markerColor + '; width: 20px; height: 20px; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 10px ' + markerColor + ';"></div>',
+                        iconSize: [20, 20],
+                        iconAnchor: [10, 10]
+                    });
+
+                    const marker = L.marker(e.latlng, { icon: customIcon })
+                        .addTo(map)
+                        .bindPopup(popupContent)
+                        .openPopup();
+
+                    markers.push(marker);
+
+                    if (markers.length > 20) {
+                        map.removeLayer(markers.shift());
+                    }
+
+                } catch (error) {
+                    popup.setContent('<div style="color: #ff4444; padding: 10px;">❌ Error: Backend not running</div>');
+                }
+            });
+
+            addSampleMarkers();
+        }
+
+        // Add sample markers
+        function addSampleMarkers() {
+            const samples = [
+                { lat: 13.0827, lon: 80.2707, name: 'Chennai', icon: '🏖️' },
+                { lat: 25.2048, lon: 55.2708, name: 'Dubai', icon: '🏜️' },
+                { lat: 35.6762, lon: 139.6503, name: 'Tokyo', icon: '🗼' },
+                { lat: 40.7128, lon: -74.0060, name: 'New York', icon: '🗽' },
+                { lat: -33.8688, lon: 151.2093, name: 'Sydney', icon: '🏄' }
+            ];
+
+            samples.forEach(loc => {
+                const icon = L.divIcon({
+                    className: 'sample-marker',
+                    html: '<div style="font-size: 24px; cursor: pointer;">' + loc.icon + '</div>',
+                    iconSize: [30, 30],
+                    iconAnchor: [15, 15]
+                });
+
+                L.marker([loc.lat, loc.lon], { icon: icon })
+                    .addTo(map)
+                    .bindTooltip(loc.name, { permanent: false, direction: 'top' });
+            });
+        }
+
+        // Add to history
+        function addToHistory(lat, lon, data, timestamp) {
+            const historyItem = {
+                lat: lat,
+                lon: lon,
+                timestamp: timestamp,
+                successRate: data.success_score * 100,
+                category: data.explanation.category,
+                depth: data.explanation.predicted_metrics.recommended_depth_m,
+                yield: data.explanation.predicted_metrics.estimated_yield_lph
+            };
+
+            predictionHistory.unshift(historyItem);
+
+            if (predictionHistory.length > 50) {
+                predictionHistory = predictionHistory.slice(0, 50);
+            }
+
+            updateHistoryPanel();
+        }
+
+        // Update history panel
+        function updateHistoryPanel() {
+            const historyList = document.getElementById('historyList');
+            const historyCount = document.getElementById('history-count');
+            const toggleBtn = document.querySelector('.history-toggle');
+
+            historyCount.textContent = predictionHistory.length;
+
+            if (predictionHistory.length > 0) {
+                toggleBtn.classList.add('has-items');
+            }
+
+            if (predictionHistory.length === 0) {
+                historyList.innerHTML = '<div style="padding: 60px 30px; text-align: center; color: #666;"><div style="font-size: 3rem; margin-bottom: 20px;">🗺️</div><div style="font-size: 1.1rem;">No predictions yet</div><div style="font-size: 0.9rem; margin-top: 10px;">Click on the map to start!</div></div>';
+                return;
+            }
+
+            historyList.innerHTML = predictionHistory.map((item) => {
+                const color = item.successRate >= 70 ? '#00ff88' : item.successRate >= 50 ? '#ffaa00' : '#ff4444';
+                return `
+                    <div class="history-item" onclick="jumpToLocation(${item.lat}, ${item.lon})">
+                        <div class="history-time">🕐 ${item.timestamp}</div>
+                        <div class="history-coords">📍 ${item.lat}, ${item.lon}</div>
+                        <div class="history-result">
+                            <div style="margin: 5px 0;"><span style="color: ${color}; font-weight: bold;">✓ ${item.successRate.toFixed(1)}%</span> Success</div>
+                            <div style="margin: 5px 0; color: #888;">${item.category}</div>
+                            <div style="margin: 5px 0; font-size: 0.9rem;">Depth: ${item.depth}m | Yield: ${item.yield} L/h</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Toggle history panel
+        function toggleHistory() {
+            const panel = document.getElementById('historyPanel');
+            panel.classList.toggle('open');
+        }
+
+        // Jump to location
+        function jumpToLocation(lat, lon) {
+            map.setView([lat, lon], 10);
+            toggleHistory();
+        }
+
+        // Toggle heatmap
+        async function toggleHeatmap() {
+            if (heatmapActive) {
+                clearHeatmap();
+            } else {
+                await generateHeatmap();
+            }
+        }
+
+        // Generate heatmap
+        async function generateHeatmap() {
+            const btn = document.getElementById('heatmapBtn');
+            const status = document.getElementById('heatmapStatus');
+            const legend = document.getElementById('heatmapLegend');
+
+            btn.disabled = true;
+            status.textContent = '⏳ Analyzing region...';
+
+            try {
+                const bounds = map.getBounds();
+                const zoom = map.getZoom();
+
+                const gridSize = zoom > 8 ? 5 : zoom > 5 ? 4 : 3;
+                const latStep = (bounds.getNorth() - bounds.getSouth()) / gridSize;
+                const lonStep = (bounds.getEast() - bounds.getWest()) / gridSize;
+
+                const heatPoints = [];
+                let completed = 0;
+                const total = gridSize * gridSize;
+
+                for (let i = 0; i < gridSize; i++) {
+                    for (let j = 0; j < gridSize; j++) {
+                        const lat = bounds.getSouth() + (i + 0.5) * latStep;
+                        const lon = bounds.getWest() + (j + 0.5) * lonStep;
+
+                        try {
+                            const response = await fetch(API_BASE + '/api/v1/predict', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    latitude: parseFloat(lat.toFixed(4)),
+                                    longitude: parseFloat(lon.toFixed(4))
+                                })
+                            });
+
+                            if (response.ok) {
+                                const data = await response.json();
+                                const intensity = data.success_score;
+                                heatPoints.push({ lat, lon, intensity });
+                            }
+                        } catch (error) {
+                            console.error('Heatmap point error:', error);
+                        }
+
+                        completed++;
+                        status.textContent = `⏳ Analyzing ${completed}/${total} points...`;
+                    }
+                }
+
+                // Create colored circles for heatmap
+                heatPoints.forEach(point => {
+                    const { lat, lon, intensity } = point;
+                    const color = intensity >= 0.7 ? '#00ff88' : intensity >= 0.5 ? '#ffaa00' : '#ff4444';
+                    const circle = L.circle([lat, lon], {
+                        radius: 50000 / zoom,
+                        fillColor: color,
+                        fillOpacity: 0.5,
+                        color: color,
+                        weight: 2,
+                        opacity: 0.8
+                    }).addTo(map);
+                    heatmapCircles.push(circle);
+                });
+
+                heatmapActive = true;
+                btn.textContent = '🔥 Clear Heatmap';
+                btn.classList.add('active');
+                status.textContent = `✓ Analyzed ${total} points`;
+                legend.style.display = 'block';
+
+            } catch (error) {
+                status.textContent = '❌ Error generating heatmap';
+                console.error('Heatmap error:', error);
+            }
+
+            btn.disabled = false;
+        }
+
+        // Clear heatmap
+        function clearHeatmap() {
+            heatmapCircles.forEach(circle => map.removeLayer(circle));
+            heatmapCircles = [];
+
+            heatmapActive = false;
+            document.getElementById('heatmapBtn').textContent = '🔥 Generate Heatmap';
+            document.getElementById('heatmapBtn').classList.remove('active');
+            document.getElementById('heatmapStatus').textContent = '';
+            document.getElementById('heatmapLegend').style.display = 'none';
+        }
+
+        // Initialize on load
+        window.addEventListener('load', function() {
+            setTimeout(initMap, 500);
+        });
+    </script>
+</body>
+</html>

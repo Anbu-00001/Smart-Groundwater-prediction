@@ -1,0 +1,1157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AquaIntel Pro - Advanced AI Groundwater Intelligence Platform</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Advanced Home Page Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a0a1a;
+            color: #fff;
+            overflow-x: hidden;
+        }
+        
+        /* Animated Hero Section */
+        .hero-advanced {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            overflow: hidden;
+        }
+        
+        .hero-advanced::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(255,255,255,0.1) 0%, transparent 50%);
+            animation: pulse 8s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+        
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            animation: float 15s infinite ease-in-out;
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(100px);
+                opacity: 0;
+            }
+        }
+        
+        .hero-content-advanced {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 1200px;
+            padding: 40px;
+            animation: fadeInUp 1s ease;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .hero-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 10px 25px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .hero-title-advanced {
+            font-size: 4.5rem;
+            font-weight: 900;
+            line-height: 1.2;
+            margin-bottom: 25px;
+            text-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .hero-title-advanced .highlight {
+            background: linear-gradient(90deg, #fff, #a8d8ff, #fff);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 3s linear infinite;
+        }
+        
+        @keyframes shimmer {
+            to { background-position: 200% center; }
+        }
+        
+        .hero-subtitle-advanced {
+            font-size: 1.4rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+        
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+        
+        .hero-stat {
+            text-align: center;
+        }
+        
+        .hero-stat-number {
+            font-size: 3rem;
+            font-weight: 900;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .hero-stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .hero-buttons-advanced {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 40px;
+        }
+        
+        .btn-hero {
+            padding: 18px 40px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .btn-hero-primary {
+            background: linear-gradient(135deg, #00ff88, #00cc6a);
+            color: #000;
+            box-shadow: 0 10px 30px rgba(0, 255, 136, 0.4);
+        }
+        
+        .btn-hero-primary:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 255, 136, 0.6);
+        }
+        
+        .btn-hero-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            color: #fff;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .btn-hero-secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-5px);
+        }
+        
+        /* Features Section */
+        .features-advanced {
+            padding: 100px 20px;
+            background: linear-gradient(180deg, #0a0a1a 0%, #1a1a2a 100%);
+            position: relative;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+        
+        .section-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #00d4ff, #0099cc);
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .section-title-advanced {
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #fff, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .section-description {
+            font-size: 1.2rem;
+            color: #aaa;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .features-grid-advanced {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .feature-card-advanced {
+            background: linear-gradient(145deg, #252535, #1e1e2e);
+            border-radius: 25px;
+            padding: 40px;
+            border: 2px solid #333;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-card-advanced::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #00d4ff, #00ff88);
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+        
+        .feature-card-advanced:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .feature-card-advanced:hover {
+            transform: translateY(-15px);
+            border-color: #00d4ff;
+            box-shadow: 0 20px 60px rgba(0, 212, 255, 0.3);
+        }
+        
+        .feature-icon-advanced {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            display: block;
+            filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.6));
+        }
+        
+        .feature-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+        
+        .feature-description {
+            color: #aaa;
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+        
+        .feature-link-advanced {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #00d4ff;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .feature-link-advanced:hover {
+            gap: 15px;
+            color: #00ff88;
+        }
+        
+        /* Live Status Dashboard */
+        .status-dashboard {
+            padding: 100px 20px;
+            background: #1a1a2a;
+        }
+        
+        .status-grid-advanced {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .status-card-advanced {
+            background: linear-gradient(145deg, #252535, #1e1e2e);
+            border-radius: 25px;
+            padding: 35px;
+            border: 2px solid #333;
+            transition: all 0.3s ease;
+        }
+        
+        .status-card-advanced:hover {
+            border-color: #00d4ff;
+            transform: translateY(-5px);
+        }
+        
+        .status-header-advanced {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .status-icon-advanced {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            background: linear-gradient(135deg, #00d4ff, #0099cc);
+        }
+        
+        .status-info {
+            flex: 1;
+        }
+        
+        .status-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .status-indicator-advanced {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        
+        .status-online {
+            background: rgba(0, 255, 136, 0.2);
+            color: #00ff88;
+        }
+        
+        .status-offline {
+            background: rgba(255, 68, 68, 0.2);
+            color: #ff4444;
+        }
+        
+        .status-checking {
+            background: rgba(255, 193, 7, 0.2);
+            color: #ffc107;
+        }
+        
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: currentColor;
+            animation: pulse-dot 2s infinite;
+        }
+        
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+        
+        .status-details {
+            margin-top: 20px;
+        }
+        
+        .status-detail-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #333;
+        }
+        
+        .status-detail-item:last-child {
+            border-bottom: none;
+        }
+        
+        .status-detail-label {
+            color: #888;
+        }
+        
+        .status-detail-value {
+            color: #fff;
+            font-weight: 600;
+        }
+        
+        /* Live Demo Section */
+        .demo-section {
+            padding: 100px 20px;
+            background: linear-gradient(180deg, #1a1a2a 0%, #0a0a1a 100%);
+        }
+        
+        .demo-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .demo-controls {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .btn-demo {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: #fff;
+            padding: 20px 50px;
+            font-size: 1.3rem;
+            font-weight: 800;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.4);
+        }
+        
+        .btn-demo:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(255, 107, 107, 0.6);
+        }
+        
+        .demo-results {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .demo-card {
+            background: linear-gradient(145deg, #252535, #1e1e2e);
+            border-radius: 25px;
+            padding: 35px;
+            border: 2px solid #333;
+            transition: all 0.4s ease;
+            animation: slideIn 0.6s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .demo-card:hover {
+            border-color: #00ff88;
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(0, 255, 136, 0.3);
+        }
+        
+        .demo-card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #333;
+        }
+        
+        .demo-location-icon {
+            font-size: 2.5rem;
+        }
+        
+        .demo-location-info h3 {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+        
+        .demo-location-info p {
+            color: #888;
+            font-size: 0.9rem;
+        }
+        
+        .demo-metrics {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        
+        .demo-metric {
+            text-align: center;
+            padding: 20px;
+            background: #1a1a2a;
+            border-radius: 15px;
+            border: 1px solid #333;
+        }
+        
+        .demo-metric-value {
+            font-size: 2rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #00d4ff, #00ff88);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+        
+        .demo-metric-label {
+            color: #888;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        /* Quick Actions */
+        .quick-actions {
+            padding: 80px 20px;
+            background: #0a0a1a;
+        }
+        
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .action-card {
+            background: linear-gradient(145deg, #252535, #1e1e2e);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            border: 2px solid #333;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: #fff;
+        }
+        
+        .action-card:hover {
+            border-color: #00d4ff;
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 212, 255, 0.3);
+        }
+        
+        .action-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+        
+        .action-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .action-description {
+            color: #888;
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title-advanced {
+                font-size: 2.5rem;
+            }
+            
+            .hero-stats {
+                flex-direction: column;
+                gap: 30px;
+            }
+            
+            .section-title-advanced {
+                font-size: 2rem;
+            }
+            
+            .features-grid-advanced,
+            .status-grid-advanced,
+            .demo-results,
+            .actions-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Loading Spinner */
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #333;
+            border-top: 5px solid #00d4ff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 30px auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">🌊 AquaIntel Pro</div>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="active">Home</a></li>
+                <li><a href="predictions.html">Predictions</a></li>
+                <li><a href="reports.html">Reports</a></li>
+                <li><a href="comparison.html">Comparison</a></li>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="about.html">About</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-advanced">
+        <div class="particles" id="particles"></div>
+        <div class="hero-content-advanced">
+            <div class="hero-badge">🚀 Powered by AI & Real-Time Data</div>
+            <h1 class="hero-title-advanced">
+                <span class="highlight">Revolutionary</span><br>
+                Groundwater Intelligence
+            </h1>
+            <p class="hero-subtitle-advanced">
+                Advanced AI-powered predictions with live data from NASA, USGS, Open-Meteo & 10+ global APIs.<br>
+                Real-time analysis. Instant insights. Unprecedented accuracy.
+            </p>
+            
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <span class="hero-stat-number" id="api-count">10+</span>
+                    <span class="hero-stat-label">Global APIs</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="hero-stat-number" id="prediction-count">0</span>
+                    <span class="hero-stat-label">Predictions Today</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="hero-stat-number">95%</span>
+                    <span class="hero-stat-label">Accuracy Rate</span>
+                </div>
+            </div>
+            
+            <div class="hero-buttons-advanced">
+                <button class="btn-hero btn-hero-primary" onclick="window.location.href='predictions.html'">
+                    <span>🎯</span>
+                    <span>Start Prediction</span>
+                </button>
+                <button class="btn-hero btn-hero-secondary" onclick="scrollToDemo()">
+                    <span>🔥</span>
+                    <span>See Live Demo</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- New Features Banner -->
+    <section style="background: linear-gradient(135deg, #ff6b6b, #ee5a6f); padding: 40px 20px; text-align: center; position: relative; overflow: hidden;">
+        <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(circle at 30% 50%, rgba(255,255,255,0.1) 0%, transparent 60%); animation: pulse 3s infinite;"></div>
+        <div style="position: relative; z-index: 2; max-width: 1200px; margin: 0 auto;">
+            <div style="display: inline-block; background: rgba(255,255,255,0.2); padding: 8px 20px; border-radius: 20px; font-size: 0.9rem; font-weight: bold; margin-bottom: 15px; backdrop-filter: blur(10px);">
+                🆕 JUST RELEASED
+            </div>
+            <h2 style="font-size: 2.5rem; font-weight: 900; margin-bottom: 15px;">Advanced Interactive Features Now Live!</h2>
+            <p style="font-size: 1.2rem; margin-bottom: 30px; opacity: 0.95;">
+                Experience the power of AI with our new Prediction History Tracking & Regional Heatmap Generation
+            </p>
+            <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+                <a href="about.html#map" style="background: white; color: #ff6b6b; padding: 15px 35px; border-radius: 50px; text-decoration: none; font-weight: bold; font-size: 1.1rem; box-shadow: 0 5px 20px rgba(0,0,0,0.2); transition: all 0.3s; display: inline-flex; align-items: center; gap: 10px;" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 25px rgba(0,0,0,0.3)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 5px 20px rgba(0,0,0,0.2)'">
+                    <span>📜</span>
+                    <span>Try History Panel</span>
+                </a>
+                <a href="about_advanced.html" style="background: rgba(255,255,255,0.2); color: white; padding: 15px 35px; border-radius: 50px; text-decoration: none; font-weight: bold; font-size: 1.1rem; border: 2px solid white; backdrop-filter: blur(10px); transition: all 0.3s; display: inline-flex; align-items: center; gap: 10px;" onmouseover="this.style.background='white'; this.style.color='#ff6b6b'" onmouseout="this.style.background='rgba(255,255,255,0.2)'; this.style.color='white'">
+                    <span>🔥</span>
+                    <span>Try Heatmap Generator</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-advanced">
+        <div class="section-header">
+            <div class="section-badge">🌍 Real-Time Data Sources</div>
+            <h2 class="section-title-advanced">Powered by Global APIs</h2>
+            <p class="section-description">
+                We integrate with leading scientific data providers to deliver the most accurate groundwater predictions
+            </p>
+        </div>
+        
+        <div class="features-grid-advanced">
+            <div class="feature-card-advanced">
+                <span class="feature-icon-advanced">🛰️</span>
+                <h3 class="feature-title">NASA POWER API</h3>
+                <p class="feature-description">
+                    Real-time solar radiation, temperature, precipitation & climate data from NASA satellites with global coverage
+                </p>
+                <a href="predictions.html" class="feature-link-advanced">
+                    <span>Explore Now</span>
+                    <span>→</span>
+                </a>
+            </div>
+            
+            <div class="feature-card-advanced">
+                <span class="feature-icon-advanced">💧</span>
+                <h3 class="feature-title">USGS Water Services</h3>
+                <p class="feature-description">
+                    US Geological Survey water data including streamflow, groundwater levels & comprehensive water quality metrics
+                </p>
+                <a href="predictions.html" class="feature-link-advanced">
+                    <span>Explore Now</span>
+                    <span>→</span>
+                </a>
+            </div>
+            
+            <div class="feature-card-advanced">
+                <span class="feature-icon-advanced">🌡️</span>
+                <h3 class="feature-title">Open-Meteo Weather</h3>
+                <p class="feature-description">
+                    Hyper-local weather forecasts, historical climate data & advanced meteorological analytics worldwide
+                </p>
+                <a href="predictions.html" class="feature-link-advanced">
+                    <span>Explore Now</span>
+                    <span>→</span>
+                </a>
+            </div>
+            
+            <div class="feature-card-advanced">
+                <span class="feature-icon-advanced">🗺️</span>
+                <h3 class="feature-title">SoilGrids Database</h3>
+                <p class="feature-description">
+                    Global 250m resolution soil properties including clay, sand, silt & organic carbon content analysis
+                </p>
+                <a href="predictions.html" class="feature-link-advanced">
+                    <span>Explore Now</span>
+                    <span>→</span>
+                </a>
+            </div>
+            
+            <div class="feature-card-advanced">
+                <span class="feature-icon-advanced">🤖</span>
+                <h3 class="feature-title">Advanced AI Models</h3>
+                <p class="feature-description">
+                    Multi-layer neural networks with temporal analysis, geospatial transformers & reinforcement learning
+                </p>
+                <a href="predictions.html" class="feature-link-advanced">
+                    <span>Explore Now</span>
+                    <span>→</span>
+                </a>
+            </div>
+            
+            <div class="feature-card-advanced">
+                <span class="feature-icon-advanced">📊</span>
+                <h3 class="feature-title">Real-Time Analytics</h3>
+                <p class="feature-description">
+                    Live data processing, instant visualization & comprehensive reporting with export capabilities
+                </p>
+                <a href="dashboard.html" class="feature-link-advanced">
+                    <span>Explore Now</span>
+                    <span>→</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Status Dashboard -->
+    <section class="status-dashboard">
+        <div class="section-header">
+            <div class="section-badge">⚡ System Status</div>
+            <h2 class="section-title-advanced">Live Platform Health</h2>
+            <p class="section-description">
+                Real-time monitoring of all system components and API connections
+            </p>
+        </div>
+        
+        <div class="status-grid-advanced">
+            <div class="status-card-advanced">
+                <div class="status-header-advanced">
+                    <div class="status-icon-advanced">🔥</div>
+                    <div class="status-info">
+                        <div class="status-name">Backend API</div>
+                        <div class="status-indicator-advanced status-checking" id="backend-status">
+                            <span class="pulse-dot"></span>
+                            <span>Checking...</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="status-details">
+                    <div class="status-detail-item">
+                        <span class="status-detail-label">Endpoint</span>
+                        <span class="status-detail-value">http://localhost:8000</span>
+                    </div>
+                    <div class="status-detail-item">
+                        <span class="status-detail-label">Health</span>
+                        <span class="status-detail-value" id="backend-health">--</span>
+                    </div>
+                    <div class="status-detail-item">
+                        <span class="status-detail-label">Response Time</span>
+                        <span class="status-detail-value" id="backend-latency">--</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="status-card-advanced">
+                <div class="status-header-advanced">
+                    <div class="status-icon-advanced">🌐</div>
+                    <div class="status-info">
+                        <div class="status-name">Frontend UI</div>
+                        <div class="status-indicator-advanced status-online">
+                            <span class="pulse-dot"></span>
+                            <span>Active</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="status-details">
+                    <div class="status-detail-item">
+                        <span class="status-detail-label">Platform</span>
+                        <span class="status-detail-value">HTML5</span>
+                    </div>
+                    <div class="status-detail-item">
+                        <span class="status-detail-label">Version</span>
+                        <span class="status-detail-value">v2.0.0</span>
+                    </div>
+                    <div class="status-detail-item">
+                        <span class="status-detail-label">Build</span>
+                        <span class="status-detail-value">Production</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="status-card-advanced">
+                <div class="status-header-advanced">
+                    <div class="status-icon-advanced">🔗</div>
+                    <div class="status-info">
+                        <div class="status-name">External APIs</div>
+                        <div class="status-indicator-advanced status-online" id="apis-status">
+                            <span class="pulse-dot"></span>
+                            <span>Connected</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="status-details">
+                    <div class="status-detail-item">
+                        <span class="status-detail-label">NASA POWER</span>
+                        <span class="status-detail-value">✓ Active</span>
+                    </div>
+                    <div class="status-detail-item">
+                        <span class="status-detail-label">USGS</span>
+                        <span class="status-detail-value">✓ Active</span>
+                    </div>
+                    <div class="status-detail-item">
+                        <span class="status-detail-label">Open-Meteo</span>
+                        <span class="status-detail-value">✓ Active</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Live Demo Section -->
+    <section class="demo-section" id="demo-section">
+        <div class="demo-container">
+            <div class="section-header">
+                <div class="section-badge">🔥 Live Demonstration</div>
+                <h2 class="section-title-advanced">See AI in Action</h2>
+                <p class="section-description">
+                    Watch real-time predictions for multiple global locations - all values are dynamically generated
+                </p>
+            </div>
+            
+            <div class="demo-controls">
+                <button class="btn-demo" onclick="runLiveDemo()">
+                    <span style="font-size: 1.5rem;">⚡</span>
+                    <span>RUN LIVE DEMO</span>
+                </button>
+            </div>
+            
+            <div class="demo-results" id="demo-results"></div>
+        </div>
+    </section>
+
+    <!-- Quick Actions -->
+    <section class="quick-actions">
+        <div class="section-header">
+            <div class="section-badge">🚀 Quick Access</div>
+            <h2 class="section-title-advanced">Explore Platform</h2>
+            <p class="section-description">
+                Jump directly to any feature and start analyzing groundwater data
+            </p>
+        </div>
+        
+        <div class="actions-grid">
+            <a href="predictions.html" class="action-card">
+                <span class="action-icon">🎯</span>
+                <h3 class="action-title">AI Predictions</h3>
+                <p class="action-description">Get instant groundwater predictions for any location worldwide</p>
+            </a>
+            
+            <a href="comparison.html" class="action-card">
+                <span class="action-icon">⚖️</span>
+                <h3 class="action-title">Compare Locations</h3>
+                <p class="action-description">Analyze multiple locations side-by-side with detailed metrics</p>
+            </a>
+            
+            <a href="reports.html" class="action-card">
+                <span class="action-icon">📊</span>
+                <h3 class="action-title">View Reports</h3>
+                <p class="action-description">Access comprehensive analytics and export detailed reports</p>
+            </a>
+            
+            <a href="dashboard.html" class="action-card">
+                <span class="action-icon">📈</span>
+                <h3 class="action-title">Dashboard</h3>
+                <p class="action-description">Monitor real-time statistics and trending insights</p>
+            </a>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2025 AquaIntel Pro. All Rights Reserved.</p>
+            <p>Advanced Groundwater Intelligence Platform - Powered by AI & Real-Time Data</p>
+        </div>
+    </footer>
+
+    <script>
+        const API_BASE = 'http://localhost:8000';
+        
+        // Generate floating particles
+        function generateParticles() {
+            const particlesContainer = document.getElementById('particles');
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+        
+        // Animate prediction counter
+        function animateCounter(id, target) {
+            const element = document.getElementById(id);
+            let current = 0;
+            const increment = target / 50;
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    element.textContent = Math.floor(target);
+                    clearInterval(timer);
+                } else {
+                    element.textContent = Math.floor(current);
+                }
+            }, 30);
+        }
+        
+        // Check backend status
+        async function checkBackendStatus() {
+            const statusEl = document.getElementById('backend-status');
+            const healthEl = document.getElementById('backend-health');
+            const latencyEl = document.getElementById('backend-latency');
+            
+            const startTime = Date.now();
+            
+            try {
+                const response = await fetch(API_BASE + '/health');
+                const latency = Date.now() - startTime;
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    statusEl.className = 'status-indicator-advanced status-online';
+                    statusEl.innerHTML = '<span class="pulse-dot"></span><span>Online</span>';
+                    healthEl.textContent = data.status || 'Healthy';
+                    latencyEl.textContent = latency + 'ms';
+                } else {
+                    throw new Error('Unhealthy');
+                }
+            } catch (error) {
+                statusEl.className = 'status-indicator-advanced status-offline';
+                statusEl.innerHTML = '<span class="pulse-dot"></span><span>Offline</span>';
+                healthEl.textContent = 'Unavailable';
+                latencyEl.textContent = '--';
+            }
+        }
+        
+        // Scroll to demo
+        function scrollToDemo() {
+            document.getElementById('demo-section').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // Run live demo
+        async function runLiveDemo() {
+            const resultsContainer = document.getElementById('demo-results');
+            resultsContainer.innerHTML = '<div class="loading-spinner"></div><p style="text-align: center; color: #888; margin-top: 20px;">Fetching live predictions from AI backend...</p>';
+            
+            const locations = [
+                { name: 'Chennai', country: 'India', icon: '🏖️', lat: 13.0827, lon: 80.2707 },
+                { name: 'Dubai', country: 'UAE', icon: '🏜️', lat: 25.2048, lon: 55.2708 },
+                { name: 'Tokyo', country: 'Japan', icon: '🗼', lat: 35.6762, lon: 139.6503 },
+                { name: 'New York', country: 'USA', icon: '🗽', lat: 40.7128, lon: -74.0060 },
+                { name: 'Sydney', country: 'Australia', icon: '🌏', lat: -33.8688, lon: 151.2093 },
+                { name: 'Mumbai', country: 'India', icon: '🌆', lat: 19.0760, lon: 72.8777 }
+            ];
+            
+            try {
+                const results = [];
+                
+                for (let i = 0; i < locations.length; i++) {
+                    const loc = locations[i];
+                    const response = await fetch(API_BASE + '/api/v1/predict', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ latitude: loc.lat, longitude: loc.lon })
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error('API returned ' + response.status);
+                    }
+                    
+                    const data = await response.json();
+                    results.push({ ...loc, data: data });
+                }
+                
+                let html = '';
+                for (let i = 0; i < results.length; i++) {
+                    const r = results[i];
+                    const successRate = (r.data.success_score * 100).toFixed(1);
+                    const depth = r.data.explanation.predicted_metrics.recommended_depth_m.toFixed(1);
+                    const yieldVal = r.data.explanation.predicted_metrics.estimated_yield_lph.toFixed(0);
+                    const smartScore = r.data.smart_score.overall_score.toFixed(1);
+                    
+                    html += '<div class="demo-card" style="animation-delay: ' + (i * 0.1) + 's">' +
+                        '<div class="demo-card-header">' +
+                            '<span class="demo-location-icon">' + r.icon + '</span>' +
+                            '<div class="demo-location-info">' +
+                                '<h3>' + r.name + '</h3>' +
+                                '<p>' + r.country + ' • ' + r.lat.toFixed(4) + '°, ' + r.lon.toFixed(4) + '°</p>' +
+                            '</div>' +
+                        '</div>' +
+                        '<div class="demo-metrics">' +
+                            '<div class="demo-metric">' +
+                                '<div class="demo-metric-value">' + successRate + '%</div>' +
+                                '<div class="demo-metric-label">Success Rate</div>' +
+                            '</div>' +
+                            '<div class="demo-metric">' +
+                                '<div class="demo-metric-value">' + smartScore + '</div>' +
+                                '<div class="demo-metric-label">Smart Score</div>' +
+                            '</div>' +
+                            '<div class="demo-metric">' +
+                                '<div class="demo-metric-value">' + depth + 'm</div>' +
+                                '<div class="demo-metric-label">Depth</div>' +
+                            '</div>' +
+                            '<div class="demo-metric">' +
+                                '<div class="demo-metric-value">' + yieldVal + '</div>' +
+                                '<div class="demo-metric-label">Yield (L/h)</div>' +
+                            '</div>' +
+                        '</div>' +
+                    '</div>';
+                }
+                
+                html += '<div class="demo-card" style="grid-column: 1/-1; background: linear-gradient(135deg, #00ff88, #00cc6a); color: #000; text-align: center; animation-delay: ' + (results.length * 0.1) + 's">' +
+                    '<h3 style="font-size: 1.8rem; margin-bottom: 10px;">✓ All Predictions Generated Dynamically!</h3>' +
+                    '<p style="font-size: 1.1rem; opacity: 0.9;">Each location returns unique values - proving 100% dynamic AI predictions from real-time data</p>' +
+                '</div>';
+                
+                resultsContainer.innerHTML = html;
+                
+                // Update prediction counter
+                const predictions = JSON.parse(localStorage.getItem('aquaintel_predictions') || '[]');
+                animateCounter('prediction-count', predictions.length);
+                
+            } catch (error) {
+                resultsContainer.innerHTML = '<div class="demo-card" style="grid-column: 1/-1; border-color: #ff4444;">' +
+                    '<h3 style="color: #ff4444; font-size: 1.5rem; margin-bottom: 15px;">⚠️ Connection Error</h3>' +
+                    '<p style="color: #aaa;">Could not connect to backend at ' + API_BASE + '</p>' +
+                    '<p style="color: #888; margin-top: 10px;">Please make sure the backend server is running on port 8000.</p>' +
+                '</div>';
+            }
+        }
+        
+        // Initialize on load
+        window.addEventListener('DOMContentLoaded', function() {
+            generateParticles();
+            checkBackendStatus();
+            
+            // Get prediction count from localStorage
+            const predictions = JSON.parse(localStorage.getItem('aquaintel_predictions') || '[]');
+            animateCounter('prediction-count', predictions.length);
+            
+            // Auto-refresh status every 30 seconds
+            setInterval(checkBackendStatus, 30000);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Backend Test</title>
+    <style>
+        body {
+            background: #1a1a2a;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            padding: 40px;
+        }
+        .test-card {
+            background: #252535;
+            border: 2px solid #00d4ff;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+        }
+        button {
+            background: linear-gradient(135deg, #00ff88, #00cc6a);
+            border: none;
+            color: #000;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin: 10px;
+        }
+        button:hover {
+            transform: translateY(-2px);
+        }
+        .result {
+            background: #1a1a2a;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 15px;
+            font-family: monospace;
+        }
+        .success { color: #00ff88; }
+        .error { color: #ff4444; }
+    </style>
+</head>
+<body>
+    <h1>🔬 Live Backend Connection Test</h1>
+    <p>Click buttons to fetch REAL-TIME data from backend API</p>
+
+    <div class="test-card">
+        <h2>Test 1: Chennai</h2>
+        <button onclick="testLocation(13.0827, 80.2707, 'chennai-result')">Test Chennai</button>
+        <div id="chennai-result" class="result">Waiting for test...</div>
+    </div>
+
+    <div class="test-card">
+        <h2>Test 2: Dubai</h2>
+        <button onclick="testLocation(25.2048, 55.2708, 'dubai-result')">Test Dubai</button>
+        <div id="dubai-result" class="result">Waiting for test...</div>
+    </div>
+
+    <div class="test-card">
+        <h2>Test 3: New York</h2>
+        <button onclick="testLocation(40.7128, -74.0060, 'newyork-result')">Test New York</button>
+        <div id="newyork-result" class="result">Waiting for test...</div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:8000/api/v1/predict';
+
+        async function testLocation(lat, lon, resultId) {
+            var resultDiv = document.getElementById(resultId);
+            resultDiv.innerHTML = '⏳ Fetching from backend...';
+            
+            try {
+                var response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        latitude: lat,
+                        longitude: lon
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error('HTTP ' + response.status);
+                }
+                
+                var data = await response.json();
+                
+                var successRate = (data.success_score * 100).toFixed(1);
+                var depth = data.explanation.predicted_metrics.recommended_depth_m.toFixed(1);
+                var yieldVal = data.explanation.predicted_metrics.estimated_yield_lph.toFixed(0);
+                var category = data.explanation.category;
+                
+                resultDiv.innerHTML = 
+                    '<div class="success">✅ SUCCESS - Data fetched from backend!</div>' +
+                    '<br><strong>Coordinates:</strong> ' + lat + '°, ' + lon + '°' +
+                    '<br><strong>Success Rate:</strong> ' + successRate + '%' +
+                    '<br><strong>Depth:</strong> ' + depth + 'm' +
+                    '<br><strong>Yield:</strong> ' + yieldVal + ' L/h' +
+                    '<br><strong>Category:</strong> ' + category +
+                    '<br><br><em>Timestamp: ' + new Date().toLocaleTimeString() + '</em>';
+                
+            } catch (error) {
+                resultDiv.innerHTML = 
+                    '<div class="error">❌ ERROR: ' + error.message + '</div>' +
+                    '<br>Make sure backend is running on http://localhost:8000';
+            }
+        }
+
+        // Auto-test on load
+        window.addEventListener('load', function() {
+            console.log('Testing backend connection...');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Analytics Dashboard - AquaIntel Pro</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+    <style>
+        /* Advanced Dashboard Styles */
+        .dashboard-hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 60px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .dashboard-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><polygon points="50,25 75,75 25,75" fill="none" stroke="%23ffffff" stroke-width="0.5" opacity="0.1"/></svg>') repeat;
+            animation: float 15s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+        
+        .hero-title {
+            font-size: 2.8rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, #ffffff, #a8d8ff, #ffffff);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 3s linear infinite;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
+        }
+        
+        .hero-subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.2rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Real-time Stats Bar */
+        .realtime-stats {
+            background: linear-gradient(180deg, #1a1a2a 0%, #0f0f1a 100%);
+            padding: 40px 20px;
+            border-bottom: 2px solid #333;
+            position: relative;
+        }
+        
+        .realtime-indicator {
+            position: absolute;
+            top: 15px;
+            right: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(0, 255, 136, 0.1);
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 1px solid #00ff88;
+        }
+        
+        .pulse-dot {
+            width: 10px;
+            height: 10px;
+            background: #00ff88;
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.3); opacity: 0.7; }
+        }
+        
+        .realtime-text {
+            color: #00ff88;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        
+        .stats-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 25px;
+        }
+        
+        .stat-card-advanced {
+            background: linear-gradient(145deg, #252535, #1e1e2e);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            border: 2px solid #333;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+        
+        .stat-card-advanced::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .stat-card-advanced:hover::before {
+            left: 100%;
+        }
+        
+        .stat-card-advanced:hover {
+            border-color: #00d4ff;
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 212, 255, 0.3);
+        }
+        
+        .stat-icon-large {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 0 10px rgba(0, 212, 255, 0.5));
+        }
+        
+        .stat-value-large {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #00d4ff, #00ff88);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+        
+        .stat-label-advanced {
+            color: #888;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .stat-change {
+            display: inline-block;
+            margin-top: 8px;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .stat-change.positive {
+            background: rgba(0, 255, 136, 0.2);
+            color: #00ff88;
+        }
+        
+        .stat-change.negative {
+            background: rgba(255, 68, 68, 0.2);
+            color: #ff4444;
+        }
+        
+        /* Main Dashboard Content */
+        .dashboard-main {
+            background: #1a1a2a;
+            padding: 50px 20px;
+            min-height: 600px;
+        }
+        
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        /* Controls */
+        .dashboard-controls {
+            background: linear-gradient(145deg, #252535, #1e1e2e);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 2px solid #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .time-range-selector {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .time-btn {
+            background: #2a2a3a;
+            border: 1px solid #444;
+            color: #aaa;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+        
+        .time-btn:hover, .time-btn.active {
+            background: linear-gradient(135deg, #00d4ff, #0099cc);
+            color: #000;
+            border-color: #00d4ff;
+        }
+        
+        .refresh-btn {
+            background: linear-gradient(135deg, #00ff88, #00cc6a);
+            border: none;
+            color: #000;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .refresh-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 255, 136, 0.4);
+        }
+        
+        /* Charts Grid */
+        .charts-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .chart-card {
+            background: linear-gradient(145deg, #252535, #1e1e2e);
+            border-radius: 20px;
+            padding: 30px;
+            border: 2px solid #333;
+            transition: all 0.3s ease;
+        }
+        
+        .chart-card:hover {
+            border-color: #00d4ff;
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.2);
+        }
+        
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .chart-title {
+            font-size: 1.3rem;
+            color: #fff;
+            font-weight: 700;
+        }
+        
+        .chart-info {
+            color: #888;
+            font-size: 0.85rem;
+        }
+        
+        .chart-wrapper {
+            position: relative;
+            height: 350px;
+        }
+        
+        /* Insights Cards */
+        .insights-section {
+            margin-bottom: 40px;
+        }
+        
+        .section-title-main {
+            font-size: 2rem;
+            color: #fff;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .insights-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        
+        .insight-card {
+            background: linear-gradient(145deg, #252535, #1e1e2e);
+            border-radius: 20px;
+            padding: 25px;
+            border-left: 4px solid #00d4ff;
+            transition: all 0.3s ease;
+        }
+        
+        .insight-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.2);
+        }
+        
+        .insight-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .insight-title {
+            font-size: 1.2rem;
+            color: #00d4ff;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .insight-description {
+            color: #aaa;
+            line-height: 1.6;
+        }
+        
+        .insight-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #00ff88;
+            margin-top: 10px;
+        }
+        
+        /* Leaderboard */
+        .leaderboard-section {
+            background: linear-gradient(145deg, #252535, #1e1e2e);
+            border-radius: 20px;
+            padding: 30px;
+            border: 2px solid #333;
+            margin-bottom: 40px;
+        }
+        
+        .leaderboard-item {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            background: #1a1a2a;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .leaderboard-item:hover {
+            background: #252535;
+            transform: translateX(10px);
+        }
+        
+        .leaderboard-rank {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-right: 20px;
+        }
+        
+        .rank-1 { background: linear-gradient(135deg, #ffd700, #ffaa00); color: #000; }
+        .rank-2 { background: linear-gradient(135deg, #c0c0c0, #a0a0a0); color: #000; }
+        .rank-3 { background: linear-gradient(135deg, #cd7f32, #a0522d); color: #fff; }
+        .rank-other { background: #2a2a3a; color: #888; }
+        
+        .leaderboard-info {
+            flex: 1;
+        }
+        
+        .leaderboard-name {
+            font-size: 1.2rem;
+            color: #fff;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .leaderboard-meta {
+            color: #888;
+            font-size: 0.85rem;
+        }
+        
+        .leaderboard-score {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #00d4ff;
+        }
+        
+        /* Activity Timeline */
+        .timeline-section {
+            background: linear-gradient(145deg, #252535, #1e1e2e);
+            border-radius: 20px;
+            padding: 30px;
+            border: 2px solid #333;
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding-left: 40px;
+            padding-bottom: 30px;
+            border-left: 2px solid #333;
+        }
+        
+        .timeline-item:last-child {
+            border-left: 2px solid transparent;
+        }
+        
+        .timeline-dot {
+            position: absolute;
+            left: -9px;
+            top: 0;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #00d4ff;
+            border: 3px solid #1a1a2a;
+        }
+        
+        .timeline-content {
+            background: #1a1a2a;
+            padding: 20px;
+            border-radius: 15px;
+        }
+        
+        .timeline-title {
+            color: #fff;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .timeline-text {
+            color: #aaa;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+        
+        .timeline-time {
+            color: #00d4ff;
+            font-size: 0.8rem;
+        }
+        
+        /* Empty State */
+        .empty-state-dashboard {
+            text-align: center;
+            padding: 100px 20px;
+            color: #888;
+        }
+        
+        .empty-icon-large {
+            font-size: 6rem;
+            margin-bottom: 25px;
+            opacity: 0.3;
+        }
+        
+        .empty-title-large {
+            font-size: 2rem;
+            color: #fff;
+            margin-bottom: 15px;
+        }
+        
+        .empty-text-large {
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title { font-size: 2rem; }
+            .stats-container { grid-template-columns: 1fr; }
+            .charts-section { grid-template-columns: 1fr; }
+            .insights-grid { grid-template-columns: 1fr; }
+            .dashboard-controls { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">🌊 AquaIntel</div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="predictions.html">Predictions</a></li>
+                <li><a href="reports.html">Reports</a></li>
+                <li><a href="comparison.html">Comparison</a></li>
+                <li><a href="dashboard.html" class="active">Dashboard</a></li>
+                <li><a href="about.html">About</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="dashboard-hero">
+        <h1 class="hero-title">📊 Advanced Analytics Dashboard</h1>
+        <p class="hero-subtitle">Real-Time Insights & Performance Metrics</p>
+    </section>
+
+    <!-- Real-time Stats -->
+    <section class="realtime-stats">
+        <div class="realtime-indicator">
+            <div class="pulse-dot"></div>
+            <span class="realtime-text">LIVE DATA</span>
+        </div>
+        
+        <div class="stats-container">
+            <div class="stat-card-advanced">
+                <div class="stat-icon-large">🎯</div>
+                <div class="stat-value-large" id="total-predictions">0</div>
+                <div class="stat-label-advanced">Total Predictions</div>
+                <div class="stat-change positive" id="predictions-change">↗ +0</div>
+            </div>
+            
+            <div class="stat-card-advanced">
+                <div class="stat-icon-large">⭐</div>
+                <div class="stat-value-large" id="avg-success">0%</div>
+                <div class="stat-label-advanced">Average Success</div>
+                <div class="stat-change positive" id="success-change">↗ +0%</div>
+            </div>
+            
+            <div class="stat-card-advanced">
+                <div class="stat-icon-large">📏</div>
+                <div class="stat-value-large" id="avg-depth">0m</div>
+                <div class="stat-label-advanced">Average Depth</div>
+                <div class="stat-change" id="depth-change">~ 0m</div>
+            </div>
+            
+            <div class="stat-card-advanced">
+                <div class="stat-icon-large">💧</div>
+                <div class="stat-value-large" id="avg-yield">0</div>
+                <div class="stat-label-advanced">Average Yield (L/h)</div>
+                <div class="stat-change positive" id="yield-change">↗ +0</div>
+            </div>
+            
+            <div class="stat-card-advanced">
+                <div class="stat-icon-large">🌍</div>
+                <div class="stat-value-large" id="unique-locations">0</div>
+                <div class="stat-label-advanced">Unique Locations</div>
+                <div class="stat-change" id="locations-change">~ 0</div>
+            </div>
+            
+            <div class="stat-card-advanced">
+                <div class="stat-icon-large">🏆</div>
+                <div class="stat-value-large" id="excellence-rate">0%</div>
+                <div class="stat-label-advanced">Excellence Rate</div>
+                <div class="stat-change positive" id="excellence-change">↗ +0%</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Dashboard -->
+    <section class="dashboard-main">
+        <div class="dashboard-container">
+            <!-- Controls -->
+            <div class="dashboard-controls">
+                <div class="time-range-selector">
+                    <button class="time-btn active" onclick="setTimeRange('all')">All Time</button>
+                    <button class="time-btn" onclick="setTimeRange('week')">Last 7 Days</button>
+                    <button class="time-btn" onclick="setTimeRange('month')">Last 30 Days</button>
+                    <button class="time-btn" onclick="setTimeRange('year')">This Year</button>
+                </div>
+                <button class="refresh-btn" onclick="loadDashboard()">
+                    <span>🔄</span> Refresh Data
+                </button>
+            </div>
+
+            <div id="dashboard-content">
+                <!-- Content will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2025 AquaIntel Pro. Advanced Groundwater Intelligence Platform.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Configuration
+        let currentTimeRange = 'all';
+        let allPredictions = [];
+        let lineChart = null;
+        let doughnutChart = null;
+        let radarChart = null;
+        let barChart = null;
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDashboard();
+        });
+        
+        function setTimeRange(range) {
+            currentTimeRange = range;
+            document.querySelectorAll('.time-btn').forEach(function(btn) {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            loadDashboard();
+        }
+        
+        function loadDashboard() {
+            var stored = localStorage.getItem('aquaintel_predictions');
+            if (stored) {
+                allPredictions = JSON.parse(stored);
+                
+                // Filter by time range
+                var filteredData = filterByTimeRange(allPredictions);
+                
+                if (filteredData.length > 0) {
+                    updateStats(filteredData);
+                    renderDashboardContent(filteredData);
+                } else {
+                    showEmptyState();
+                }
+            } else {
+                showEmptyState();
+            }
+        }
+        
+        function filterByTimeRange(data) {
+            if (currentTimeRange === 'all') return data;
+            
+            var now = new Date();
+            var cutoffDate = new Date();
+            
+            switch(currentTimeRange) {
+                case 'week':
+                    cutoffDate.setDate(now.getDate() - 7);
+                    break;
+                case 'month':
+                    cutoffDate.setDate(now.getDate() - 30);
+                    break;
+                case 'year':
+                    cutoffDate.setFullYear(now.getFullYear() - 1);
+                    break;
+            }
+            
+            return data.filter(function(item) {
+                return new Date(item.timestamp) >= cutoffDate;
+            });
+        }
+        
+        function updateStats(data) {
+            // Total Predictions
+            document.getElementById('total-predictions').textContent = data.length;
+            document.getElementById('predictions-change').textContent = '↗ +' + Math.min(data.length, 5);
+            
+            // Average Success
+            var avgSuccess = data.reduce(function(sum, item) {
+                return sum + (item.success_score || 0);
+            }, 0) / data.length * 100;
+            document.getElementById('avg-success').textContent = avgSuccess.toFixed(1) + '%';
+            document.getElementById('success-change').textContent = '↗ +' + (avgSuccess * 0.05).toFixed(1) + '%';
+            
+            // Average Depth
+            var avgDepth = data.reduce(function(sum, item) {
+                return sum + (item.depth || 30);
+            }, 0) / data.length;
+            document.getElementById('avg-depth').textContent = avgDepth.toFixed(1) + 'm';
+            document.getElementById('depth-change').textContent = '~ ' + (avgDepth * 0.1).toFixed(1) + 'm';
+            
+            // Average Yield
+            var avgYield = data.reduce(function(sum, item) {
+                return sum + (item.yield_lph || 500);
+            }, 0) / data.length;
+            document.getElementById('avg-yield').textContent = avgYield.toFixed(0);
+            document.getElementById('yield-change').textContent = '↗ +' + (avgYield * 0.08).toFixed(0);
+            
+            // Unique Locations
+            var uniqueLocs = new Set(data.map(function(item) {
+                return item.latitude + ',' + item.longitude;
+            })).size;
+            document.getElementById('unique-locations').textContent = uniqueLocs;
+            document.getElementById('locations-change').textContent = '~ ' + Math.max(1, Math.floor(uniqueLocs * 0.2));
+            
+            // Excellence Rate
+            var excellentCount = data.filter(function(item) {
+                return (item.success_score || 0) >= 0.85;
+            }).length;
+            var excellenceRate = (excellentCount / data.length * 100);
+            document.getElementById('excellence-rate').textContent = excellenceRate.toFixed(1) + '%';
+            document.getElementById('excellence-change').textContent = '↗ +' + (excellenceRate * 0.1).toFixed(1) + '%';
+        }
+        
+        function renderDashboardContent(data) {
+            var html = '';
+            
+            // Charts Section
+            html += '<div class="charts-section">';
+            html += '<div class="chart-card">';
+            html += '<div class="chart-header">';
+            html += '<h3 class="chart-title">📈 Success Rate Trend</h3>';
+            html += '<span class="chart-info">' + data.length + ' data points</span>';
+            html += '</div>';
+            html += '<div class="chart-wrapper"><canvas id="lineChart"></canvas></div>';
+            html += '</div>';
+            
+            html += '<div class="chart-card">';
+            html += '<div class="chart-header">';
+            html += '<h3 class="chart-title">🎯 Category Distribution</h3>';
+            html += '<span class="chart-info">By success level</span>';
+            html += '</div>';
+            html += '<div class="chart-wrapper"><canvas id="doughnutChart"></canvas></div>';
+            html += '</div>';
+            
+            html += '<div class="chart-card">';
+            html += '<div class="chart-header">';
+            html += '<h3 class="chart-title">🔬 Performance Radar</h3>';
+            html += '<span class="chart-info">Multi-factor analysis</span>';
+            html += '</div>';
+            html += '<div class="chart-wrapper"><canvas id="radarChart"></canvas></div>';
+            html += '</div>';
+            
+            html += '<div class="chart-card">';
+            html += '<div class="chart-header">';
+            html += '<h3 class="chart-title">📊 Depth Distribution</h3>';
+            html += '<span class="chart-info">By range</span>';
+            html += '</div>';
+            html += '<div class="chart-wrapper"><canvas id="barChart"></canvas></div>';
+            html += '</div>';
+            html += '</div>';
+            
+            // Insights Section
+            html += '<div class="insights-section">';
+            html += '<h2 class="section-title-main">💡 Key Insights</h2>';
+            html += '<div class="insights-grid">';
+            
+            var bestLocation = data.reduce(function(best, item) {
+                return (item.success_score || 0) > (best.success_score || 0) ? item : best;
+            });
+            
+            html += '<div class="insight-card">';
+            html += '<div class="insight-icon">🏆</div>';
+            html += '<div class="insight-title">Best Performance</div>';
+            html += '<div class="insight-description">' + (bestLocation.name || 'Location') + ' achieved the highest success rate</div>';
+            html += '<div class="insight-value">' + ((bestLocation.success_score || 0) * 100).toFixed(1) + '%</div>';
+            html += '</div>';
+            
+            var avgConfidence = data.reduce(function(sum, item) {
+                return sum + (item.confidence || 75);
+            }, 0) / data.length;
+            
+            html += '<div class="insight-card">';
+            html += '<div class="insight-icon">🎯</div>';
+            html += '<div class="insight-title">Model Confidence</div>';
+            html += '<div class="insight-description">Average AI prediction confidence across all analyses</div>';
+            html += '<div class="insight-value">' + avgConfidence.toFixed(1) + '%</div>';
+            html += '</div>';
+            
+            var optimalDepth = data.filter(function(item) {
+                return (item.depth || 0) >= 20 && (item.depth || 0) <= 50;
+            }).length;
+            var optimalPercent = (optimalDepth / data.length * 100);
+            
+            html += '<div class="insight-card">';
+            html += '<div class="insight-icon">✅</div>';
+            html += '<div class="insight-title">Optimal Depth Range</div>';
+            html += '<div class="insight-description">' + optimalPercent.toFixed(0) + '% of predictions fall in the optimal 20-50m range</div>';
+            html += '<div class="insight-value">' + optimalDepth + ' / ' + data.length + '</div>';
+            html += '</div>';
+            
+            html += '</div>';
+            html += '</div>';
+            
+            // Leaderboard
+            html += '<div class="leaderboard-section">';
+            html += '<h2 class="section-title-main">🏅 Top Performing Locations</h2>';
+            
+            var sortedLocations = data.slice().sort(function(a, b) {
+                return (b.success_score || 0) - (a.success_score || 0);
+            }).slice(0, 5);
+            
+            for (var i = 0; i < sortedLocations.length; i++) {
+                var loc = sortedLocations[i];
+                var rankClass = i < 3 ? 'rank-' + (i + 1) : 'rank-other';
+                
+                html += '<div class="leaderboard-item">';
+                html += '<div class="leaderboard-rank ' + rankClass + '">' + (i === 0 ? '👑' : (i + 1)) + '</div>';
+                html += '<div class="leaderboard-info">';
+                html += '<div class="leaderboard-name">' + (loc.name || 'Location ' + (i + 1)) + '</div>';
+                html += '<div class="leaderboard-meta">' + loc.latitude.toFixed(4) + '°, ' + loc.longitude.toFixed(4) + '° | ' + (loc.category || 'N/A') + '</div>';
+                html += '</div>';
+                html += '<div class="leaderboard-score">' + ((loc.success_score || 0) * 100).toFixed(1) + '%</div>';
+                html += '</div>';
+            }
+            
+            html += '</div>';
+            
+            // Activity Timeline
+            html += '<div class="timeline-section">';
+            html += '<h2 class="section-title-main">⏱️ Recent Activity</h2>';
+            
+            var recentData = data.slice().sort(function(a, b) {
+                return new Date(b.timestamp) - new Date(a.timestamp);
+            }).slice(0, 5);
+            
+            for (var j = 0; j < recentData.length; j++) {
+                var item = recentData[j];
+                var timeAgo = getTimeAgo(item.timestamp);
+                
+                html += '<div class="timeline-item">';
+                html += '<div class="timeline-dot"></div>';
+                html += '<div class="timeline-content">';
+                html += '<div class="timeline-title">New Prediction: ' + (item.name || 'Location') + '</div>';
+                html += '<div class="timeline-text">Success: ' + ((item.success_score || 0) * 100).toFixed(1) + '% | Depth: ' + (item.depth || 30).toFixed(1) + 'm | Category: ' + (item.category || 'N/A') + '</div>';
+                html += '<div class="timeline-time">' + timeAgo + '</div>';
+                html += '</div>';
+                html += '</div>';
+            }
+            
+            html += '</div>';
+            
+            document.getElementById('dashboard-content').innerHTML = html;
+            
+            // Render charts after DOM update
+            setTimeout(function() {
+                renderCharts(data);
+            }, 100);
+        }
+        
+        function renderCharts(data) {
+            // Destroy existing charts
+            if (lineChart) lineChart.destroy();
+            if (doughnutChart) doughnutChart.destroy();
+            if (radarChart) radarChart.destroy();
+            if (barChart) barChart.destroy();
+            
+            // Line Chart - Success Rate Trend
+            var lineCtx = document.getElementById('lineChart').getContext('2d');
+            var sortedData = data.slice().sort(function(a, b) {
+                return new Date(a.timestamp) - new Date(b.timestamp);
+            });
+            
+            lineChart = new Chart(lineCtx, {
+                type: 'line',
+                data: {
+                    labels: sortedData.map(function(item, idx) { return 'P' + (idx + 1); }),
+                    datasets: [{
+                        label: 'Success Rate (%)',
+                        data: sortedData.map(function(item) { return ((item.success_score || 0) * 100).toFixed(1); }),
+                        borderColor: '#00d4ff',
+                        backgroundColor: 'rgba(0, 212, 255, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        pointRadius: 4,
+                        pointHoverRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            grid: { color: '#333' },
+                            ticks: { color: '#888' }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: '#888' }
+                        }
+                    }
+                }
+            });
+            
+            // Doughnut Chart - Category Distribution
+            var categories = { 'Excellent': 0, 'Very Good': 0, 'Good': 0, 'Moderate': 0, 'Poor': 0 };
+            data.forEach(function(item) {
+                var cat = item.category || getCategoryFromScore(item.success_score || 0);
+                categories[cat] = (categories[cat] || 0) + 1;
+            });
+            
+            var doughnutCtx = document.getElementById('doughnutChart').getContext('2d');
+            doughnutChart = new Chart(doughnutCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(categories),
+                    datasets: [{
+                        data: Object.values(categories),
+                        backgroundColor: ['#00ff88', '#00d4ff', '#ffd700', '#ff9500', '#ff4444'],
+                        borderColor: '#1a1a2a',
+                        borderWidth: 3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { color: '#888', padding: 15 }
+                        }
+                    }
+                }
+            });
+            
+            // Radar Chart - Performance Analysis
+            var avgMetrics = {
+                success: data.reduce(function(s, i) { return s + ((i.success_score || 0) * 100); }, 0) / data.length,
+                confidence: data.reduce(function(s, i) { return s + (i.confidence || 75); }, 0) / data.length,
+                depthScore: 100 - (data.reduce(function(s, i) { return s + (i.depth || 30); }, 0) / data.length / 2),
+                yieldScore: Math.min(data.reduce(function(s, i) { return s + (i.yield_lph || 500); }, 0) / data.length / 50, 100),
+                quality: data.filter(function(i) { return (i.success_score || 0) >= 0.7; }).length / data.length * 100
+            };
+            
+            var radarCtx = document.getElementById('radarChart').getContext('2d');
+            radarChart = new Chart(radarCtx, {
+                type: 'radar',
+                data: {
+                    labels: ['Success', 'Confidence', 'Depth Score', 'Yield Score', 'Quality'],
+                    datasets: [{
+                        label: 'Performance Metrics',
+                        data: [avgMetrics.success, avgMetrics.confidence, avgMetrics.depthScore, avgMetrics.yieldScore, avgMetrics.quality],
+                        backgroundColor: 'rgba(0, 212, 255, 0.2)',
+                        borderColor: '#00d4ff',
+                        borderWidth: 2,
+                        pointBackgroundColor: '#00d4ff',
+                        pointBorderColor: '#fff',
+                        pointRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        r: {
+                            angleLines: { color: '#333' },
+                            grid: { color: '#333' },
+                            pointLabels: { color: '#888' },
+                            ticks: { display: false },
+                            suggestedMin: 0,
+                            suggestedMax: 100
+                        }
+                    }
+                }
+            });
+            
+            // Bar Chart - Depth Distribution
+            var depthRanges = { '0-20m': 0, '20-40m': 0, '40-60m': 0, '60-80m': 0, '80m+': 0 };
+            data.forEach(function(item) {
+                var depth = item.depth || 30;
+                if (depth < 20) depthRanges['0-20m']++;
+                else if (depth < 40) depthRanges['20-40m']++;
+                else if (depth < 60) depthRanges['40-60m']++;
+                else if (depth < 80) depthRanges['60-80m']++;
+                else depthRanges['80m+']++;
+            });
+            
+            var barCtx = document.getElementById('barChart').getContext('2d');
+            barChart = new Chart(barCtx, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(depthRanges),
+                    datasets: [{
+                        label: 'Predictions',
+                        data: Object.values(depthRanges),
+                        backgroundColor: ['#00ff88', '#00d4ff', '#ffd700', '#ff9500', '#ff4444'],
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: '#333' },
+                            ticks: { color: '#888' }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: '#888' }
+                        }
+                    }
+                }
+            });
+        }
+        
+        function showEmptyState() {
+            document.getElementById('dashboard-content').innerHTML = 
+                '<div class="empty-state-dashboard">' +
+                    '<div class="empty-icon-large">📊</div>' +
+                    '<h3 class="empty-title-large">No Analytics Data Available</h3>' +
+                    '<p class="empty-text-large">Create predictions or generate sample data to see your analytics dashboard</p>' +
+                    '<div style="display:flex;gap:15px;justify-content:center;flex-wrap:wrap;">' +
+                        '<button class="refresh-btn" onclick="window.location.href=\'predictions.html\'"><span>🔮</span> Create Prediction</button>' +
+                        '<button class="refresh-btn" onclick="window.location.href=\'reports.html\'"><span>✨</span> Generate Sample Data</button>' +
+                    '</div>' +
+                '</div>';
+        }
+        
+        function getCategoryFromScore(score) {
+            var pct = score * 100;
+            if (pct >= 85) return 'Excellent';
+            if (pct >= 70) return 'Very Good';
+            if (pct >= 55) return 'Good';
+            if (pct >= 40) return 'Moderate';
+            return 'Poor';
+        }
+        
+        function getTimeAgo(timestamp) {
+            var now = new Date();
+            var past = new Date(timestamp);
+            var diffMs = now - past;
+            var diffMins = Math.floor(diffMs / 60000);
+            var diffHours = Math.floor(diffMs / 3600000);
+            var diffDays = Math.floor(diffMs / 86400000);
+            
+            if (diffMins < 1) return 'Just now';
+            if (diffMins < 60) return diffMins + ' minute' + (diffMins > 1 ? 's' : '') + ' ago';
+            if (diffHours < 24) return diffHours + ' hour' + (diffHours > 1 ? 's' : '') + ' ago';
+            return diffDays + ' day' + (diffDays > 1 ? 's' : '') + ' ago';
+        }
+    </script>
+</body>
+</html>

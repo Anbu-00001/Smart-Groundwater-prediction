@@ -1,0 +1,1387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Comparison - AquaIntel Pro</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Advanced Comparison Styles */
+        .comparison-hero {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            padding: 60px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .comparison-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="none" stroke="%2300d4ff" stroke-width="0.5" opacity="0.1"/></svg>') repeat;
+            animation: pulse 4s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.6; }
+        }
+        
+        .hero-title {
+            font-size: 2.8rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, #00d4ff, #00ff88, #00d4ff);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradient 3s linear infinite;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        @keyframes gradient {
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
+        }
+        
+        .hero-subtitle {
+            color: #a0a0a0;
+            font-size: 1.2rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Location Input Section */
+        .location-input-section {
+            background: linear-gradient(180deg, #1e1e2e 0%, #252535 100%);
+            padding: 40px 20px;
+            border-bottom: 1px solid #333;
+        }
+        
+        .input-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            color: #00d4ff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .quick-presets {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .preset-btn {
+            background: linear-gradient(135deg, #2a2a3a, #1a1a2a);
+            border: 1px solid #444;
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+        }
+        
+        .preset-btn:hover {
+            background: linear-gradient(135deg, #00d4ff, #0099cc);
+            border-color: #00d4ff;
+            transform: translateY(-2px);
+        }
+        
+        .location-cards-input {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .location-input-card {
+            background: linear-gradient(145deg, #2a2a3a, #1e1e2e);
+            border-radius: 16px;
+            padding: 25px;
+            border: 2px solid #333;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .location-input-card:hover {
+            border-color: #00d4ff;
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.1);
+        }
+        
+        .location-input-card.active {
+            border-color: #00ff88;
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
+        }
+        
+        .card-number {
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: linear-gradient(135deg, #00d4ff, #0099cc);
+            color: #fff;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+        
+        .input-group {
+            margin-bottom: 15px;
+        }
+        
+        .input-group label {
+            display: block;
+            color: #888;
+            font-size: 0.85rem;
+            margin-bottom: 5px;
+        }
+        
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 12px 15px;
+            background: #1a1a2a;
+            border: 1px solid #444;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .input-group input:focus, .input-group select:focus {
+            outline: none;
+            border-color: #00d4ff;
+            box-shadow: 0 0 10px rgba(0, 212, 255, 0.2);
+        }
+        
+        .coordinate-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .quick-location-btns {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 15px;
+        }
+        
+        .quick-loc-btn {
+            background: #2a2a3a;
+            border: 1px solid #444;
+            color: #aaa;
+            padding: 6px 12px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.2s ease;
+        }
+        
+        .quick-loc-btn:hover {
+            background: #00d4ff;
+            color: #000;
+            border-color: #00d4ff;
+        }
+        
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+        
+        .btn-compare {
+            background: linear-gradient(135deg, #00d4ff, #0099cc);
+            color: #000;
+            font-weight: 700;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .btn-compare:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.4);
+        }
+        
+        .btn-compare:disabled {
+            background: #444;
+            color: #888;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .btn-secondary-action {
+            background: transparent;
+            color: #00d4ff;
+            border: 2px solid #00d4ff;
+            padding: 15px 30px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary-action:hover {
+            background: rgba(0, 212, 255, 0.1);
+        }
+        
+        /* Results Section */
+        .results-section {
+            background: #1a1a2a;
+            padding: 50px 20px;
+            min-height: 400px;
+        }
+        
+        .results-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .results-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .results-title {
+            font-size: 2rem;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+        
+        .results-meta {
+            color: #888;
+            font-size: 0.9rem;
+        }
+        
+        /* Comparison Cards */
+        .comparison-results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+        
+        .result-card {
+            background: linear-gradient(145deg, #252535, #1e1e2e);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 2px solid #333;
+            transition: all 0.4s ease;
+            animation: slideUp 0.6s ease forwards;
+            opacity: 0;
+        }
+        
+        .result-card:nth-child(1) { animation-delay: 0.1s; }
+        .result-card:nth-child(2) { animation-delay: 0.2s; }
+        .result-card:nth-child(3) { animation-delay: 0.3s; }
+        .result-card:nth-child(4) { animation-delay: 0.4s; }
+        .result-card:nth-child(5) { animation-delay: 0.5s; }
+        
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .result-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .result-card.winner {
+            border-color: #ffd700;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+        }
+        
+        .card-header {
+            padding: 25px;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(0, 255, 136, 0.05));
+            position: relative;
+        }
+        
+        .result-card.winner .card-header {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 165, 0, 0.1));
+        }
+        
+        .rank-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .rank-1 { background: linear-gradient(135deg, #ffd700, #ffaa00); color: #000; }
+        .rank-2 { background: linear-gradient(135deg, #c0c0c0, #a0a0a0); color: #000; }
+        .rank-3 { background: linear-gradient(135deg, #cd7f32, #a0522d); color: #fff; }
+        .rank-other { background: #444; color: #fff; }
+        
+        .location-name {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 5px;
+        }
+        
+        .location-coords {
+            color: #888;
+            font-size: 0.85rem;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .card-body {
+            padding: 25px;
+        }
+        
+        /* Score Circle */
+        .score-circle-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 25px;
+        }
+        
+        .score-circle {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        
+        .score-circle svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            transform: rotate(-90deg);
+        }
+        
+        .score-circle circle {
+            fill: none;
+            stroke-width: 10;
+        }
+        
+        .score-circle .bg {
+            stroke: #333;
+        }
+        
+        .score-circle .progress {
+            stroke-linecap: round;
+            transition: stroke-dashoffset 1s ease;
+        }
+        
+        .score-value {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #fff;
+        }
+        
+        .score-label {
+            font-size: 0.8rem;
+            color: #888;
+            margin-top: 2px;
+        }
+        
+        /* Metrics Grid */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .metric-item {
+            background: #1a1a2a;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+        }
+        
+        .metric-icon {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+        }
+        
+        .metric-value {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #00d4ff;
+        }
+        
+        .metric-label {
+            font-size: 0.75rem;
+            color: #888;
+            margin-top: 5px;
+        }
+        
+        /* Category Badge */
+        .category-container {
+            text-align: center;
+            margin-top: 15px;
+        }
+        
+        .category-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .category-excellent { background: linear-gradient(135deg, #00ff88, #00cc6a); color: #000; }
+        .category-very-good { background: linear-gradient(135deg, #00d4ff, #0099cc); color: #000; }
+        .category-good { background: linear-gradient(135deg, #ffd700, #ffaa00); color: #000; }
+        .category-moderate { background: linear-gradient(135deg, #ff9500, #ff6600); color: #000; }
+        .category-poor { background: linear-gradient(135deg, #ff4444, #cc0000); color: #fff; }
+        
+        /* Charts Section */
+        .charts-section {
+            background: linear-gradient(145deg, #252535, #1e1e2e);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+        }
+        
+        .chart-container {
+            background: #1a1a2a;
+            border-radius: 15px;
+            padding: 20px;
+            height: 350px;
+        }
+        
+        .chart-title {
+            color: #fff;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        /* Winner Announcement */
+        .winner-announcement {
+            background: linear-gradient(135deg, #1a1a2e, #252535);
+            border: 2px solid #ffd700;
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .winner-announcement::before {
+            content: '🏆';
+            position: absolute;
+            font-size: 150px;
+            opacity: 0.05;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .winner-title {
+            font-size: 1rem;
+            color: #ffd700;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 15px;
+        }
+        
+        .winner-name {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+        
+        .winner-score {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, #ffd700, #ffaa00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .winner-details {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+        
+        .winner-detail {
+            text-align: center;
+        }
+        
+        .winner-detail-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #00d4ff;
+        }
+        
+        .winner-detail-label {
+            font-size: 0.85rem;
+            color: #888;
+        }
+        
+        /* Detailed Analysis Table */
+        .analysis-table-container {
+            background: linear-gradient(145deg, #252535, #1e1e2e);
+            border-radius: 20px;
+            padding: 30px;
+            overflow-x: auto;
+        }
+        
+        .analysis-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .analysis-table th {
+            background: #1a1a2a;
+            color: #00d4ff;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid #333;
+        }
+        
+        .analysis-table td {
+            padding: 15px;
+            border-bottom: 1px solid #333;
+            color: #ddd;
+        }
+        
+        .analysis-table tr:hover {
+            background: rgba(0, 212, 255, 0.05);
+        }
+        
+        .highlight-best {
+            color: #00ff88 !important;
+            font-weight: 700;
+        }
+        
+        .highlight-worst {
+            color: #ff6666;
+        }
+        
+        /* Empty State */
+        .empty-state-advanced {
+            text-align: center;
+            padding: 80px 20px;
+            color: #888;
+        }
+        
+        .empty-icon-large {
+            font-size: 5rem;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+        
+        .empty-title {
+            font-size: 1.5rem;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+        
+        /* Loading State */
+        .loading-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid #333;
+            border-top-color: #00d4ff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .loading-text {
+            color: #00d4ff;
+            font-size: 1.2rem;
+        }
+        
+        .loading-subtext {
+            color: #888;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+        
+        /* Export Options */
+        .export-section {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+        
+        .export-btn {
+            background: #2a2a3a;
+            border: 1px solid #444;
+            color: #fff;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .export-btn:hover {
+            background: #00d4ff;
+            color: #000;
+            border-color: #00d4ff;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title { font-size: 2rem; }
+            .location-cards-input { grid-template-columns: 1fr; }
+            .comparison-results-grid { grid-template-columns: 1fr; }
+            .charts-grid { grid-template-columns: 1fr; }
+            .winner-details { flex-direction: column; gap: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">🌊 AquaIntel</div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="predictions.html">Predictions</a></li>
+                <li><a href="reports.html">Reports</a></li>
+                <li><a href="comparison.html" class="active">Comparison</a></li>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="about.html">About</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="comparison-hero">
+        <h1 class="hero-title">⚡ Advanced Location Comparison</h1>
+        <p class="hero-subtitle">AI-Powered Multi-Location Analysis with Real-Time Data</p>
+    </section>
+
+    <!-- Location Input Section -->
+    <section class="location-input-section">
+        <div class="input-container">
+            <div class="section-header">
+                <h2 class="section-title">📍 Select Locations to Compare</h2>
+                <div class="quick-presets">
+                    <button class="preset-btn" onclick="loadPreset('india')">🇮🇳 Indian Cities</button>
+                    <button class="preset-btn" onclick="loadPreset('world')">🌍 World Capitals</button>
+                    <button class="preset-btn" onclick="loadPreset('desert')">🏜️ Arid Regions</button>
+                    <button class="preset-btn" onclick="loadPreset('coastal')">🌊 Coastal Cities</button>
+                </div>
+            </div>
+            
+            <div class="location-cards-input" id="location-inputs">
+                <!-- Location cards will be generated here -->
+            </div>
+            
+            <div class="action-buttons">
+                <button class="btn-secondary-action" onclick="addLocationCard()">
+                    ➕ Add Location
+                </button>
+                <button class="btn-compare" id="compare-btn" onclick="runComparison()">
+                    <span>🚀</span> Run AI Comparison
+                </button>
+                <button class="btn-secondary-action" onclick="clearAll()">
+                    🗑️ Clear All
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Results Section -->
+    <section class="results-section">
+        <div class="results-container">
+            <div id="results-content">
+                <div class="empty-state-advanced">
+                    <div class="empty-icon-large">🔬</div>
+                    <h3 class="empty-title">Ready for Comparison</h3>
+                    <p>Enter locations above and click "Run AI Comparison" to analyze groundwater potential across multiple sites</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2025 AquaIntel Pro. Advanced Groundwater Intelligence Platform.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Configuration
+        const API_URL = 'http://localhost:8000/api/v1/predict';
+        let locationCards = [];
+        let comparisonResults = [];
+        let radarChart = null;
+        let barChart = null;
+        
+        // Preset Locations
+        const presets = {
+            india: [
+                { name: 'Chennai', lat: 13.0827, lon: 80.2707 },
+                { name: 'Mumbai', lat: 19.0760, lon: 72.8777 },
+                { name: 'Delhi', lat: 28.6139, lon: 77.2090 },
+                { name: 'Bangalore', lat: 12.9716, lon: 77.5946 }
+            ],
+            world: [
+                { name: 'Tokyo', lat: 35.6762, lon: 139.6503 },
+                { name: 'New York', lat: 40.7128, lon: -74.0060 },
+                { name: 'London', lat: 51.5074, lon: -0.1278 },
+                { name: 'Sydney', lat: -33.8688, lon: 151.2093 }
+            ],
+            desert: [
+                { name: 'Dubai', lat: 25.2048, lon: 55.2708 },
+                { name: 'Las Vegas', lat: 36.1699, lon: -115.1398 },
+                { name: 'Cairo', lat: 30.0444, lon: 31.2357 },
+                { name: 'Riyadh', lat: 24.7136, lon: 46.6753 }
+            ],
+            coastal: [
+                { name: 'Miami', lat: 25.7617, lon: -80.1918 },
+                { name: 'Singapore', lat: 1.3521, lon: 103.8198 },
+                { name: 'Cape Town', lat: -33.9249, lon: 18.4241 },
+                { name: 'Barcelona', lat: 41.3851, lon: 2.1734 }
+            ]
+        };
+        
+        const quickLocations = [
+            { name: 'Chennai', lat: 13.0827, lon: 80.2707 },
+            { name: 'Mumbai', lat: 19.0760, lon: 72.8777 },
+            { name: 'Dubai', lat: 25.2048, lon: 55.2708 },
+            { name: 'Tokyo', lat: 35.6762, lon: 139.6503 },
+            { name: 'New York', lat: 40.7128, lon: -74.0060 }
+        ];
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeLocationCards();
+        });
+        
+        function initializeLocationCards() {
+            locationCards = [
+                { id: 1, name: 'Chennai', lat: 13.0827, lon: 80.2707 },
+                { id: 2, name: 'Dubai', lat: 25.2048, lon: 55.2708 },
+                { id: 3, name: 'Tokyo', lat: 35.6762, lon: 139.6503 }
+            ];
+            renderLocationCards();
+        }
+        
+        function renderLocationCards() {
+            var container = document.getElementById('location-inputs');
+            var html = '';
+            
+            for (var i = 0; i < locationCards.length; i++) {
+                var card = locationCards[i];
+                html += createLocationCardHTML(card, i);
+            }
+            
+            container.innerHTML = html;
+        }
+        
+        function createLocationCardHTML(card, index) {
+            var quickBtns = '';
+            for (var j = 0; j < quickLocations.length; j++) {
+                var loc = quickLocations[j];
+                quickBtns += '<button class="quick-loc-btn" onclick="setQuickLocation(' + card.id + ', ' + loc.lat + ', ' + loc.lon + ', \'' + loc.name + '\')">' + loc.name + '</button>';
+            }
+            
+            return '<div class="location-input-card" id="card-' + card.id + '">' +
+                '<div class="card-number">' + (index + 1) + '</div>' +
+                '<div class="input-group">' +
+                    '<label>Location Name</label>' +
+                    '<input type="text" id="name-' + card.id + '" value="' + card.name + '" placeholder="Enter location name">' +
+                '</div>' +
+                '<div class="coordinate-inputs">' +
+                    '<div class="input-group">' +
+                        '<label>Latitude</label>' +
+                        '<input type="number" id="lat-' + card.id + '" value="' + card.lat + '" step="0.0001" placeholder="e.g., 13.0827">' +
+                    '</div>' +
+                    '<div class="input-group">' +
+                        '<label>Longitude</label>' +
+                        '<input type="number" id="lon-' + card.id + '" value="' + card.lon + '" step="0.0001" placeholder="e.g., 80.2707">' +
+                    '</div>' +
+                '</div>' +
+                '<div class="quick-location-btns">' + quickBtns + '</div>' +
+                (locationCards.length > 2 ? '<button class="quick-loc-btn" style="margin-top:15px;background:#ff4444;border-color:#ff4444;color:#fff" onclick="removeLocationCard(' + card.id + ')">✕ Remove</button>' : '') +
+            '</div>';
+        }
+        
+        function setQuickLocation(cardId, lat, lon, name) {
+            document.getElementById('name-' + cardId).value = name;
+            document.getElementById('lat-' + cardId).value = lat;
+            document.getElementById('lon-' + cardId).value = lon;
+            
+            // Update card data
+            for (var i = 0; i < locationCards.length; i++) {
+                if (locationCards[i].id === cardId) {
+                    locationCards[i].name = name;
+                    locationCards[i].lat = lat;
+                    locationCards[i].lon = lon;
+                    break;
+                }
+            }
+            
+            // Visual feedback
+            var card = document.getElementById('card-' + cardId);
+            card.classList.add('active');
+            setTimeout(function() {
+                card.classList.remove('active');
+            }, 500);
+        }
+        
+        function addLocationCard() {
+            if (locationCards.length >= 5) {
+                alert('Maximum 5 locations can be compared at once');
+                return;
+            }
+            
+            var newId = Date.now();
+            locationCards.push({
+                id: newId,
+                name: 'Location ' + (locationCards.length + 1),
+                lat: 0,
+                lon: 0
+            });
+            
+            renderLocationCards();
+        }
+        
+        function removeLocationCard(cardId) {
+            if (locationCards.length <= 2) {
+                alert('Minimum 2 locations required for comparison');
+                return;
+            }
+            
+            locationCards = locationCards.filter(function(c) {
+                return c.id !== cardId;
+            });
+            renderLocationCards();
+        }
+        
+        function loadPreset(presetName) {
+            var preset = presets[presetName];
+            if (!preset) return;
+            
+            locationCards = [];
+            for (var i = 0; i < preset.length; i++) {
+                locationCards.push({
+                    id: Date.now() + i,
+                    name: preset[i].name,
+                    lat: preset[i].lat,
+                    lon: preset[i].lon
+                });
+            }
+            
+            renderLocationCards();
+        }
+        
+        function clearAll() {
+            initializeLocationCards();
+            document.getElementById('results-content').innerHTML = 
+                '<div class="empty-state-advanced">' +
+                    '<div class="empty-icon-large">🔬</div>' +
+                    '<h3 class="empty-title">Ready for Comparison</h3>' +
+                    '<p>Enter locations above and click "Run AI Comparison" to analyze groundwater potential across multiple sites</p>' +
+                '</div>';
+        }
+        
+        async function runComparison() {
+            // Get current values from inputs
+            var locations = [];
+            for (var i = 0; i < locationCards.length; i++) {
+                var card = locationCards[i];
+                var name = document.getElementById('name-' + card.id).value || ('Location ' + (i + 1));
+                var lat = parseFloat(document.getElementById('lat-' + card.id).value);
+                var lon = parseFloat(document.getElementById('lon-' + card.id).value);
+                
+                if (isNaN(lat) || isNaN(lon)) {
+                    alert('Please enter valid coordinates for ' + name);
+                    return;
+                }
+                
+                locations.push({ name: name, lat: lat, lon: lon });
+            }
+            
+            // Show loading state
+            var resultsDiv = document.getElementById('results-content');
+            resultsDiv.innerHTML = 
+                '<div class="loading-state">' +
+                    '<div class="loading-spinner"></div>' +
+                    '<div class="loading-text">Running AI Analysis...</div>' +
+                    '<div class="loading-subtext">Fetching real-time data from NASA, USGS, Open-Meteo APIs</div>' +
+                '</div>';
+            
+            var btn = document.getElementById('compare-btn');
+            btn.disabled = true;
+            btn.innerHTML = '<span>⏳</span> Analyzing...';
+            
+            try {
+                // Fetch predictions for all locations
+                comparisonResults = [];
+                
+                for (var j = 0; j < locations.length; j++) {
+                    var loc = locations[j];
+                    var response = await fetch(API_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ latitude: loc.lat, longitude: loc.lon })
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error('API request failed for ' + loc.name);
+                    }
+                    
+                    var data = await response.json();
+                    comparisonResults.push({
+                        name: loc.name,
+                        lat: loc.lat,
+                        lon: loc.lon,
+                        success_score: data.success_score || 0,
+                        depth: data.depth || (data.explanation && data.explanation.predicted_metrics ? data.explanation.predicted_metrics.recommended_depth_m : 30),
+                        yield_lph: data.yield_lph || (data.explanation && data.explanation.predicted_metrics ? data.explanation.predicted_metrics.estimated_yield_lph : 500),
+                        confidence: data.confidence || (data.smart_score ? data.smart_score.confidence : 75),
+                        category: data.explanation && data.explanation.category ? data.explanation.category : getCategoryFromScore(data.success_score),
+                        smart_score: data.smart_score || { overall_score: Math.round(data.success_score * 100) },
+                        risk_level: getRiskLevel(data.success_score),
+                        key_factors: data.explanation && data.explanation.key_factors ? data.explanation.key_factors : generateKeyFactors(data.success_score)
+                    });
+                }
+                
+                // Sort by success score
+                comparisonResults.sort(function(a, b) {
+                    return b.success_score - a.success_score;
+                });
+                
+                // Display results
+                displayResults();
+                
+            } catch (error) {
+                resultsDiv.innerHTML = 
+                    '<div class="empty-state-advanced">' +
+                        '<div class="empty-icon-large">⚠️</div>' +
+                        '<h3 class="empty-title">Connection Error</h3>' +
+                        '<p>Could not connect to the AI backend. Make sure the server is running on http://localhost:8000</p>' +
+                        '<p style="color:#888;margin-top:15px;">Error: ' + error.message + '</p>' +
+                    '</div>';
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<span>🚀</span> Run AI Comparison';
+            }
+        }
+        
+        function getCategoryFromScore(score) {
+            var pct = score * 100;
+            if (pct >= 85) return 'Excellent';
+            if (pct >= 70) return 'Very Good';
+            if (pct >= 55) return 'Good';
+            if (pct >= 40) return 'Moderate';
+            return 'Poor';
+        }
+        
+        function getRiskLevel(score) {
+            var pct = score * 100;
+            if (pct >= 80) return 'Low';
+            if (pct >= 60) return 'Medium';
+            if (pct >= 40) return 'High';
+            return 'Very High';
+        }
+        
+        function generateKeyFactors(score) {
+            var factors = [];
+            if (score > 0.7) {
+                factors.push('Good geological conditions');
+                factors.push('Adequate precipitation');
+            } else if (score > 0.5) {
+                factors.push('Moderate aquifer potential');
+                factors.push('Variable rainfall patterns');
+            } else {
+                factors.push('Challenging terrain');
+                factors.push('Low recharge rates');
+            }
+            return factors;
+        }
+        
+        function displayResults() {
+            var winner = comparisonResults[0];
+            var timestamp = new Date().toLocaleString();
+            
+            var html = '';
+            
+            // Header
+            html += '<div class="results-header">';
+            html += '<h2 class="results-title">📊 Comparison Results</h2>';
+            html += '<p class="results-meta">Analysis completed at ' + timestamp + ' | ' + comparisonResults.length + ' locations analyzed</p>';
+            html += '</div>';
+            
+            // Winner Announcement
+            html += '<div class="winner-announcement">';
+            html += '<div class="winner-title">🏆 Best Location for Groundwater</div>';
+            html += '<div class="winner-name">' + winner.name + '</div>';
+            html += '<div class="winner-score">' + (winner.success_score * 100).toFixed(1) + '%</div>';
+            html += '<div class="winner-details">';
+            html += '<div class="winner-detail"><div class="winner-detail-value">' + winner.depth.toFixed(1) + 'm</div><div class="winner-detail-label">Recommended Depth</div></div>';
+            html += '<div class="winner-detail"><div class="winner-detail-value">' + winner.yield_lph.toFixed(0) + ' L/h</div><div class="winner-detail-label">Expected Yield</div></div>';
+            html += '<div class="winner-detail"><div class="winner-detail-value">' + winner.confidence.toFixed(1) + '%</div><div class="winner-detail-label">Confidence</div></div>';
+            html += '<div class="winner-detail"><div class="winner-detail-value">' + winner.risk_level + '</div><div class="winner-detail-label">Risk Level</div></div>';
+            html += '</div>';
+            html += '</div>';
+            
+            // Result Cards
+            html += '<div class="comparison-results-grid">';
+            for (var i = 0; i < comparisonResults.length; i++) {
+                html += createResultCardHTML(comparisonResults[i], i);
+            }
+            html += '</div>';
+            
+            // Charts Section
+            html += '<div class="charts-section">';
+            html += '<h3 style="color:#fff;margin-bottom:25px;text-align:center;">📈 Visual Analysis</h3>';
+            html += '<div class="charts-grid">';
+            html += '<div class="chart-container"><h4 class="chart-title">Success Score Comparison</h4><canvas id="barChart"></canvas></div>';
+            html += '<div class="chart-container"><h4 class="chart-title">Multi-Factor Radar Analysis</h4><canvas id="radarChart"></canvas></div>';
+            html += '</div>';
+            html += '</div>';
+            
+            // Detailed Table
+            html += '<div class="analysis-table-container">';
+            html += '<h3 style="color:#fff;margin-bottom:20px;">📋 Detailed Metrics Comparison</h3>';
+            html += '<table class="analysis-table">';
+            html += '<thead><tr>';
+            html += '<th>Rank</th><th>Location</th><th>Success Rate</th><th>Depth (m)</th><th>Yield (L/h)</th><th>Confidence</th><th>Category</th><th>Risk</th>';
+            html += '</tr></thead>';
+            html += '<tbody>';
+            
+            var bestDepth = Math.min.apply(null, comparisonResults.map(function(r) { return r.depth; }));
+            var bestYield = Math.max.apply(null, comparisonResults.map(function(r) { return r.yield_lph; }));
+            
+            for (var k = 0; k < comparisonResults.length; k++) {
+                var r = comparisonResults[k];
+                var depthClass = r.depth === bestDepth ? 'highlight-best' : '';
+                var yieldClass = r.yield_lph === bestYield ? 'highlight-best' : '';
+                
+                html += '<tr>';
+                html += '<td><span class="rank-badge rank-' + (k < 3 ? (k + 1) : 'other') + '" style="width:30px;height:30px;font-size:0.9rem;">' + (k + 1) + '</span></td>';
+                html += '<td><strong>' + r.name + '</strong><br><small style="color:#888;">' + r.lat.toFixed(4) + ', ' + r.lon.toFixed(4) + '</small></td>';
+                html += '<td class="' + (k === 0 ? 'highlight-best' : '') + '">' + (r.success_score * 100).toFixed(1) + '%</td>';
+                html += '<td class="' + depthClass + '">' + r.depth.toFixed(1) + '</td>';
+                html += '<td class="' + yieldClass + '">' + r.yield_lph.toFixed(0) + '</td>';
+                html += '<td>' + r.confidence.toFixed(1) + '%</td>';
+                html += '<td><span class="category-badge category-' + r.category.toLowerCase().replace(' ', '-') + '">' + r.category + '</span></td>';
+                html += '<td>' + r.risk_level + '</td>';
+                html += '</tr>';
+            }
+            
+            html += '</tbody></table>';
+            html += '</div>';
+            
+            // Export Section
+            html += '<div class="export-section">';
+            html += '<button class="export-btn" onclick="exportToCSV()">📥 Export CSV</button>';
+            html += '<button class="export-btn" onclick="exportToJSON()">📄 Export JSON</button>';
+            html += '<button class="export-btn" onclick="printReport()">🖨️ Print Report</button>';
+            html += '<button class="export-btn" onclick="saveToHistory()">💾 Save to History</button>';
+            html += '</div>';
+            
+            document.getElementById('results-content').innerHTML = html;
+            
+            // Render charts
+            setTimeout(function() {
+                renderCharts();
+            }, 100);
+        }
+        
+        function createResultCardHTML(result, index) {
+            var scoreColor = getScoreColor(result.success_score);
+            var circumference = 2 * Math.PI * 60;
+            var dashOffset = circumference - (result.success_score * circumference);
+            var categoryClass = 'category-' + result.category.toLowerCase().replace(' ', '-');
+            
+            var html = '<div class="result-card ' + (index === 0 ? 'winner' : '') + '">';
+            
+            // Header
+            html += '<div class="card-header">';
+            html += '<span class="rank-badge rank-' + (index < 3 ? (index + 1) : 'other') + '">' + (index === 0 ? '👑' : (index + 1)) + '</span>';
+            html += '<div class="location-name">' + result.name + '</div>';
+            html += '<div class="location-coords">' + result.lat.toFixed(4) + '°, ' + result.lon.toFixed(4) + '°</div>';
+            html += '</div>';
+            
+            // Body
+            html += '<div class="card-body">';
+            
+            // Score Circle
+            html += '<div class="score-circle-container">';
+            html += '<div class="score-circle">';
+            html += '<svg width="140" height="140">';
+            html += '<circle class="bg" cx="70" cy="70" r="60"></circle>';
+            html += '<circle class="progress" cx="70" cy="70" r="60" stroke="' + scoreColor + '" stroke-dasharray="' + circumference + '" stroke-dashoffset="' + dashOffset + '"></circle>';
+            html += '</svg>';
+            html += '<div class="score-value">' + (result.success_score * 100).toFixed(0) + '%</div>';
+            html += '<div class="score-label">Success</div>';
+            html += '</div>';
+            html += '</div>';
+            
+            // Metrics
+            html += '<div class="metrics-grid">';
+            html += '<div class="metric-item"><div class="metric-icon">📏</div><div class="metric-value">' + result.depth.toFixed(1) + 'm</div><div class="metric-label">Depth</div></div>';
+            html += '<div class="metric-item"><div class="metric-icon">💧</div><div class="metric-value">' + result.yield_lph.toFixed(0) + '</div><div class="metric-label">Yield L/h</div></div>';
+            html += '<div class="metric-item"><div class="metric-icon">🎯</div><div class="metric-value">' + result.confidence.toFixed(0) + '%</div><div class="metric-label">Confidence</div></div>';
+            html += '<div class="metric-item"><div class="metric-icon">⚠️</div><div class="metric-value">' + result.risk_level + '</div><div class="metric-label">Risk</div></div>';
+            html += '</div>';
+            
+            // Category
+            html += '<div class="category-container">';
+            html += '<span class="category-badge ' + categoryClass + '">' + result.category + '</span>';
+            html += '</div>';
+            
+            html += '</div>';
+            html += '</div>';
+            
+            return html;
+        }
+        
+        function getScoreColor(score) {
+            if (score >= 0.8) return '#00ff88';
+            if (score >= 0.6) return '#00d4ff';
+            if (score >= 0.4) return '#ffd700';
+            return '#ff4444';
+        }
+        
+        function renderCharts() {
+            var labels = comparisonResults.map(function(r) { return r.name; });
+            var successData = comparisonResults.map(function(r) { return (r.success_score * 100).toFixed(1); });
+            var depthData = comparisonResults.map(function(r) { return r.depth; });
+            var yieldData = comparisonResults.map(function(r) { return r.yield_lph / 100; }); // Scale for radar
+            var confidenceData = comparisonResults.map(function(r) { return r.confidence; });
+            
+            var colors = ['#00d4ff', '#00ff88', '#ffd700', '#ff6b6b', '#c084fc'];
+            
+            // Destroy existing charts
+            if (barChart) barChart.destroy();
+            if (radarChart) radarChart.destroy();
+            
+            // Bar Chart
+            var barCtx = document.getElementById('barChart').getContext('2d');
+            barChart = new Chart(barCtx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Success Rate (%)',
+                        data: successData,
+                        backgroundColor: colors.slice(0, labels.length),
+                        borderColor: colors.slice(0, labels.length),
+                        borderWidth: 2,
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            grid: { color: '#333' },
+                            ticks: { color: '#888' }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: '#888' }
+                        }
+                    }
+                }
+            });
+            
+            // Radar Chart
+            var radarCtx = document.getElementById('radarChart').getContext('2d');
+            var radarDatasets = [];
+            
+            for (var i = 0; i < comparisonResults.length; i++) {
+                var r = comparisonResults[i];
+                radarDatasets.push({
+                    label: r.name,
+                    data: [
+                        r.success_score * 100,
+                        r.confidence,
+                        100 - (r.depth / 2), // Invert depth (shallower is better)
+                        Math.min(r.yield_lph / 20, 100), // Scale yield
+                        r.risk_level === 'Low' ? 90 : (r.risk_level === 'Medium' ? 60 : 30)
+                    ],
+                    backgroundColor: colors[i] + '33',
+                    borderColor: colors[i],
+                    borderWidth: 2,
+                    pointBackgroundColor: colors[i]
+                });
+            }
+            
+            radarChart = new Chart(radarCtx, {
+                type: 'radar',
+                data: {
+                    labels: ['Success', 'Confidence', 'Depth Score', 'Yield Score', 'Safety'],
+                    datasets: radarDatasets
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { color: '#888', font: { size: 11 } }
+                        }
+                    },
+                    scales: {
+                        r: {
+                            angleLines: { color: '#333' },
+                            grid: { color: '#333' },
+                            pointLabels: { color: '#888' },
+                            ticks: { display: false },
+                            suggestedMin: 0,
+                            suggestedMax: 100
+                        }
+                    }
+                }
+            });
+        }
+        
+        function exportToCSV() {
+            if (comparisonResults.length === 0) {
+                alert('No data to export');
+                return;
+            }
+            
+            var csv = 'Rank,Location,Latitude,Longitude,Success Rate (%),Depth (m),Yield (L/h),Confidence (%),Category,Risk Level\n';
+            
+            for (var i = 0; i < comparisonResults.length; i++) {
+                var r = comparisonResults[i];
+                csv += (i + 1) + ',' + r.name + ',' + r.lat + ',' + r.lon + ',' + (r.success_score * 100).toFixed(2) + ',' + r.depth.toFixed(2) + ',' + r.yield_lph.toFixed(0) + ',' + r.confidence.toFixed(2) + ',' + r.category + ',' + r.risk_level + '\n';
+            }
+            
+            var blob = new Blob([csv], { type: 'text/csv' });
+            var url = window.URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.href = url;
+            a.download = 'aquaintel_comparison_' + new Date().toISOString().split('T')[0] + '.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+        
+        function exportToJSON() {
+            if (comparisonResults.length === 0) {
+                alert('No data to export');
+                return;
+            }
+            
+            var exportData = {
+                generated_at: new Date().toISOString(),
+                total_locations: comparisonResults.length,
+                winner: comparisonResults[0].name,
+                results: comparisonResults
+            };
+            
+            var blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+            var url = window.URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.href = url;
+            a.download = 'aquaintel_comparison_' + new Date().toISOString().split('T')[0] + '.json';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+        
+        function printReport() {
+            window.print();
+        }
+        
+        function saveToHistory() {
+            if (comparisonResults.length === 0) {
+                alert('No data to save');
+                return;
+            }
+            
+            var history = JSON.parse(localStorage.getItem('aquaintel_comparisons') || '[]');
+            
+            history.unshift({
+                id: Date.now(),
+                timestamp: new Date().toISOString(),
+                results: comparisonResults
+            });
+            
+            // Keep only last 10 comparisons
+            if (history.length > 10) {
+                history = history.slice(0, 10);
+            }
+            
+            localStorage.setItem('aquaintel_comparisons', JSON.stringify(history));
+            alert('Comparison saved to history!');
+        }
+    </script>
+</body>
+</html>
